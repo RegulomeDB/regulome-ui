@@ -1,5 +1,5 @@
 /**
- * Change the UI version number for each igvf-ui release.
+ * Change the UI version number for each regulome-ui release.
  */
 const UI_VERSION = "6.0.0";
 

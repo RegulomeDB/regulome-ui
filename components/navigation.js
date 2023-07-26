@@ -1,5 +1,5 @@
 // node_modules
-import { useAuth0 } from "@auth0/auth0-react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bars2Icon,
@@ -24,20 +24,10 @@ import {
   standardAnimationVariants,
 } from "./animation";
 import { useSessionStorage } from "./browser-storage";
-import { Button } from "./form-elements";
 import GlobalContext from "./global-context";
 import Icon from "./icon";
-import IdSearchTrigger from "./id-search-trigger";
-import SiteLogo from "./logo";
-import Modal from "./modal";
-import SessionContext from "./session-context";
-import SiteSearchTrigger from "./site-search-trigger";
 // lib
-import {
-  loginAuthProvider,
-  logoutAuthProvider,
-  logoutDataProvider,
-} from "../lib/authentication";
+
 import { UC } from "../lib/constants";
 
 /**
@@ -256,117 +246,6 @@ NavigationButton.propTypes = {
 };
 
 /**
- * NavigationExpanded item to handle the Sign In button.
- */
-function NavigationSignInItem({ id, isNarrowNav = false, children }) {
-  const { isLoading, loginWithRedirect } = useAuth0();
-
-  return (
-    <li>
-      <NavigationButton
-        id={id}
-        onClick={() => loginAuthProvider(loginWithRedirect)}
-        isNarrowNav={isNarrowNav}
-        isDisabled={isLoading}
-      >
-        {children}
-      </NavigationButton>
-    </li>
-  );
-}
-
-NavigationSignInItem.propTypes = {
-  // ID of the authentication navigation item
-  id: PropTypes.string.isRequired,
-  // True if the navigation is in narrow mode
-  isNarrowNav: PropTypes.bool,
-};
-
-/**
- * Navigation item to handle the Sign Out button. Display a model to allow the user to confirm or
- * cancel the sign out.
- */
-function NavigationSignOutItem({
-  id,
-  isChildItem = false,
-  isNarrowNav = false,
-  className = null,
-  children,
-}) {
-  // True if sign-out warning modal open
-  const [isWarningOpen, setIsWarningOpen] = useState(false);
-  // Session properties object
-  // Logged-in session-properties object
-  const { sessionProperties } = useContext(SessionContext);
-  const { logout } = useAuth0();
-
-  /**
-   * Called when the user clicks the Sign Out button. Log out of both the authentication provider
-   * and the data provider.
-   */
-  function handleAuthClick() {
-    logoutAuthProvider(logout);
-    logoutDataProvider();
-  }
-
-  return (
-    <>
-      <li className={className}>
-        <NavigationButton
-          id={id}
-          onClick={() => setIsWarningOpen(true)}
-          isNarrowNav={isNarrowNav}
-          isChildItem={isChildItem}
-        >
-          {children}
-        </NavigationButton>
-      </li>
-
-      <Modal isOpen={isWarningOpen} onClose={() => setIsWarningOpen(false)}>
-        <Modal.Header
-          onClose={() => setIsWarningOpen(false)}
-          closeLabel="Cancel signing out"
-        >
-          <h2 className="text-lg font-semibold">
-            Sign Out {sessionProperties?.user?.title || "User"}
-          </h2>
-        </Modal.Header>
-        <Modal.Body>
-          Once you sign out, you only see publicly released data.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="secondary"
-            onClick={() => setIsWarningOpen(false)}
-            label="Cancel signing out"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleAuthClick}
-            label={`Sign out ${sessionProperties?.user?.title || "User"}`}
-            id="sign-out-confirm"
-          >
-            Sign Out
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
-}
-
-NavigationSignOutItem.propTypes = {
-  // ID of the authentication navigation item
-  id: PropTypes.string.isRequired,
-  // True if this item is a child of another navigation item
-  isChildItem: PropTypes.bool,
-  // True if the navigation is in wide mode
-  isNarrowNav: PropTypes.bool,
-  // Optional Tailwind CSS class name to add to the li element
-  className: PropTypes.string,
-};
-
-/**
  * Renders a single navigation item that links to a URI.
  */
 function NavigationHrefItem({
@@ -404,13 +283,6 @@ NavigationHrefItem.propTypes = {
   // True if the navigation is in narrow mode
   isNarrowNav: PropTypes.bool,
 };
-
-/**
- * Wrapper for the site search icon while navigation is collapsed.
- */
-function NavigationSearchItem({ children }) {
-  return <li>{children}</li>;
-}
 
 /**
  * Icon for expanding or collapsing a navigation group item.
@@ -533,27 +405,11 @@ NavigationList.propTypes = {
 };
 
 /**
- * Renders the search trigger buttons in the navigation.
- */
-function NavigationSearchTriggers() {
-  return (
-    <div className="flex gap-1">
-      <SiteSearchTrigger isExpanded />
-      <IdSearchTrigger />
-    </div>
-  );
-}
-
-/**
  * Renders the navigation area for mobile and desktop.
  */
 function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
   // Holds the ids of the currently open parent navigation items
   const [openedParents, setOpenedParents] = React.useState([]);
-  // Current Auth0 information
-  const { isAuthenticated } = useAuth0();
-  // Logged-in session-properties object
-  const { sessionProperties } = useContext(SessionContext);
 
   /**
    * Called when the user clicks a group navigation item to open or close it.
@@ -577,11 +433,10 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           isNavCollapsed={false}
         />
       )}
-      <NavigationSearchTriggers />
       <NavigationList className="p-4">
         <NavigationGroupItem
-          id="data"
-          title="Data"
+          id="search"
+          title="Search"
           icon={<Icon.Data />}
           isGroupOpened={openedParents.includes("data")}
           handleGroupClick={handleParentClick}
@@ -605,8 +460,8 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
         </NavigationGroupItem>
 
         <NavigationGroupItem
-          id="methodology"
-          title="Methodology"
+          id="summary"
+          title="Summary"
           icon={<Icon.Methodology />}
           isGroupOpened={openedParents.includes("methodology")}
           handleGroupClick={handleParentClick}
@@ -638,8 +493,8 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
         </NavigationGroupItem>
 
         <NavigationGroupItem
-          id="data-model"
-          title="Data Model"
+          id="data"
+          title="Data"
           icon={<Icon.DataModel />}
           isGroupOpened={openedParents.includes("data-model")}
           handleGroupClick={handleParentClick}
@@ -663,8 +518,8 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
         </NavigationGroupItem>
 
         <NavigationGroupItem
-          id="about"
-          title="About"
+          id="help"
+          title="Help"
           icon={<InformationCircleIcon />}
           isGroupOpened={openedParents.includes("about")}
           handleGroupClick={handleParentClick}
@@ -686,44 +541,6 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
             Help
           </NavigationHrefItem>
         </NavigationGroupItem>
-        {isAuthenticated ? (
-          <NavigationGroupItem
-            id="authenticate"
-            title={sessionProperties?.user?.title || "User"}
-            icon={<Icon.UserSignedIn />}
-            isGroupOpened={openedParents.includes("authenticate")}
-            handleGroupClick={handleParentClick}
-          >
-            <NavigationHrefItem
-              id="profile"
-              href="/user-profile"
-              navigationClick={navigationClick}
-              isChildItem
-            >
-              Profile
-            </NavigationHrefItem>
-            {sessionProperties?.admin && (
-              <NavigationHrefItem
-                id="impersonate"
-                href="/impersonate-user"
-                navigationClick={navigationClick}
-                isChildItem
-              >
-                Impersonate User
-              </NavigationHrefItem>
-            )}
-            <NavigationSignOutItem id="signout" isChildItem>
-              Sign Out
-            </NavigationSignOutItem>
-          </NavigationGroupItem>
-        ) : (
-          <NavigationSignInItem id="authenticate">
-            <NavigationIcon>
-              <Icon.UserSignedOut />
-            </NavigationIcon>
-            Sign In
-          </NavigationSignInItem>
-        )}
       </NavigationList>
     </>
   );
@@ -737,8 +554,6 @@ NavigationExpanded.propTypes = {
 };
 
 function NavigationCollapsed({ navigationClick, toggleNavCollapsed }) {
-  const { isAuthenticated } = useAuth0();
-
   return (
     <NavigationList className="w-full [&>ul>li]:my-2 [&>ul]:flex [&>ul]:flex-col [&>ul]:items-center">
       <NavigationCollapseItem
@@ -757,18 +572,6 @@ function NavigationCollapsed({ navigationClick, toggleNavCollapsed }) {
           <Icon.Brand />
         </NavigationIcon>
       </NavigationHrefItem>
-      <NavigationSearchItem>
-        <SiteSearchTrigger />
-      </NavigationSearchItem>
-      {isAuthenticated ? (
-        <NavigationSignOutItem id="sign-out" isNarrowNav>
-          <Icon.UserSignedIn className="h-8 w-8" />
-        </NavigationSignOutItem>
-      ) : (
-        <NavigationSignInItem id="authenticate" isNarrowNav>
-          <Icon.UserSignedOut className="h-8 w-8" />
-        </NavigationSignInItem>
-      )}
       <NavigationHrefItem
         id="help"
         href="/help"
@@ -791,12 +594,22 @@ NavigationCollapsed.propTypes = {
 };
 
 /**
- * Displays the full IGVF logo and the sidebar navigation collapse button.
+ * Displays the full regulome logo and the sidebar navigation collapse button.
  */
 function NavigationLogo({ toggleNavCollapsed, isNavCollapsed }) {
   return (
     <div className="flex">
-      <SiteLogo />
+      <Link href="/" className="block w-32 py-2 md:h-24 md:w-auto md:px-8">
+        <div>
+          <Image
+            src="/RegulomeLogoFinal.gif"
+            alt="clickable image"
+            width="300"
+            height="96"
+          />
+        </div>
+        <span className="sr-only">Home</span>
+      </Link>
       <NavigationCollapseButton
         toggleNavCollapsed={toggleNavCollapsed}
         isNavCollapsed={isNavCollapsed}
@@ -871,7 +684,17 @@ export default function NavigationSection() {
       }`}
     >
       <div className="flex h-14 items-center justify-between p-2 md:hidden">
-        <SiteLogo />
+        <Link href="/" className="block w-32 py-2 md:h-24 md:w-auto md:px-8">
+          <div>
+            <Image
+              src="/RegulomeLogoFinal.gif"
+              alt="clickable image"
+              width="300"
+              height="96"
+            />
+          </div>
+          <span className="sr-only">Home</span>
+        </Link>
         <button
           data-testid="mobile-navigation-trigger"
           className="stroke-white md:hidden"
