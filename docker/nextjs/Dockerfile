@@ -8,7 +8,7 @@ COPY ./docker/nextjs/entrypoint.sh .
 
 RUN chmod +x ./entrypoint.sh
 
-WORKDIR /igvf-ui
+WORKDIR /regulome-ui
 
 COPY package*.json ./
 

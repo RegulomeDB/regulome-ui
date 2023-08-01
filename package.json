@@ -1,5 +1,5 @@
 {
-  "name": "igvf-ui",
+  "name": "regulome-ui",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

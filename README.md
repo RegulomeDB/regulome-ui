@@ -1,55 +1,33 @@
-[![CircleCI](https://circleci.com/gh/IGVF-DACC/igvf-ui/tree/main.svg?style=svg)](https://circleci.com/gh/IGVF-DACC/igvf-ui/tree/main)
-[![Coverage Status](https://coveralls.io/repos/github/IGVF-DACC/igvf-ui/badge.svg)](https://coveralls.io/github/IGVF-DACC/igvf-ui)
+# RegulomeDB
 
-This is the UI portion of the RegulomeDB project bootstrapped with [Next.js](https://nextjs.org). This relies on the [igvfd](https://github.com/IGVF-DACC/igvfd) project to supply its data.
+This is the UI portion of the RegulomeDB project bootstrapped with [Next.js](https://nextjs.org). This relies on the [Genomic Data Services
+](https://github.com/ENCODE-DCC/genomic-data-service) project to supply its data.
 
 ## Getting Started
 
-You must first install [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-mac) and launch it so that its window with the blue title bar appears. Keep this app running in the background while you test `igvf-ui` locally.
+You must first install [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-mac) and launch it so that its window with the blue title bar appears. Keep this app running in the background while you test `regulome-ui` locally.
 
-1. Clone the [igvfd](https://github.com/IGVF-DACC/igvfd) repo and start its server:
-
-```bash
-# In igvfd repo.
-$ docker compose up --build
-```
-
-2. Clone this repo (`igvf-ui`) and start the `Next.js` server:
+1. Clone this repo (`regulome-ui`) and start the `Next.js` server:
 
 ```bash
-# In igvf-ui repo.
+# In regulome-ui repo.
 # Note the build flag is only required if dependencies (e.g. package.json) have changed.
-# igvf-ui branches change dependency versions frequently, so it makes sense to use the build flag
-# whenever you switch between igvf-ui branches, or the dev branch gets new branches merged in.
+# regulome-ui branches change dependency versions frequently, so it makes sense to use the build flag
+# whenever you switch between regulome-ui branches, or the dev branch gets new branches merged in.
 $ docker compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the `igvf-ui` home page.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the `regulome-ui` home page.
 
-Changes you make to Javascript files hot reload this local `igvf-ui`.
+Changes you make to Javascript files hot reload this local `regulome-ui`.
 
 When you have finished local development, stop and clean up the Docker instances in both terminals:
 
 ```bash
-$ docker compose down -v
+docker compose down -v
 ```
 
 The Docker Desktop app should now show no running containers.
-
-## Signing Onto the Site
-
-If you want to sign into the site you need to:
-
-1. Download the environment-variable files and place them in the igvf-ui root directory.
-2. Make sure you have a user record in the igvfd user.json test insert file.
-
-You can download the environment files here:
-
-https://drive.google.com/drive/folders/1jBPTau0Bqzr418IjraWnEhFgiy09e_98?usp=sharing
-
-Move these both to your igvf-ui root directory, then rename the `dot-env.local` file to `.env.local`.
-
-You need to make sure you have a user record in the [user.json test insert file](https://github.com/IGVF-DACC/igvfd/blob/dev/src/igvfd/tests/data/inserts/user.json). When you click “Sign In” on the site, you can enter your username and password in the login text fields. If you have a Stanford email, you can use single-click sign in with the Google button.
 
 ## Installing Packages
 
@@ -58,13 +36,13 @@ Install packages from the Docker environment itself (to ensure proper `npm` vers
 For example to install `uuid` package start interactive container:
 
 ```bash
-$ docker compose -f docker-compose.test.yml run nextjs /bin/sh
+docker compose -f docker-compose.test.yml run nextjs /bin/sh
 ```
 
 In container run desired `npm install` command:
 
 ```bash
-$ npm install uuid
+npm install uuid
 ```
 
 Changes should be reflected in the `package*.json` files of local repository (exit container and commit them to `git`). Make sure to use `docker compose up --build` when starting the application the next time to rebuild Docker image with latest dependencies.
@@ -98,7 +76,7 @@ $ npm test -- separated-list
 And stop and clean, exit the interactive container and then:
 
 ```bash
-$ docker compose down -v
+docker compose down -v
 ```
 
 #### Writing Jest Tests
@@ -111,7 +89,7 @@ Jest tests use the [coveralls](https://coveralls.io/) code coverage service. We 
 
 In extremely rare cases, some Javascript files might not make sense to write Jest tests for. In this case, you can exclude the file from coveralls coverage by including the following comment after the import lines:
 
-```
+```javascript
 /* istanbul ignore file */
 ```
 
@@ -121,31 +99,21 @@ Use [Cypress](https://www.cypress.io) for end-to-end integration testing, such a
 
 Run Cypress tests with Docker Compose.
 
-1. Start `igvfd`:
+1. Start `regulome-ui`:
 
 ```bash
-# In igvfd repo. Note can use -d flag to detach from output.
-$ docker compose up
+docker compose up
 ```
 
-2. Start `igvfd-ui`:
+2. Run Cypress tests:
 
 ```bash
-# In igvf-ui repo.
-$ docker compose up
-```
-
-3. Run Cypress tests:
-
-```bash
-# In igvf-ui repo.
-$ docker compose -f docker-compose.cypress-m1.yml up --exit-code-from cypress
+docker compose -f docker-compose.cypress-m1.yml up --exit-code-from cypress
 ```
 
 Note if you want to run Cypress locally using the official Cypress image (not for M1 macs) you can use the `docker-compose.cypress-on-circle.yml` in `./docker/cypress` folder, e.g.:
 
 ```bash
-# In igvf-ui repo.
 # Temporarily copy yml to root directory so Docker context is correct.
 $ cp ./docker/cypress/docker-compose.cypress-on-circle.yml docker-compose.cypress.yml
 # Run tests.
@@ -154,12 +122,12 @@ $ docker compose -f docker-compose.cypress.yml up --exit-code-from cypress
 $ rm docker-compose.cypress.yml
 ```
 
-4. Review video in `./cypress/videos/`.
+3. Review video in `./cypress/videos/`.
 
-5. Stop and clean up `igvf-ui` and `igvfd` services in respective terminals:
+4. Stop and clean up `regulome-ui` service in the terminal:
 
 ```bash
-$ docker compose down -v
+docker compose down -v
 ```
 
 #### Writing Cypress Tests
@@ -175,7 +143,7 @@ Generally, each page or major feature on a page should have its own Cypress test
 1. Install the [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extension. This automatically formats the code to standard on each save.
 1. Install the [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension. This lets you see and select Tailwind CSS classes as you type them, and shows the corresponding CSS when you hover over Tailwind CSS classes.
 
-In addition, you might have a better experience if you set these in your Visual Studio Code JSON settings, either as your preferences (user settings) or specific to the igvf-ui project (workspace settings):
+In addition, you might have a better experience if you set these in your Visual Studio Code JSON settings, either as your preferences (user settings) or specific to the regulome-ui project (workspace settings):
 
 ```json
   "css.validate": false,

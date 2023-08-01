@@ -5,17 +5,9 @@ services:
     build:
       context: .
       dockerfile: ./docker/nextjs/Dockerfile
-    image: igvf-ui-nextjs
+    image: regulome-ui-nextjs
     command: npm run start
     environment:
       - NODE_ENV=production
-      - SERVER_URL=http://localhost:3000
-      - BACKEND_URL=http://nginx:8000
-      - PUBLIC_BACKEND_URL=http://localhost:8000
     ports:
       - "3000:3000"
-
-networks:
-  default:
-    external: true
-    name: igvfd_default

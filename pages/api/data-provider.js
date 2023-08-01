@@ -1,4 +1,3 @@
-import { HTTP_STATUS_CODE } from "../../lib/fetch-request";
 import { API_URL } from "../../lib/constants";
 
 /**
@@ -13,5 +12,5 @@ export default function dataProvider(req, res) {
   const props = {
     dataProviderUrl: API_URL,
   };
-  return res.status(HTTP_STATUS_CODE.OK).json(props);
+  return res.status(200).json(props);
 }
