@@ -46,7 +46,7 @@ export default function ScrollToTop() {
           transition={{ duration: 1 }}
         >
           <button
-            className="fixed bottom-4 right-4 rounded-full bg-[#337788] p-2 opacity-70"
+            className="fixed bottom-4 right-4 rounded-full bg-[#36582e] p-2 opacity-70"
             onClick={scrollToTop}
           >
             <ArrowUpIcon className="h-8 w-8 fill-white" />

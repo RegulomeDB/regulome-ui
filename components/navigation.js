@@ -687,7 +687,7 @@ export default function NavigationSection() {
         <Link href="/" className="block w-32 py-2 md:h-24 md:w-auto md:px-8">
           <div>
             <Image
-              src="/RegulomeLogoFinal.gif"
+              src="/RegulomeLogoTransparent.gif"
               alt="clickable image"
               width="300"
               height="96"
