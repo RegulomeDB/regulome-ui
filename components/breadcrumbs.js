@@ -54,22 +54,6 @@ BreadcrumbElement.propTypes = {
 };
 
 export default function Breadcrumbs() {
-  //   const router = useRouter();
-  //   const [breadcrumbs, setBreadcrumbs] = useState(null);
-
-  //   useEffect(() => {
-  //     if (router) {
-  //       const linkPath = router.asPath.split('/');
-  //       linkPath.shift();
-
-  //       const pathArray = linkPath.map((path, i) => {
-  //         return { breadcrumb: path, href: '/' + linkPath.slice(0, i + 1).join('/') };
-  //       });
-
-  //       setBreadcrumbs(pathArray);
-  //     }
-  //   }, [router]);
-
   const { breadcrumbs } = useContext(GlobalContext);
   if (!breadcrumbs) {
     return null;
