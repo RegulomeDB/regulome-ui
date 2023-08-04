@@ -33,6 +33,9 @@ function Site({ Component, pageProps }) {
     };
   }, []);
 
+  console.log(pageProps);
+  console.log(pageProps.breadcrumbs);
+
   const globalContext = useMemo(() => {
     return {
       site: {

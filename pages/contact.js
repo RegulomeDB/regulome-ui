@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <>
       <Breadcrumbs />
-      <h1>Help</h1>
+      <h1>Contact</h1>
     </>
   );
 }
@@ -12,8 +12,8 @@ export default function Page() {
 export async function getServerSideProps() {
   const breadcrumbs = [
     {
-      title: "Help",
-      href: "/help",
+      title: "Contact",
+      href: "/contact",
     },
   ];
 

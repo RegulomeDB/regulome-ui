@@ -8,7 +8,7 @@ export default function Page({ data }) {
   return (
     <>
       <Breadcrumbs />
-      <h1>Search</h1>
+      <h1>Summary</h1>
       <div dangerouslySetInnerHTML={{ __html: data }} />
     </>
   );
@@ -19,22 +19,20 @@ Page.propTypes = {
 };
 
 export async function getServerSideProps({ query }) {
-  console.log(query);
   const queryElements = [];
   for (const [key, value] of Object.entries(query)) {
     const element = key + "=" + value;
     queryElements.push(element);
   }
   const queryString = queryElements.join("&");
-  console.log(queryString);
-  const url = API_URL + "/search?" + queryString;
-  console.log(url);
+  const url = API_URL + "/summary?" + queryString;
 
   const response = await fetch(url);
   const data = await response.text();
+
   const breadcrumbs = [
     {
-      title: "Search",
+      title: "Summary",
       href: "query",
     },
   ];
