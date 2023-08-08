@@ -1,7 +1,6 @@
-// node_modules
-
 import PropTypes from "prop-types";
 import { API_URL } from "../lib/constants";
+import { getQueryStringFromServerQuery } from "../lib/query-utils";
 import Breadcrumbs from "../components/breadcrumbs";
 
 export default function Page({ data }) {
@@ -19,23 +18,14 @@ Page.propTypes = {
 };
 
 export async function getServerSideProps({ query }) {
-  console.log(query);
-  const queryElements = [];
-  for (const [key, value] of Object.entries(query)) {
-    const element = key + "=" + value;
-    queryElements.push(element);
-  }
-  const queryString = queryElements.join("&");
-  console.log(queryString);
+  const queryString = getQueryStringFromServerQuery(query);
   const url = API_URL + "/search?" + queryString;
-  console.log(url);
-
   const response = await fetch(url);
   const data = await response.text();
   const breadcrumbs = [
     {
       title: "Search",
-      href: "query",
+      href: "/search?" + queryString,
     },
   ];
 
