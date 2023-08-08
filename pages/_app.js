@@ -72,7 +72,7 @@ function Site({ Component, pageProps }) {
       </Head>
       <Script
         async
-        src="https://www.googletagmanager.com/gtag/js?id=G-E2PEXFFGYR"
+        src="https://www.googletagmanager.com/gtag/js?id=G-Q7NV8NWM99"
       ></Script>
       <Script id="google-analytics-4-script">
         {`
@@ -80,7 +80,7 @@ function Site({ Component, pageProps }) {
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-E2PEXFFGYR');
+          gtag('config', 'G-Q7NV8NWM99');
         `}
       </Script>
       <div className="md:container">

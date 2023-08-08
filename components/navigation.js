@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Bars2Icon,
   InformationCircleIcon,
+  IdentificationIcon,
   MinusIcon,
   PlusIcon,
   QuestionMarkCircleIcon,
@@ -435,112 +436,49 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
       )}
       <NavigationList className="p-4">
         <NavigationGroupItem
-          id="search"
-          title="Search"
-          icon={<Icon.Data />}
+          id="data"
+          title="Data"
+          icon={<Icon.DataModel />}
           isGroupOpened={openedParents.includes("data")}
           handleGroupClick={handleParentClick}
         >
           <NavigationHrefItem
-            id="datasets"
-            href="/search?type=MeasurementSet"
+            id="experiments"
+            href="https://www.encodeproject.org/search/?type=Experiment&internal_tags=RegulomeDB_2_2"
             navigationClick={navigationClick}
             isChildItem
           >
-            Datasets
+            Experiments
           </NavigationHrefItem>
           <NavigationHrefItem
-            id="files"
-            href="/search?type=File"
+            id="annotations"
+            href="https://www.encodeproject.org/search/?type=Annotation&internal_tags=RegulomeDB_2_2"
             navigationClick={navigationClick}
             isChildItem
           >
-            Files
+            Annotations
           </NavigationHrefItem>
         </NavigationGroupItem>
-
-        <NavigationGroupItem
-          id="summary"
-          title="Summary"
-          icon={<Icon.Methodology />}
-          isGroupOpened={openedParents.includes("methodology")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="experimental-standards"
-            href="/methodology/experimental_standards"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Experimental Standards
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="computational-standards"
-            href="/methodology/computational_standards"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Computational Standards
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="genome-references"
-            href="/search?type=CuratedSet&curated_set_type=genome"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Genome References
-          </NavigationHrefItem>
-        </NavigationGroupItem>
-
-        <NavigationGroupItem
-          id="data"
-          title="Data"
-          icon={<Icon.DataModel />}
-          isGroupOpened={openedParents.includes("data-model")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="overview"
-            href="/profiles/graph.svg"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Overview
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="schemas"
-            href="/profiles"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Schemas
-          </NavigationHrefItem>
-        </NavigationGroupItem>
-
-        <NavigationGroupItem
+        <NavigationHrefItem
           id="help"
-          title="Help"
-          icon={<InformationCircleIcon />}
-          isGroupOpened={openedParents.includes("about")}
-          handleGroupClick={handleParentClick}
+          href="/help"
+          navigationClick={navigationClick}
         >
-          <NavigationHrefItem
-            id="policies"
-            href="/policies"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Policies
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="help"
-            href="/help"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Help
-          </NavigationHrefItem>
-        </NavigationGroupItem>
+          <NavigationIcon>
+            <InformationCircleIcon />
+          </NavigationIcon>
+          Help
+        </NavigationHrefItem>
+        <NavigationHrefItem
+          id="contact"
+          href="/contact"
+          navigationClick={navigationClick}
+        >
+          <NavigationIcon>
+            <IdentificationIcon />
+          </NavigationIcon>
+          Contact
+        </NavigationHrefItem>
       </NavigationList>
     </>
   );
@@ -687,7 +625,7 @@ export default function NavigationSection() {
         <Link href="/" className="block w-32 py-2 md:h-24 md:w-auto md:px-8">
           <div>
             <Image
-              src="/RegulomeLogoFinal.gif"
+              src="/RegulomeLogoTransparent.gif"
               alt="clickable image"
               width="300"
               height="96"

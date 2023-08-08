@@ -1,5 +1,12 @@
+import Breadcrumbs from "../components/breadcrumbs";
+
 export default function Home() {
-  return null;
+  return (
+    <>
+      <Breadcrumbs />
+      <h1>Home</h1>
+    </>
+  );
 }
 
 export async function getServerSideProps() {
