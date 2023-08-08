@@ -19,13 +19,13 @@ Page.propTypes = {
 
 export async function getServerSideProps({ query }) {
   const queryString = getQueryStringFromServerQuery(query);
-  const url = API_URL + "/search?" + queryString;
+  const url = `${API_URL}/search?${queryString}`;
   const response = await fetch(url);
   const data = await response.text();
   const breadcrumbs = [
     {
       title: "Search",
-      href: "/search?" + queryString,
+      href: `/search?${queryString}`,
     },
   ];
 
