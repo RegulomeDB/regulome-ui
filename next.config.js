@@ -26,7 +26,7 @@ module.exports = {
     return [
       {
         source: "/",
-        destination: "/query",
+        destination: "/search",
         permanent: true,
       },
       {

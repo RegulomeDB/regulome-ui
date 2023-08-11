@@ -42,7 +42,7 @@ export default function Page({ data }) {
         maf === "1.1"
           ? `regions=${regions}&genome=${assembly}`
           : `regions=${regions}&genome=${assembly}&maf=${maf}`;
-      const endpoint = `/api/query?${queryString}`;
+      const endpoint = `/api/search?${queryString}`;
       const response = await fetch(endpoint);
       data = await response.json();
       setShowForm(false);
@@ -60,7 +60,7 @@ export default function Page({ data }) {
             };
       Router.push(
         {
-          pathname: "/query",
+          pathname: "/search",
           query,
         },
         undefined,
@@ -186,14 +186,14 @@ export async function getServerSideProps({ query }) {
   }
   const breadcrumbs = [
     {
-      title: "Query",
-      href: "/query",
+      title: "Search",
+      href: "/search",
     },
   ];
   return {
     props: {
       breadcrumbs,
-      pageContext: { title: "Query" },
+      pageContext: { title: "Search" },
       data,
     },
   };
