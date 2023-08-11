@@ -6,7 +6,6 @@ import {
   DataItemValue,
   DataPanel,
 } from "../data-area";
-import Status from "../status";
 
 describe("Test the DataArea component", () => {
   it("properly renders a data panel with default Tailwind CSS classes", () => {
@@ -15,9 +14,7 @@ describe("Test the DataArea component", () => {
         <DataPanel>
           <DataArea>
             <DataItemLabel>Status</DataItemLabel>
-            <DataItemValue>
-              <Status status="in progress" />
-            </DataItemValue>
+            <DataItemValue>Released</DataItemValue>
           </DataArea>
         </DataPanel>
         <DataAreaTitle>Treatments</DataAreaTitle>
@@ -46,9 +43,7 @@ describe("Test the DataArea component", () => {
         <DataPanel className="text-xs">
           <DataArea>
             <DataItemLabel className="font-black">Status</DataItemLabel>
-            <DataItemValue>
-              <Status status="in progress" />
-            </DataItemValue>
+            <DataItemValue>Released</DataItemValue>
           </DataArea>
         </DataPanel>
         <DataAreaTitle>Treatments</DataAreaTitle>
