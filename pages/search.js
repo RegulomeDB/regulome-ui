@@ -132,7 +132,7 @@ export default function Page({ data }) {
                     name="regions"
                     rows="4"
                     cols="50"
-                    placeholder="Enter search parameters here."
+                    placeholder="Enter rsID(s) OR region(s), one per line. For example: rs75982468, chr12:69360231-69360232."
                   ></textarea>
                 </div>
               </div>
