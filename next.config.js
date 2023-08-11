@@ -22,4 +22,18 @@ module.exports = {
       process.env.PUBLIC_BACKEND_URL || process.env.BACKEND_URL || "",
     UI_VERSION,
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/query",
+        permanent: true,
+      },
+      {
+        source: "/index",
+        destination: "/_index",
+        permanent: true,
+      },
+    ];
+  },
 };

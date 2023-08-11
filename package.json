@@ -18,6 +18,7 @@
     "ace-builds": "^1.5.0",
     "dayjs": "^1.11.3",
     "empty-schema": "^0.1.5",
+    "flowbite-react": "^0.5.0",
     "framer-motion": "^10.10.0",
     "isomorphic-dompurify": "^1.0.0",
     "jwt-decode": "^3.1.2",
@@ -35,7 +36,7 @@
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^14.0.0",
     "auth0-js": "^9.19.0",
-    "autoprefixer": "^10.4.7",
+    "autoprefixer": "^10.4.14",
     "coveralls": "^3.1.1",
     "cypress": "^12.17.3",
     "eslint": "^8.17.0",
@@ -45,10 +46,10 @@
     "eslint-plugin-testing-library": "^5.10.2",
     "jest": "^29.0.2",
     "jest-environment-jsdom": "^29.0.2",
-    "postcss": "^8.4.14",
+    "postcss": "^8.4.27",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "pretty-format": "^29.5.0",
-    "tailwindcss": "^3.1.8"
+    "tailwindcss": "^3.3.3"
   }
 }

@@ -1,9 +1,11 @@
 import Breadcrumbs from "../components/breadcrumbs";
+import PagePreamble from "../components/page-preamble";
 
 export default function Page() {
   return (
     <>
       <Breadcrumbs />
+      <PagePreamble />
       <h1>Help</h1>
     </>
   );
@@ -20,6 +22,7 @@ export async function getServerSideProps() {
   return {
     props: {
       breadcrumbs,
+      pageContext: { title: "Help" },
     },
   };
 }

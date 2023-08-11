@@ -1,16 +1,11 @@
-import Breadcrumbs from "../components/breadcrumbs";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
-    <>
-      <Breadcrumbs />
-      <h1>Home</h1>
-    </>
-  );
-}
+  const { push } = useRouter();
 
-export async function getServerSideProps() {
-  return {
-    props: {},
-  };
+  useEffect(() => {
+    push("/query");
+  });
+  return <p></p>;
 }
