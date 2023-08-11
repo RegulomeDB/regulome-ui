@@ -47,12 +47,6 @@ export default function Page({ data }) {
       data = await response.json();
       setShowForm(false);
       setJsondata(data);
-      console.log("maf", maf);
-      console.log(typeof maf);
-      if (maf === 1.1) {
-        console.log("maf === 1.1");
-      }
-
       const query =
         maf === "1.1"
           ? {
