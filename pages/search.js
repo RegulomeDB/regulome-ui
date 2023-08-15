@@ -30,7 +30,7 @@ export default function Page({ data }) {
 
     if (textInput && fileInput) {
       alert(
-        "Only choose one method to set regions: throught text input or file upload"
+        "Only choose one method to set regions: through text input or file upload"
       );
     } else if (!textInput && !fileInput) {
       alert("Please define region(s) for query");
