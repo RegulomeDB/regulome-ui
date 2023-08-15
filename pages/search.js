@@ -30,7 +30,7 @@ export default function Page({ data }) {
 
     if (textInput && fileInput) {
       alert(
-        "Only choose one method to set regions: through text input or file upload"
+        "Only choose one method to set regions: throughtext input or file upload"
       );
     } else if (!textInput && !fileInput) {
       alert("Please define region(s) for query");
@@ -38,10 +38,9 @@ export default function Page({ data }) {
       const regions = textInput
         ? textInput.replace(/\s/g, " ")
         : fileInput.replace(/\s/g, " ");
-      const queryString =
-        maf === "1.1"
-          ? `regions=${regions}&genome=${assembly}`
-          : `regions=${regions}&genome=${assembly}&maf=${maf}`;
+      let queryString = `regions=${regions}&genome=${assembly}`;
+      queryString =
+        maf === "1.1" ? `${queryString}` : `r${queryString}}&maf=${maf}`;
       const endpoint = `/api/search?${queryString}`;
       const response = await fetch(endpoint);
       data = await response.json();
