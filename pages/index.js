@@ -1,16 +1,10 @@
-import Breadcrumbs from "../components/breadcrumbs";
-
-export default function Home() {
-  return (
-    <>
-      <Breadcrumbs />
-      <h1>Home</h1>
-    </>
-  );
-}
+export default function Home() {}
 
 export async function getServerSideProps() {
   return {
-    props: {},
+    redirect: {
+      destination: `/search`,
+      permanent: true,
+    },
   };
 }
