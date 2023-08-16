@@ -14,7 +14,7 @@ const inputClassName =
 const buttonClassName =
   "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
 
-export default function Page({ data }) {
+export default function Page({ data = null }) {
   const [fileInput, setFileInput] = useState("");
 
   // Handles the submit event on form submit.
