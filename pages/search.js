@@ -9,14 +9,13 @@ import RegulomeVersionTag from "../components/regulome-version-tag";
 import { API_URL } from "../lib/constants";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
 
-export default function Page({ data }) {
-  const [showForm, setShowForm] = useState(true);
-  const [fileInput, setFileInput] = useState("");
-  const [jsonData, setJsondata] = useState(data);
+const inputClassName =
+  "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-brand";
+const buttonClassName =
+  "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
 
-  if (data) {
-    return <JsonDisplay item={data} />;
-  }
+export default function Page({ data }) {
+  const [fileInput, setFileInput] = useState("");
 
   // Handles the submit event on form submit.
   async function handleSubmit(event) {
@@ -38,14 +37,6 @@ export default function Page({ data }) {
       const regions = textInput
         ? textInput.replace(/\s/g, " ")
         : fileInput.replace(/\s/g, " ");
-      let queryString = `regions=${regions}&genome=${assembly}`;
-      queryString =
-        maf === "1.1" ? `${queryString}` : `r${queryString}}&maf=${maf}`;
-      const endpoint = `/api/search?${queryString}`;
-      const response = await fetch(endpoint);
-      data = await response.json();
-      setShowForm(false);
-      setJsondata(data);
       const query =
         maf === "1.1"
           ? {
@@ -57,33 +48,24 @@ export default function Page({ data }) {
               genome: assembly,
               maf,
             };
-      Router.push(
-        {
-          pathname: "/search",
-          query,
-        },
-        undefined,
-        { shallow: true }
-      );
+      Router.push({
+        pathname: "/search",
+        query,
+      });
     }
   }
 
-  async function ReadText(event) {
+  async function readText(event) {
     const file = event.target.files.item(0);
     const text = await file.text();
     setFileInput(text);
   }
 
-  const inputClassName =
-    "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-brand";
-  const buttonClassName =
-    "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
-
   return (
     <>
       <Breadcrumbs />
       <PagePreamble />
-      {showForm ? (
+      {!data ? (
         <>
           <RegulomeVersionTag />
           <DataPanel>
@@ -146,12 +128,10 @@ export default function Page({ data }) {
                     name="file"
                     type="file"
                     accept=".txt, .tsv, .csv"
-                    onChange={ReadText}
+                    onChange={readText}
                   />
                 </div>
               </div>
-              <pre id="output"></pre>
-
               <div className="flex items-center">
                 <div className="w-1/3"></div>
                 <div className="w-2/3">
@@ -164,7 +144,7 @@ export default function Page({ data }) {
           </DataPanel>{" "}
         </>
       ) : (
-        <JsonDisplay item={jsonData} />
+        <JsonDisplay item={data} />
       )}
     </>
   );
@@ -179,7 +159,7 @@ export async function getServerSideProps({ query }) {
   let data = null;
   if (Object.keys(query).length > 0) {
     const queryString = getQueryStringFromServerQuery(query);
-    const url = `${API_URL}/search?${queryString}`;
+    const url = `${API_URL}/summary?${queryString}`;
     const response = await fetch(url);
     data = await response.json();
   }

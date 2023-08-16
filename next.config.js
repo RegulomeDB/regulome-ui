@@ -22,18 +22,18 @@ module.exports = {
       process.env.PUBLIC_BACKEND_URL || process.env.BACKEND_URL || "",
     UI_VERSION,
   },
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/search",
-        permanent: true,
-      },
-      {
-        source: "/index",
-        destination: "/_index",
-        permanent: true,
-      },
-    ];
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: "/",
+  //       destination: "/search",
+  //       permanent: true,
+  //     },
+  //     {
+  //       source: "/index",
+  //       destination: "/_index",
+  //       permanent: true,
+  //     },
+  //   ];
+  // },
 };
