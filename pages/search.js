@@ -10,7 +10,7 @@ export default function Page({ data }) {
     <>
       <Breadcrumbs />
       <PagePreamble />
-      <JsonDisplay item={data.total === 0 ? data.notifications : data} />
+      <JsonDisplay item={data} />
     </>
   );
 }
