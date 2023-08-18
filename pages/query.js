@@ -28,7 +28,7 @@ export default function Page() {
 
     if (textInput && fileInput) {
       alert(
-        "Only choose one method to set regions: throughtext input or file upload"
+        "Only choose one method to set regions: through text input or file upload"
       );
     } else if (!textInput && !fileInput) {
       setIsOpen(true);
