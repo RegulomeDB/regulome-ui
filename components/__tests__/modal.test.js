@@ -23,6 +23,26 @@ describe("Test a basic modal", () => {
     expect(screen.getByText("Modal Body")).toBeInTheDocument();
   });
 
+  it("displays a modal with onClose function in header", () => {
+    const onClose = jest.fn();
+
+    render(
+      <Modal isOpen={true} onClose={onClose}>
+        <Modal.Header onClose={onClose}>Modal Header</Modal.Header>
+        <Modal.Body>Modal Body</Modal.Body>
+        <Modal.Footer>
+          <button onClick={onClose}>Close</button>
+        </Modal.Footer>
+      </Modal>
+    );
+
+    // Open the modal and make sure it appears.
+    const modal = screen.getByRole("dialog");
+    expect(modal).toBeInTheDocument();
+    expect(screen.getByText("Modal Header")).toBeInTheDocument();
+    expect(screen.getByText("Modal Body")).toBeInTheDocument();
+  });
+
   it("displays a modal and focuses on a specific button", () => {
     const onClose = jest.fn();
 
