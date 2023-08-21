@@ -5,7 +5,7 @@ import Breadcrumbs from "../components/breadcrumbs";
 import JsonDisplay from "../components/json-display";
 import PagePreamble from "../components/page-preamble";
 
-export default function Search({ data }) {
+export default function Summary({ data }) {
   return (
     <>
       <Breadcrumbs />
@@ -15,19 +15,20 @@ export default function Search({ data }) {
   );
 }
 
-Search.propTypes = {
-  data: PropTypes.string.isRequired,
+Summary.propTypes = {
+  data: PropTypes.object.isRequired,
 };
 
 export async function getServerSideProps({ query }) {
   const queryString = getQueryStringFromServerQuery(query);
-  const url = `${API_URL}/search?${queryString}`;
+  const url = `${API_URL}/summary?${queryString}`;
   const response = await fetch(url);
   const data = await response.json();
+
   const breadcrumbs = [
     {
-      title: "Search",
-      href: `/search?${queryString}`,
+      title: "Summary",
+      href: `/summary?${queryString}`,
     },
   ];
 
@@ -35,7 +36,7 @@ export async function getServerSideProps({ query }) {
     props: {
       data,
       breadcrumbs,
-      pageContext: { title: "Search" },
+      pageContext: { title: "Summary" },
     },
   };
 }

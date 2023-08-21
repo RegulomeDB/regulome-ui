@@ -1,7 +1,7 @@
 import Breadcrumbs from "../components/breadcrumbs";
 import PagePreamble from "../components/page-preamble";
 
-export default function Page() {
+export default function Help() {
   return (
     <>
       <Breadcrumbs />
