@@ -5,7 +5,7 @@ import Breadcrumbs from "../components/breadcrumbs";
 import JsonDisplay from "../components/json-display";
 import PagePreamble from "../components/page-preamble";
 
-export default function Page({ data }) {
+export default function Search({ data }) {
   return (
     <>
       <Breadcrumbs />
@@ -15,7 +15,7 @@ export default function Page({ data }) {
   );
 }
 
-Page.propTypes = {
+Search.propTypes = {
   data: PropTypes.string.isRequired,
 };
 

@@ -12,7 +12,7 @@ const inputClassName =
 const buttonClassName =
   "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
 
-export default function Page() {
+export default function Query() {
   const [fileInput, setFileInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
