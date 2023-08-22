@@ -5,7 +5,7 @@ def test_naming_prepend_project_name():
     from infrastructure.naming import prepend_project_name
     assert prepend_project_name(
         'some-other-name'
-    ) == 'igvf-ui-some-other-name'
+    ) == 'regulome-ui-some-other-name'
 
 
 def test_naming_prepend_branch_name():

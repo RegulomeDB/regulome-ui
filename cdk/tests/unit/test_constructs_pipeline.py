@@ -264,7 +264,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
     from infrastructure.config import Config
     from infrastructure.constructs.pipeline import DemoDeploymentPipeline
     from infrastructure.constructs.pipeline import DemoDeploymentPipelineProps
-    from infrastructure.constructs.existing import igvf_dev
+    from infrastructure.constructs.existing import regulome_dev
     stack = Stack(
         env=igvf_dev.US_WEST_2
     )
@@ -529,9 +529,9 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
     from infrastructure.config import Config
     from infrastructure.constructs.pipeline import DevDeploymentPipeline
     from infrastructure.constructs.pipeline import DevDeploymentPipelineProps
-    from infrastructure.constructs.existing import igvf_dev
+    from infrastructure.constructs.existing import regulome_dev
     stack = Stack(
-        env=igvf_dev.US_WEST_2
+        env=regulome_dev.US_WEST_2
     )
     existing_resources = mocker.Mock()
     existing_resources.code_star_connection.arn = 'some-arn'
@@ -796,9 +796,9 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
     from infrastructure.config import Config
     from infrastructure.constructs.pipeline import ProductionDeploymentPipeline
     from infrastructure.constructs.pipeline import ProductionDeploymentPipelineProps
-    from infrastructure.constructs.existing import igvf_dev
+    from infrastructure.constructs.existing import regulome_dev
     stack = Stack(
-        env=igvf_dev.US_WEST_2
+        env=regulome_dev.US_WEST_2
     )
     existing_resources = mocker.Mock()
     existing_resources.code_star_connection.arn = 'some-arn'
