@@ -9,32 +9,33 @@ const initialSort = {
   columnId: "rank",
 };
 
+const summaryColumns = [
+  {
+    id: "chrom_location",
+    title: "Chromosome location",
+    display: ({ source }) => {
+      const url = `/search?regions=${source.chrom_location}&genome=${source.assembly}`;
+      return <Link href={url}>{source.chrom_location}</Link>;
+    },
+  },
+  {
+    id: "rsids",
+    title: "dbSNP IDs",
+    display: ({ source }) => `${source.rsids.join(", ")}`,
+  },
+  {
+    id: "rank",
+    title: "Rank",
+  },
+  {
+    id: "score",
+    title: "Score",
+  },
+];
+
 /**
  * Display a sortable table of the given data.
- */ export default function SummaryTable({ data, assembly }) {
-  const summaryColumns = [
-    {
-      id: "chrom_location",
-      title: "Chromosome location",
-      display: ({ source }) => {
-        const url = `/search?regions=${source.chrom_location}&genome=${assembly}`;
-        return <Link href={url}>{source.chrom_location}</Link>;
-      },
-    },
-    {
-      id: "rsids",
-      title: "dbSNP IDs",
-      display: ({ source }) => `${source.rsids.join(", ")}`,
-    },
-    {
-      id: "rank",
-      title: "Rank",
-    },
-    {
-      id: "score",
-      title: "Score",
-    },
-  ];
+ */ export default function SummaryTable({ data }) {
   return (
     <DataGridContainer>
       <SortableGrid
@@ -50,5 +51,4 @@ const initialSort = {
 SummaryTable.propTypes = {
   // data to display
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  assembly: PropTypes.string.isRequired,
 };

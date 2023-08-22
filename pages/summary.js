@@ -20,6 +20,7 @@ export default function Summary({ data, queryString }) {
       variant.rsids = data.variants[i].rsids;
       variant.rank = data.variants[i].regulome_score.ranking;
       variant.score = data.variants[i].regulome_score.probability;
+      variant.assembly = assembly;
       variants[i] = variant;
     }
   }
@@ -46,7 +47,7 @@ export default function Summary({ data, queryString }) {
                 Download TSV
               </ButtonLink>
             </div>
-            <SummaryTable data={variants} assembly={assembly} />
+            <SummaryTable data={variants} />
           </>
         )}
       </DataPanel>
