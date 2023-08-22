@@ -20,7 +20,7 @@ def test_stacks_frontend_initialize_frontend_stack(config):
         'AWS::ECS::Service',
         {
             'Cluster': {
-                'Ref': 'EcsDefaultClusterMnL3mNNYNDemoVpc278C9613'
+                'Ref': 'EcsDefaultClusterMnL3mNNYNVpc18E0451A'
             },
             'DeploymentConfiguration': {
                 'DeploymentCircuitBreaker': {
@@ -67,7 +67,7 @@ def test_stacks_frontend_initialize_frontend_stack(config):
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://gds-some-test-backend.demo.igvf.org'
+                    'Value': 'https://gds-some-test-backend.regulomedb.org'
                 },
                 {
                     'Key': 'branch',

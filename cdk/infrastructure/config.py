@@ -69,30 +69,6 @@ config: Dict[str, Any] = {
             'tags': [
             ],
         },
-        'staging': {
-            'frontend': {
-                'cpu': 1024,
-                'memory_limit_mib': 2048,
-                'desired_count': 1,
-                'max_capacity': 4,
-            },
-            'backend_url': 'https://api.staging.igvf.org',
-            'use_subdomain': False,
-            'tags': [
-            ],
-        },
-        'sandbox': {
-            'frontend': {
-                'cpu': 1024,
-                'memory_limit_mib': 2048,
-                'desired_count': 1,
-                'max_capacity': 4,
-            },
-            'backend_url': 'https://api.sandbox.igvf.org',
-            'use_subdomain': False,
-            'tags': [
-            ],
-        },
         'production': {
             'frontend': {
                 'cpu': 1024,
@@ -111,10 +87,10 @@ config: Dict[str, Any] = {
 
 @dataclass
 class Common:
-    organization_name: str = 'igvf-dacc'
-    project_name: str = 'igvf-ui'
+    organization_name: str = 'regulomedb'
+    project_name: str = 'regulome-ui'
     default_region: str = 'us-west-2'
-    aws_cdk_version: str = '2.61.0'
+    aws_cdk_version: str = '2.88.0'
 
 
 @dataclass
@@ -203,4 +179,4 @@ def get_pipeline_config_name_from_branch(branch: str) -> str:
 
 
 def get_backend_url_from_branch(branch: str) -> str:
-    return f'https://igvfd-{branch}.demo.igvf.org'
+    return f'https://regulome-ui-{branch}.regulomedb.org'

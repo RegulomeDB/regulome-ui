@@ -2,7 +2,7 @@ from aws_cdk import Stage
 
 from constructs import Construct
 
-from infrastructure.constructs.existing import igvf_prod
+from infrastructure.constructs.existing import regulome_prod
 
 from infrastructure.config import Config
 
@@ -28,7 +28,7 @@ class ProductionDeployStage(Stage):
             self,
             'FrontendStack',
             config=config,
-            existing_resources_class=igvf_prod.Resources,
-            env=igvf_prod.US_WEST_2,
+            existing_resources_class=regulome_prod.Resources,
+            env=regulome_prod.US_WEST_2,
         )
         add_tags_to_stack(self.frontend_stack, config)
