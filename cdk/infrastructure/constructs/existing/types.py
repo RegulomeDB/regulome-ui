@@ -1,5 +1,5 @@
-from infrastructure.constructs.existing.igvf_dev import Resources as REGULOMEDevResources
-from infrastructure.constructs.existing.igvf_prod import Resources as REGULOMEProdResources
+from infrastructure.constructs.existing.regulome_dev import Resources as REGULOMEDevResources
+from infrastructure.constructs.existing.regulome_prod import Resources as REGULOMEProdResources
 
 from typing import Union
 

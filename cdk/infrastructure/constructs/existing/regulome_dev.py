@@ -7,7 +7,6 @@ from regulome_infrastructure.regulome_dev.secret import DockerHubCredentials
 from regulome_infrastructure.regulome_dev.network import Network as DemoNetwork
 from regulome_infrastructure.regulome_dev.notification import Notification
 from regulome_infrastructure.regulome_dev.bus import Bus
-from regulome_infrastructure.regulome_dev.secret import PortalCredentials
 
 from typing import Any
 
@@ -27,10 +26,6 @@ class Resources(Construct):
         self.docker_hub_credentials = DockerHubCredentials(
             self,
             'DockerHubCredentials',
-        )
-        self.portal_credentials = PortalCredentials(
-            self,
-            'PortalCredentials',
         )
         self.code_star_connection = CodeStarConnection(
             self,
