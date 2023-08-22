@@ -151,6 +151,52 @@ describe("SortableGrid", () => {
     expect(cells[7]).toHaveTextContent("2021-09-15");
   });
 
+  it("renders a two-column sortable table with sorting suppressed", () => {
+    const columns = [
+      {
+        id: "accession",
+        title: "Accession",
+      },
+      {
+        id: "biosample_ontology",
+        title: "Biosample",
+        value: (item) =>
+          `${item.biosample_ontology.term_name} / ${item.biosample_ontology.classification}`,
+      },
+      {
+        id: "description",
+        title: "Description",
+        isSortable: false,
+      },
+      {
+        id: "date_obtained",
+        title: "Date Obtained",
+      },
+    ];
+
+    const initialSort = { isSortingSuppressed: true };
+
+    render(
+      <DataGridContainer>
+        <SortableGrid data={data} columns={columns} initialSort={initialSort} />
+      </DataGridContainer>
+    );
+
+    const table = screen.getByRole("table");
+    expect(table).toBeInTheDocument();
+    const cells = within(table).getAllByRole("cell");
+
+    // Before clicking a header cell to change sorting.
+    expect(cells[0]).toHaveTextContent("ENCBS697LCA");
+    expect(cells[1]).toHaveTextContent("HepG2 / cell line");
+    expect(cells[2]).toHaveTextContent("RNA-seq on HepG2");
+    expect(cells[3]).toHaveTextContent("2021-09-15");
+    expect(cells[4]).toHaveTextContent("ENCBS255XED");
+    expect(cells[5]).toHaveTextContent("K562 / cell line");
+    expect(cells[6]).toHaveTextContent("RNA-seq on K562");
+    expect(cells[7]).not.toHaveValue();
+  });
+
   it("renders a table with a custom sorting function", () => {
     const columns = [
       {
