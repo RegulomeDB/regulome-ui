@@ -22,7 +22,7 @@ export default function Notifications({ notifications }) {
 }
 
 Notifications.propTypes = {
-  // Page title for pages in which the server doesn't supply one
+  // notifications to display
   notifications: PropTypes.object.isRequired,
 };
 
@@ -36,6 +36,6 @@ function NotificationsList({ notifications }) {
 }
 
 NotificationsList.propTypes = {
-  // Page title for pages in which the server doesn't supply one
+  // notifications to display
   notifications: PropTypes.object.isRequired,
 };
