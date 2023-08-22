@@ -15,7 +15,7 @@ export default function Summary({ data, queryString }) {
   const assembly = data.assembly;
   if (total > 1) {
     for (let i = 0; i < data.variants.length; i++) {
-      const variant = [];
+      const variant = {};
       variant.chrom_location = `${data.variants[i].chrom}:${data.variants[i].start}-${data.variants[i].end}`;
       variant.rsids = data.variants[i].rsids;
       variant.rank = data.variants[i].regulome_score.ranking;
