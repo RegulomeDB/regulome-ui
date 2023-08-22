@@ -10,15 +10,17 @@ import SummaryTable from "../components/summary-table";
 import Notifications from "../components/notifications";
 
 export default function Summary({ data, queryString }) {
-  const total = data.total;
+  const total = data.total ? data.total : 0;
   const variants = data.variants;
   const assembly = data.assembly;
-  for (let i = 0; i < variants.length; i++) {
-    variants[
-      i
-    ].chrom_location = `${variants[i].chrom}:${variants[i].start}-${variants[i].end}`;
-    variants[i].rank = variants[i].regulome_score.ranking;
-    variants[i].score = variants[i].regulome_score.probability;
+  if (total > 1) {
+    for (let i = 0; i < variants.length; i++) {
+      variants[
+        i
+      ].chrom_location = `${variants[i].chrom}:${variants[i].start}-${variants[i].end}`;
+      variants[i].rank = variants[i].regulome_score.ranking;
+      variants[i].score = variants[i].regulome_score.probability;
+    }
   }
   return (
     <>
