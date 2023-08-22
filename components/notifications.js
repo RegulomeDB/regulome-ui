@@ -8,7 +8,7 @@ import {
   DataPanel,
 } from "./data-area";
 /**
- * display notifictions when query is failed
+ * display notifications when query is failed
  */
 export default function Notifications({ notifications }) {
   return (
@@ -27,8 +27,8 @@ Notifications.propTypes = {
 };
 
 function NotificationsList({ notifications }) {
-  return Object.keys(notifications).map((note, noteIdx) => (
-    <DataArea key={noteIdx}>
+  return Object.keys(notifications).map((note) => (
+    <DataArea key={note}>
       <DataItemLabel>{note}</DataItemLabel>
       <DataItemValue>{notifications[note]}</DataItemValue>
     </DataArea>

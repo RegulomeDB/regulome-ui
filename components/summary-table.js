@@ -5,10 +5,13 @@ import Link from "next/link";
 import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
+const initialSort = {
+  columnId: "rank",
+};
+
 /**
  * Display a sortable table of the given data.
- */
-export default function SummaryTable({ data, assembly }) {
+ */ export default function SummaryTable({ data, assembly }) {
   const summaryColumns = [
     {
       id: "chrom_location",
@@ -32,9 +35,6 @@ export default function SummaryTable({ data, assembly }) {
       title: "Score",
     },
   ];
-  const initialSort = {
-    columnId: "rank",
-  };
   return (
     <DataGridContainer>
       <SortableGrid
