@@ -266,7 +266,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
     from infrastructure.constructs.pipeline import DemoDeploymentPipelineProps
     from infrastructure.constructs.existing import regulome_dev
     stack = Stack(
-        env=igvf_dev.US_WEST_2
+        env=regulome_dev.US_WEST_2
     )
     existing_resources = mocker.Mock()
     existing_resources.code_star_connection.arn = 'some-arn'

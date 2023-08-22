@@ -38,7 +38,6 @@ config: Dict[str, Any] = {
         },
         'production': {
             'pipeline': 'ProductionDeploymentPipelineStack',
-            'cross_account_keys': True,
             'existing_resources_class': regulome_prod.Resources,
             'account_and_region': regulome_prod.US_WEST_2,
             'tags': [
@@ -115,7 +114,6 @@ class PipelineConfig:
     existing_resources_class: ExistingResourcesClass
     account_and_region: Environment
     tags: List[Tuple[str, str]]
-    cross_account_keys: bool = False
     common: Common = field(
         default_factory=Common
     )

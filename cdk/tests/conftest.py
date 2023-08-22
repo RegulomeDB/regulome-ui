@@ -172,7 +172,6 @@ def production_pipeline_config():
         pipeline='xyz',
         existing_resources_class=regulome_dev.Resources,
         account_and_region=regulome_dev.US_WEST_2,
-        cross_account_keys=True,
         tags=[
             ('test', 'tag'),
         ]
