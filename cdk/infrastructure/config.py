@@ -5,8 +5,8 @@ from aws_cdk import Environment
 from dataclasses import dataclass
 from dataclasses import field
 
-from infrastructure.constructs.existing import igvf_dev
-from infrastructure.constructs.existing import igvf_prod
+from infrastructure.constructs.existing import regulome_dev
+from infrastructure.constructs.existing import regulome_prod
 
 from infrastructure.constructs.existing.types import ExistingResourcesClass
 
@@ -22,8 +22,8 @@ config: Dict[str, Any] = {
     'pipeline': {
         'demo': {
             'pipeline': 'DemoDeploymentPipelineStack',
-            'existing_resources_class': igvf_dev.Resources,
-            'account_and_region': igvf_dev.US_WEST_2,
+            'existing_resources_class': regulome_dev.Resources,
+            'account_and_region': regulome_dev.US_WEST_2,
             'tags': [
                 ('time-to-live-hours', '72'),
                 ('turn-off-on-friday-night', 'yes'),
@@ -31,16 +31,16 @@ config: Dict[str, Any] = {
         },
         'dev': {
             'pipeline': 'DevDeploymentPipelineStack',
-            'existing_resources_class': igvf_dev.Resources,
-            'account_and_region': igvf_dev.US_WEST_2,
+            'existing_resources_class': regulome_dev.Resources,
+            'account_and_region': regulome_dev.US_WEST_2,
             'tags': [
             ],
         },
         'production': {
             'pipeline': 'ProductionDeploymentPipelineStack',
             'cross_account_keys': True,
-            'existing_resources_class': igvf_prod.Resources,
-            'account_and_region': igvf_prod.US_WEST_2,
+            'existing_resources_class': regulome_prod.Resources,
+            'account_and_region': regulome_prod.US_WEST_2,
             'tags': [
             ],
         },

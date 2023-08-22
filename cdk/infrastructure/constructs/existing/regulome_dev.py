@@ -1,13 +1,13 @@
 from constructs import Construct
 
-from shared_infrastructure.igvf_staging.connection import CodeStarConnection
-from shared_infrastructure.igvf_staging.environment import US_WEST_2 as US_WEST_2
-from shared_infrastructure.igvf_staging.domain import Domain
-from shared_infrastructure.igvf_staging.secret import DockerHubCredentials
-from shared_infrastructure.igvf_staging.network import Network
-from shared_infrastructure.igvf_staging.notification import Notification
-from shared_infrastructure.igvf_staging.bus import Bus
-from shared_infrastructure.igvf_staging.secret import PortalCredentials
+from regulome_infrastructure.regulome_dev.connection import CodeStarConnection
+from regulome_infrastructure.regulome_dev.environment import US_WEST_2 as US_WEST_2
+from regulome_infrastructure.regulome_dev.domain import Domain as DemoDomain
+from regulome_infrastructure.regulome_dev.secret import DockerHubCredentials
+from regulome_infrastructure.regulome_dev.network import Network as DemoNetwork
+from regulome_infrastructure.regulome_dev.notification import Notification
+from regulome_infrastructure.regulome_dev.bus import Bus
+from regulome_infrastructure.regulome_dev.secret import PortalCredentials
 
 from typing import Any
 
@@ -16,13 +16,13 @@ class Resources(Construct):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs: Any) -> None:
         super().__init__(scope, construct_id, **kwargs)
-        self.network = Network(
+        self.network = DemoNetwork(
             self,
-            'Network',
+            'DemoNetwork',
         )
-        self.domain = Domain(
+        self.domain = DemoDomain(
             self,
-            'Domain',
+            'DemoDomain',
         )
         self.docker_hub_credentials = DockerHubCredentials(
             self,
