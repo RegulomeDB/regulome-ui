@@ -3,6 +3,119 @@ import pytest
 from aws_cdk.assertions import Template
 
 
+def stack():
+    from aws_cdk import Stack
+    return Stack()
+
+def vpc():
+    from aws_cdk import Stack
+    from aws_cdk.aws_ec2 import SubnetConfiguration
+    from aws_cdk.aws_ec2 import SubnetType
+    from aws_cdk.aws_ec2 import Vpc
+    vpc = Vpc(
+        stack(),
+        'TestVpc',
+        cidr='10.4.0.0/16',
+        nat_gateways=0,
+        subnet_configuration=[
+            SubnetConfiguration(
+                name='public',
+                cidr_mask=20,
+                subnet_type=SubnetType.PUBLIC,
+            ),
+            SubnetConfiguration(
+                name='isolated',
+                cidr_mask=20,
+                subnet_type=SubnetType.PRIVATE_ISOLATED,
+            ),
+        ]
+    )
+    return vpc
+
+def secret():
+    from aws_cdk.aws_secretsmanager import Secret
+    return Secret(
+        stack(),
+        'TestSecret',
+    )
+
+
+
+def chatbot():
+    from aws_cdk.aws_chatbot import SlackChannelConfiguration
+    return SlackChannelConfiguration(
+        stack(),
+        'TestChatbot',
+        slack_channel_configuration_name='some-config-name',
+        slack_channel_id='some-channel-id',
+        slack_workspace_id='some-workspace-id',
+    )
+
+
+
+def _domain_name():
+    return 'my.test.domain.org'
+
+
+
+def certificate():
+    from aws_cdk.aws_certificatemanager import Certificate
+    domain_name=_domain_name()
+    return Certificate(
+        stack(),
+        'TestCertificate',
+        domain_name=f'*.{domain_name}',
+    )
+
+
+
+def hosted_zone():
+    from aws_cdk.aws_route53 import HostedZone
+    return HostedZone(
+        stack(),
+        'TestHostedZone',
+        zone_name=_domain_name(),
+    )
+
+
+
+def network(mocker):
+    mock = mocker.Mock()
+    mock.vpc = vpc()
+    return mock
+
+
+
+def domain(mocker):
+    mock = mocker.Mock()
+    mock.name = _domain_name()
+    mock.certificate = certificate()
+    mock.zone = hosted_zone()
+    return mock
+
+
+
+def sns_topic():
+    from aws_cdk.aws_sns import Topic
+    return Topic(
+        stack(),
+        'TestTopic',
+    )
+
+
+
+def _existing_resources(mocker):
+    mock = mocker.Mock()
+    mock.domain = domain(mocker)
+    mock.network = network(mocker)
+    mock.docker_hub_credentials.secret = secret()
+    mock.code_star_connection.arn = 'some-code-star-arn'
+    mock.notification.regulomedb_chatbot = chatbot()
+    mock.notification.alarm_notification_topic = sns_topic()
+    return mock
+
+
+
 def test_constructs_pipeline_initialize_basic_self_updating_pipeline_construct(stack, secret, mocker, pipeline_config):
     from infrastructure.constructs.pipeline import BasicSelfUpdatingPipeline
     from infrastructure.constructs.pipeline import BasicSelfUpdatingPipelineProps
@@ -157,7 +270,7 @@ def test_constructs_pipeline_initialize_basic_self_updating_pipeline_construct(s
                         'Value': 'some-branch'
                     }
                 ],
-                'Image': 'aws/codebuild/standard:5.0',
+                'Image': 'aws/codebuild/standard:6.0',
                 'ImagePullCredentialsType': 'CODEBUILD',
                 'PrivilegedMode': True,
                 'Type': 'LINUX_CONTAINER'
@@ -268,19 +381,21 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
     stack = Stack(
         env=regulome_dev.US_WEST_2
     )
-    existing_resources = mocker.Mock()
+    '''
     existing_resources.code_star_connection.arn = 'some-arn'
     existing_resources.docker_hub_credentials.secret = Secret(
         stack,
         'TestSecret',
     )
-    existing_resources.notification.encode_dcc_chatbot = SlackChannelConfiguration(
+    existing_resources.notification.regulome_db_chatbot = SlackChannelConfiguration(
         stack,
         'TestChatbot',
         slack_channel_configuration_name='some-config-name',
         slack_channel_id='some-channel-id',
         slack_workspace_id='some-workspace-id',
     )
+    '''
+    existing_resources = _existing_resources(mocker)
     pipeline = DemoDeploymentPipeline(
         stack,
         'TestDemoDeploymentPipeline',

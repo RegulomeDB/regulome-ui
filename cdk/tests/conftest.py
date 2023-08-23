@@ -122,7 +122,7 @@ def existing_resources(mocker, domain, network, secret, chatbot, sns_topic):
     mock.network = network
     mock.docker_hub_credentials.secret = secret
     mock.code_star_connection.arn = 'some-code-star-arn'
-    mock.notification.encode_dcc_chatbot = chatbot
+    mock.notification.regulomedb_chatbot = chatbot
     mock.notification.alarm_notification_topic = sns_topic
     return mock
 
