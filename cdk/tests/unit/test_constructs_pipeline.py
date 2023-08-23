@@ -259,7 +259,7 @@ def test_constructs_pipeline_initialize_basic_self_updating_pipeline_construct(s
     )
 
 
-def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(stack, secret, mocker, domain, pipeline_config):
+def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocker, pipeline_config):
     from aws_cdk import Stack
     from aws_cdk.aws_secretsmanager import Secret
     from aws_cdk.aws_chatbot import SlackChannelConfiguration
@@ -267,9 +267,20 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(stack
     from infrastructure.constructs.pipeline import DemoDeploymentPipeline
     from infrastructure.constructs.pipeline import DemoDeploymentPipelineProps
     from infrastructure.constructs.existing import regulome_dev
-    existing_resources=mocker.Mock()
+    stack = Stack(env=regulome_dev.US_WEST_2)
+    existing_resources = mocker.Mock()
     existing_resources.code_star_connection.arn = 'some-arn'
-    existing_resources.docker_hub_credentials.secret = secret
+    existing_resources.docker_hub_credentials.secret = Secret(
+        stack,
+        'TestSecret',
+    )
+    existing_resources.notification.regulomedb_chatbot = SlackChannelConfiguration(
+        stack,
+        'TestChatBot',
+        slack_channel_configuration_name='some-config-name',
+        slack_channel_id='some-channel-id',
+        slack_workspace_id='some-workspace-id',
+    )
     pipeline = DemoDeploymentPipeline(
         stack,
         'TestDemoDeploymentPipeline',
@@ -277,7 +288,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(stack
             github_repo='ABC/xyz',
             existing_resources=existing_resources,
             config=pipeline_config,
-        )
+        ),
     )
     assert isinstance(pipeline.demo_config, Config)
     template = Template.from_stack(stack)
@@ -430,7 +441,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(stack
                                 'Version': '1'
                             },
                             'Configuration': {
-                                'StackName': 'igvf-ui-some-branch-DemoDeployStage-FrontendStack',
+                                'StackName': 'regulome-ui-some-branch-DemoDeployStage-FrontendStack',
                                 'Capabilities': 'CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND',
                                 'RoleArn': {
                                     'Fn::Join': [
@@ -440,14 +451,14 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(stack
                                             {
                                                 'Ref': 'AWS::Partition'
                                             },
-                                            ':iam::109189702753:role/cdk-hnb659fds-cfn-exec-role-109189702753-us-west-2'
+                                            ':iam::281708499374:role/cdk-hnb659fds-cfn-exec-role-281708499374-us-west-2'
                                         ]
                                     ]
                                 },
-                                'TemplateConfiguration': 'SynthStep_Output::assembly-Default-TestDemoDeploymentPipeline-igvf-ui-some-branch-DemoDeployStage/TestDemoDeploymentPipelineigvfuisomebranchDemoDeployStageFrontendStack04E16543.template.json.config.json',
+                                'TemplateConfiguration': 'SynthStep_Output::assembly-Default-TestDemoDeploymentPipeline-regulome-ui-some-branch-DemoDeployStage/TestDemoDeploymentPipelineregulomeuisomebranchDemoDeployStageFrontendStackE9F5F699.template.json.config.json',
                                 'ActionMode': 'CHANGE_SET_REPLACE',
                                 'ChangeSetName': 'PipelineChange',
-                                'TemplatePath': 'SynthStep_Output::assembly-Default-TestDemoDeploymentPipeline-igvf-ui-some-branch-DemoDeployStage/TestDemoDeploymentPipelineigvfuisomebranchDemoDeployStageFrontendStack04E16543.template.json'
+                                'TemplatePath': 'SynthStep_Output::assembly-Default-TestDemoDeploymentPipeline-regulome-ui-some-branch-DemoDeployStage/TestDemoDeploymentPipelineregulomeuisomebranchDemoDeployStageFrontendStackE9F5F699.template.json'
                             },
                             'InputArtifacts': [
                                 {
@@ -463,7 +474,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(stack
                                         {
                                             'Ref': 'AWS::Partition'
                                         },
-                                        ':iam::109189702753:role/cdk-hnb659fds-deploy-role-109189702753-us-west-2'
+                                        ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
                                     ]
                                 ]
                             },
@@ -477,7 +488,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(stack
                                 'Version': '1'
                             },
                             'Configuration': {
-                                'StackName': 'igvf-ui-some-branch-DemoDeployStage-FrontendStack',
+                                'StackName': 'regulome-ui-some-branch-DemoDeployStage-FrontendStack',
                                 'ActionMode': 'CHANGE_SET_EXECUTE',
                                 'ChangeSetName': 'PipelineChange'
                             },
@@ -490,14 +501,14 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(stack
                                         {
                                             'Ref': 'AWS::Partition'
                                         },
-                                        ':iam::109189702753:role/cdk-hnb659fds-deploy-role-109189702753-us-west-2'
+                                        ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
                                     ]
                                 ]
                             },
                             'RunOrder': 2
                         }
                     ],
-                    'Name': 'igvf-ui-some-branch-DemoDeployStage'
+                    'Name': 'regulome-ui-some-branch-DemoDeployStage'
                 }
             ],
             'ArtifactStore': {
