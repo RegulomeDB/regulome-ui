@@ -165,7 +165,7 @@ class DemoDeploymentPipeline(BasicSelfUpdatingPipeline):
             **kwargs,
         )
         self._define_demo_environment_config()
-        self._add_development_deploy_stage()
+        self._add_demo_deploy_stage()
         self._add_slack_notifications()
 
     def _define_demo_environment_config(self) -> None:
@@ -174,7 +174,7 @@ class DemoDeploymentPipeline(BasicSelfUpdatingPipeline):
             branch=self.props.config.branch,
         )
 
-    def _add_development_deploy_stage(self) -> None:
+    def _add_demo_deploy_stage(self) -> None:
         stage = DemoDeployStage(
             self,
             prepend_project_name(
