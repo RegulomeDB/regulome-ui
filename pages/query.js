@@ -14,11 +14,11 @@ const buttonClassName =
   "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
 
 export default function Query() {
-  const [fileInput, setFileInput] = useState(null);
+  const [fileInput, setFileInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [maf, setMaf] = useState("1.1");
   const [assembly, setAssembly] = useState("GRCh38");
-  const [textInput, setTextInput] = useState(null);
+  const [textInput, setTextInput] = useState("");
 
   // Handles the submit event on form submit.
   async function handleSubmit(event) {

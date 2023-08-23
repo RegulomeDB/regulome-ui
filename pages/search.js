@@ -16,7 +16,7 @@ export default function Search({ data }) {
 }
 
 Search.propTypes = {
-  data: PropTypes.string.isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 export async function getServerSideProps({ query }) {
