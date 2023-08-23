@@ -1,6 +1,4 @@
 import PropTypes from "prop-types";
-import { API_URL } from "../lib/constants";
-import { getQueryStringFromServerQuery } from "../lib/query-utils";
 import Breadcrumbs from "../components/breadcrumbs";
 import { DataPanel, DataAreaTitle } from "../components/data-area";
 import { ButtonLink } from "../components/form-elements";
@@ -8,6 +6,10 @@ import PagePreamble from "../components/page-preamble";
 import RegulomeVersionTag from "../components/regulome-version-tag";
 import SummaryTable from "../components/summary-table";
 import Notifications from "../components/notifications";
+import { API_URL } from "../lib/constants";
+import errorObjectToProps from "../lib/errors";
+import FetchRequest from "../lib/fetch-request";
+import { getQueryStringFromServerQuery } from "../lib/query-utils";
 
 export default function Summary({ data, queryString }) {
   const total = data.total || 0;
@@ -24,11 +26,12 @@ export default function Summary({ data, queryString }) {
       variants[i] = variant;
     }
   }
+
   return (
     <>
       <Breadcrumbs />
-      <PagePreamble />
       <RegulomeVersionTag />
+      <PagePreamble />
       <DataPanel>
         <DataAreaTitle>This search has found {total} variant(s).</DataAreaTitle>
         {total > 1 && (
@@ -65,31 +68,33 @@ Summary.propTypes = {
 
 export async function getServerSideProps({ query }) {
   const queryString = getQueryStringFromServerQuery(query);
-  const url = `${API_URL}/summary?${queryString}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  if (data.total === 1) {
+  const request = new FetchRequest();
+  const data = await request.getObject(`/summary?${queryString}`);
+  if (FetchRequest.isResponseSuccess(data)) {
+    if (data["@type"][0] === "search") {
+      return {
+        redirect: {
+          destination: `${data["@id"]}`,
+          permanent: true,
+        },
+      };
+    }
+
+    const breadcrumbs = [
+      {
+        title: "Summary",
+        href: `/summary?${queryString}`,
+      },
+    ];
+
     return {
-      redirect: {
-        destination: `/search?${queryString}`,
-        permanent: true,
+      props: {
+        data,
+        breadcrumbs,
+        pageContext: { title: "Summary" },
+        queryString,
       },
     };
   }
-
-  const breadcrumbs = [
-    {
-      title: "Summary",
-      href: `/summary?${queryString}`,
-    },
-  ];
-
-  return {
-    props: {
-      data,
-      breadcrumbs,
-      pageContext: { title: "Summary" },
-      queryString,
-    },
-  };
+  return errorObjectToProps(data);
 }
