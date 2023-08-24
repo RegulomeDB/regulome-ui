@@ -4,10 +4,10 @@ import pytest
 def test_constructs_existing_initialize_igvf_prod_construct():
     from aws_cdk import Stack
     from aws_cdk import Environment
-    from infrastructure.constructs.existing.igvf_prod import Resources
-    from shared_infrastructure.igvf_prod.domain import Domain
-    from shared_infrastructure.igvf_prod.secret import DockerHubCredentials
-    from shared_infrastructure.igvf_prod.network import Network
+    from infrastructure.constructs.existing.regulome_prod import Resources
+    from regulome_infrastructure.regulome_prod.domain import Domain
+    from regulome_infrastructure.regulome_prod.secret import DockerHubCredentials
+    from regulome_infrastructure.regulome_prod.network import Network
     stack = Stack(
         env=Environment(
             region='us-east-1',
@@ -28,4 +28,4 @@ def test_constructs_existing_initialize_igvf_prod_construct():
     assert isinstance(resources.docker_hub_credentials.secret.secret_arn, str)
     assert isinstance(resources.code_star_connection.arn, str)
     assert isinstance(
-        resources.notification.encode_dcc_chatbot.slack_channel_configuration_arn, str)
+        resources.notification.regulomedb_chatbot.slack_channel_configuration_arn, str)

@@ -79,7 +79,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://gds-some-test-backend.regulomedb.org'
                 },
                 {
                     'Key': 'branch',
@@ -104,7 +104,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                         },
                         {
                             'Name': 'BACKEND_URL',
-                            'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                            'Value': 'https://gds-some-test-backend.regulomedb.org'
                         }
                     ],
                     'LogConfiguration': {
@@ -145,7 +145,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://gds-some-test-backend.regulomedb.org'
                 },
                 {
                     'Key': 'branch',
@@ -189,7 +189,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://gds-some-test-backend.regulomedb.org'
                 },
                 {
                     'Key': 'branch',
@@ -222,7 +222,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'Tags': [
                 {
                     'Key': 'backend_url',
-                    'Value': 'https://igvfd-some-test-backend.demo.igvf.org'
+                    'Value': 'https://gds-some-test-backend.regulomedb.org'
                 },
                 {
                     'Key': 'branch',
