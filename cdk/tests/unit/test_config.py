@@ -10,8 +10,8 @@ def test_config_exists():
 def test_config_common_dataclass():
     from infrastructure.config import Common
     common = Common()
-    assert common.organization_name == 'igvf-dacc'
-    assert common.project_name == 'igvf-ui'
+    assert common.organization_name == 'regulomedb'
+    assert common.project_name == 'regulome-ui'
 
 
 def test_config_config_dataclass():
@@ -25,8 +25,8 @@ def test_config_config_dataclass():
             ('test', 'tag'),
         ]
     )
-    assert config.common.organization_name == 'igvf-dacc'
-    assert config.common.project_name == 'igvf-ui'
+    assert config.common.organization_name == 'regulomedb'
+    assert config.common.project_name == 'regulome-ui'
     assert config.branch == 'xyz-branch'
     assert config.frontend == {}
     assert config.backend_url == 'https://test.backend.org'
@@ -35,22 +35,22 @@ def test_config_config_dataclass():
 
 def test_config_pipeline_config_dataclass():
     from infrastructure.config import PipelineConfig
-    from infrastructure.constructs.existing import igvf_dev
+    from infrastructure.constructs.existing import regulome_dev
     config = PipelineConfig(
         name='demo',
         branch='xyz-branch',
         pipeline='xyz-pipeline',
-        existing_resources_class=igvf_dev.Resources,
-        account_and_region=igvf_dev.US_WEST_2,
+        existing_resources_class=regulome_dev.Resources,
+        account_and_region=regulome_dev.US_WEST_2,
         tags=[
             ('abc', '123'),
             ('xyz', '321'),
         ]
     )
-    assert config.common.organization_name == 'igvf-dacc'
-    assert config.common.project_name == 'igvf-ui'
-    assert config.existing_resources_class == igvf_dev.Resources
-    assert config.account_and_region == igvf_dev.US_WEST_2
+    assert config.common.organization_name == 'regulomedb'
+    assert config.common.project_name == 'regulome-ui'
+    assert config.existing_resources_class == regulome_dev.Resources
+    assert config.account_and_region == regulome_dev.US_WEST_2
     assert config.branch == 'xyz-branch'
     assert config.pipeline == 'xyz-pipeline'
     assert config.tags == [
@@ -67,8 +67,8 @@ def test_config_build_config_from_name():
         backend_url='http://my-specific-endpoint.org',
         frontend={},
     )
-    assert config.common.organization_name == 'igvf-dacc'
-    assert config.common.project_name == 'igvf-ui'
+    assert config.common.organization_name == 'regulomedb'
+    assert config.common.project_name == 'regulome-ui'
     assert config.branch == 'my-branch'
     assert config.frontend == {}
     assert config.name == 'demo'
@@ -77,8 +77,8 @@ def test_config_build_config_from_name():
         'dev',
         branch='my-branch',
     )
-    assert config.common.organization_name == 'igvf-dacc'
-    assert config.common.project_name == 'igvf-ui'
+    assert config.common.organization_name == 'regulomedb'
+    assert config.common.project_name == 'regulome-ui'
     assert config.branch == 'my-branch'
     assert config.frontend
     assert config.name == 'dev'
@@ -102,20 +102,20 @@ def test_config_build_config_from_name_demo(mocker):
         # Overrides.
         frontend={}
     )
-    assert config.backend_url == 'https://igvfd-my-branch.demo.igvf.org'
+    assert config.backend_url == 'https://regulome-ui-my-branch.regulomedb.org'
 
 
 def test_config_build_pipeline_config_from_name():
     from aws_cdk import Environment
-    from infrastructure.constructs.existing import igvf_dev
+    from infrastructure.constructs.existing import regulome_dev
     from infrastructure.config import build_pipeline_config_from_name
     config = build_pipeline_config_from_name(
         'demo',
         branch='my-branch',
         pipeline='my-pipeline',
     )
-    assert config.common.organization_name == 'igvf-dacc'
-    assert config.common.project_name == 'igvf-ui'
+    assert config.common.organization_name == 'regulomedb'
+    assert config.common.project_name == 'regulome-ui'
     assert ('time-to-live-hours', '72') in config.tags
     assert config.branch == 'my-branch'
     assert config.pipeline == 'my-pipeline'
@@ -124,12 +124,12 @@ def test_config_build_pipeline_config_from_name():
         'dev',
         branch='my-branch',
     )
-    assert config.common.organization_name == 'igvf-dacc'
-    assert config.common.project_name == 'igvf-ui'
+    assert config.common.organization_name == 'regulomedb'
+    assert config.common.project_name == 'regulome-ui'
     assert config.pipeline == 'DevDeploymentPipelineStack'
     assert config.name == 'dev'
     assert isinstance(config.account_and_region, Environment)
-    assert config.existing_resources_class == igvf_dev.Resources
+    assert config.existing_resources_class == regulome_dev.Resources
 
 
 def test_config_build_config_from_branch():
@@ -194,7 +194,7 @@ def test_config_maybe_add_backend_url():
         maybe_add_backend_url(calculated_config)
     calculated_config['branch'] = 'IGVF-my-cool-feature-branch'
     maybe_add_backend_url(calculated_config)
-    assert calculated_config['backend_url'] == 'https://igvfd-IGVF-my-cool-feature-branch.demo.igvf.org'
+    assert calculated_config['backend_url'] == 'https://regulome-ui-IGVF-my-cool-feature-branch.regulomedb.org'
     calculated_config
     calculated_config['branch'] = 'IGVF-my-cool-feature-branch'
     calculated_config['backend_url'] = 'http://someotherendpoint.org'
@@ -217,7 +217,7 @@ def test_config_fill_in_calculated_config():
         'frontend': {},
         'branch': 'my-branch',
         'name': 'demo',
-        'backend_url': 'https://igvfd-my-branch.demo.igvf.org',
+        'backend_url': 'https://regulome-ui-my-branch.regulomedb.org',
         'tags': [('xyz', '123')]
     }
 
@@ -242,4 +242,4 @@ def test_config_get_backend_url_from_branch():
     from infrastructure.config import get_backend_url_from_branch
     assert get_backend_url_from_branch(
         'IGVF-my-feature-branch-123'
-    ) == 'https://igvfd-IGVF-my-feature-branch-123.demo.igvf.org'
+    ) == 'https://regulome-ui-IGVF-my-feature-branch-123.regulomedb.org'
