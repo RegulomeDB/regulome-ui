@@ -1,7 +1,7 @@
 from constructs import Construct
 
 from regulome_infrastructure.regulome_dev.connection import CodeStarConnection
-from regulome_infrastructure.regulome_dev.environment import US_WEST_2
+from regulome_infrastructure.regulome_dev.environment import US_WEST_2 as US_WEST_2
 from regulome_infrastructure.regulome_dev.domain import Domain as DemoDomain
 from regulome_infrastructure.regulome_dev.secret import DockerHubCredentials
 from regulome_infrastructure.regulome_dev.network import Network as DemoNetwork
