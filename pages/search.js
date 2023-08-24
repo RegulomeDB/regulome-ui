@@ -23,9 +23,6 @@ const defaultDisplayCount = 3;
 
 export default function Search({ data }) {
   const [showMoreFreqs, setShowMoreFreqs] = useState(false);
-  function toggleFreqsShow() {
-    setShowMoreFreqs(!showMoreFreqs);
-  }
   if (Object.keys(data.notifications).length === 0) {
     const { hitSnps, sortedPopulations } = getSnpsInfo(data);
     const coordinates = data.query_coordinates[0];
@@ -87,7 +84,10 @@ export default function Search({ data }) {
                     </div>
                   ) : null}
                   {sortedPopulations[rsid].length > defaultDisplayCount ? (
-                    <Button type="secondary" onClick={toggleFreqsShow}>
+                    <Button
+                      type="secondary"
+                      onClick={() => setShowMoreFreqs(!showMoreFreqs)}
+                    >
                       {sortedPopulations[rsid].length - 3}{" "}
                       {showMoreFreqs ? "fewer" : "more"}
                     </Button>
