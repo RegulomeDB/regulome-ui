@@ -35,7 +35,7 @@ def test_tags_add_project_tag(config):
         'TestStack'
     )
     assert test_stack.tags == {
-        'project': 'igvf-ui'
+        'project': 'regulome-ui'
     }
 
 
@@ -94,7 +94,7 @@ def test_tags_add_tags_to_stack(config):
     assert test_stack.tags == {
         'environment': 'demo',
         'branch': 'some-branch',
-        'project': 'igvf-ui',
+        'project': 'regulome-ui',
         'test': 'tag'
     }
 
@@ -116,6 +116,6 @@ def test_tags_add_tags_to_stack_from_pipeline_config(pipeline_config):
     assert test_stack.tags == {
         'environment': 'demo',
         'branch': 'some-branch',
-        'project': 'igvf-ui',
+        'project': 'regulome-ui',
         'test': 'tag'
     }

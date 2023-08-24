@@ -23,6 +23,6 @@ def test_stages_dev_initialize_dev_stages(config):
     assert stack.tags == {
         'environment': 'demo',
         'branch': 'some-branch',
-        'project': 'igvf-ui',
+        'project': 'regulome-ui',
         'test': 'tag'
     }
