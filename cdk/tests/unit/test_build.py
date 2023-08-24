@@ -100,7 +100,7 @@ def test_synth_add_deploy_pipeline_stack_to_app():
         child.node.path
         for child in app.node.children
     ]
-    assert 'igvf-ui-my-branch-DemoDeploymentPipelineStack' in child_paths
+    assert 'regulome-ui-my-branch-DemoDeploymentPipelineStack' in child_paths
     app = App()
     app = App(
         context={
@@ -114,9 +114,9 @@ def test_synth_add_deploy_pipeline_stack_to_app():
         child.node.path
         for child in app.node.children
     ]
-    assert 'igvf-ui-dev-DevDeploymentPipelineStack' in child_paths
+    assert 'regulome-ui-dev-DevDeploymentPipelineStack' in child_paths
     stack = app.node.find_child(
-        'igvf-ui-dev-DevDeploymentPipelineStack'
+        'regulome-ui-dev-DevDeploymentPipelineStack'
     )
     template = Template.from_stack(stack)
     template.has_resource_properties(
@@ -133,7 +133,7 @@ def test_synth_add_deploy_pipeline_stack_to_app():
                 },
                 {
                     'Key': 'project',
-                    'Value': 'igvf-ui'
+                    'Value': 'regulome-ui'
                 }
             ]
         }
@@ -154,4 +154,4 @@ def test_synth_build():
         child.node.path
         for child in app.node.children
     ]
-    assert 'igvf-ui-my-branch-DemoDeploymentPipelineStack' in child_paths
+    assert 'regulome-ui-my-branch-DemoDeploymentPipelineStack' in child_paths
