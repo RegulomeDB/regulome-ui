@@ -69,7 +69,7 @@ def test_synth_get_config():
     config = get_config(args)
     assert config.branch == 'my-branch'
     assert config.pipeline == 'DemoDeploymentPipelineStack'
-    assert config.common.project_name == 'igvf-ui'
+    assert config.common.project_name == 'regulome-ui'
     app = App(
         context={
             'branch': 'dev'
@@ -79,7 +79,7 @@ def test_synth_get_config():
     config = get_config(args)
     assert config.branch == 'dev'
     assert config.pipeline == 'DevDeploymentPipelineStack'
-    assert config.common.project_name == 'igvf-ui'
+    assert config.common.project_name == 'regulome-ui'
 
 
 def test_synth_add_deploy_pipeline_stack_to_app():
