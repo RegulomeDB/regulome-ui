@@ -3,8 +3,6 @@ import pytest
 from aws_cdk.assertions import Template
 
 
-
-
 def test_constructs_pipeline_initialize_basic_self_updating_pipeline_construct(stack, secret, mocker, pipeline_config):
     from infrastructure.constructs.pipeline import BasicSelfUpdatingPipeline
     from infrastructure.constructs.pipeline import BasicSelfUpdatingPipelineProps
