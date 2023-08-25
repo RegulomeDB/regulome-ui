@@ -1,81 +1,90 @@
 import PropTypes from "prop-types";
 import { DataAreaTitle, DataPanel } from "./data-area";
+
+const MIN_DITANCE_BETWEEN_LABELS = 90;
+const TEXT_VERTICAL_DISTANCE = 20;
+const LABEL_HEIGHT = 18;
+const CHAR_SIZE = 8.5;
+const DISTANCE_BETWEEN_FIRST_AND_LAST_SNP = 920;
+const LINE_STARTING_X = 10;
+const LINE_ENDING_X = 990;
+const LINE_Y = 75;
+const TICK_STARTING_Y_EVEN = 60;
+const TICK_STARTING_Y_ODD = 90;
+const TEXT_STARTING_Y_EVEN = 55;
+const TEXT_STARTING_Y_ODD = 105;
+
 /**
  * Display SNPs Matching Searched Coordinates and Nearby SNPs using line chart
  */
-export default function NearbySNPsDrawing({ data }) {
-  let startNearbySnps = 0;
-  let endNearbySnps = 0;
-  let coordinate = 0;
-  let coordinateX = 0;
+export default function SnpsDiagram({ data }) {
+  const startSnpCoordinate = data.nearby_snps[0].coordinates.lt;
+  const endSnpCoordinate =
+    data.nearby_snps[data.nearby_snps.length - 1].coordinates.lt;
+  const hitSnpX = getX(
+    data.query_coordinates[0].split("-")[1],
+    startSnpCoordinate,
+    endSnpCoordinate
+  );
+  const chartElements = [];
+  const yOffsets = [];
+  let numberSign = 1;
+  data.nearby_snps.map((snp, snpIndex) => {
+    const isEven = snpIndex % 2 === 0;
+    const snpX = getX(snp.coordinates.lt, startSnpCoordinate, endSnpCoordinate);
+    const isHitSnp = snpX === hitSnpX;
+    const labelX = snpX - MIN_DITANCE_BETWEEN_LABELS / 2;
+    const labelWidth = snp.rsid.length * CHAR_SIZE;
+    let yOffset = 0;
+    const xYOffset = [snpX];
+    yOffsets.push(xYOffset);
 
-  const coordinateXEven = [-100];
-  const coordinateXOdd = [-100];
-  const coordinateYOffset = [];
-  let countEven = 0;
-  let countOdd = 0;
-  if (
-    data.nearby_snps &&
-    data.nearby_snps[0] &&
-    data.nearby_snps[0].coordinates
-  ) {
-    startNearbySnps = +data.nearby_snps[0].coordinates.lt;
-    endNearbySnps =
-      +data.nearby_snps[data.nearby_snps.length - 1].coordinates.lt;
-    coordinate = +data.query_coordinates[0].split("-")[1];
-    coordinateX =
-      920 *
-        ((coordinate - startNearbySnps) / (endNearbySnps - startNearbySnps)) +
-      40;
+    if (snpX - yOffsets[snpIndex - 2]?.[0] < MIN_DITANCE_BETWEEN_LABELS) {
+      yOffset = yOffsets[snpIndex - 2][1]
+        ? yOffsets[snpIndex - 2][1] + TEXT_VERTICAL_DISTANCE * numberSign
+        : TEXT_VERTICAL_DISTANCE * numberSign;
+    }
+    numberSign = numberSign * -1;
 
-    data.nearby_snps.forEach((snp, snpIndex) => {
-      let offset = 0;
-      const tempCoordinate =
-        920 *
-          ((+snp.coordinates.lt - startNearbySnps) /
-            (endNearbySnps - startNearbySnps)) +
-        40;
-      if (snpIndex % 2 === 0) {
-        countEven += 1;
-        coordinateXEven[countEven] = tempCoordinate;
-        // check if coordinate was close to last even coordinate
-        if (coordinateXEven[countEven] - coordinateXEven[countEven - 1] < 90) {
-          // check if last coordinate was also offset
-          if (coordinateYOffset[snpIndex - 2] !== 0) {
-            // if last coordinate was also offset, check if this coordinate was also too close to that one
-            if (
-              coordinateXEven[countEven] - coordinateXEven[countEven - 1] <
-              90
-            ) {
-              offset = coordinateYOffset[snpIndex - 2] + 20;
-            } else {
-              offset = 20;
-            }
-          } else {
-            offset = 20;
-          }
-        }
-      } else {
-        countOdd += 1;
-        coordinateXOdd[countOdd] = tempCoordinate;
-        // check if coordinate was close to last odd coordinate
-        if (coordinateXOdd[countOdd] - coordinateXOdd[countOdd - 1] < 90) {
-          // check if last coordinate was also offset
-          if (coordinateYOffset[snpIndex - 2] !== 0) {
-            // if last coordinate was also offset, check if this coordinate was also too close to that one
-            if (coordinateXOdd[countOdd] - coordinateXOdd[countOdd - 1] < 90) {
-              offset = coordinateYOffset[snpIndex - 2] + 20;
-            } else {
-              offset = 20;
-            }
-          } else {
-            offset = 20;
-          }
-        }
-      }
-      coordinateYOffset.push(offset);
-    });
-  }
+    xYOffset.push(yOffset);
+    const lineChartElement = {
+      line: {
+        x1: String(snpX),
+        x2: String(snpX),
+        y1: isEven
+          ? TICK_STARTING_Y_EVEN - yOffsets[snpIndex][1]
+          : TICK_STARTING_Y_ODD - yOffsets[snpIndex][1],
+        stroke: isHitSnp ? "#c13b42" : "#7F7F7F",
+      },
+      rect: {
+        x: labelX - 2,
+        y: isEven
+          ? TICK_STARTING_Y_EVEN - LABEL_HEIGHT - yOffsets[snpIndex][1]
+          : TICK_STARTING_Y_ODD - yOffsets[snpIndex][1],
+        width: labelWidth,
+        fill: isHitSnp ? "#c13b42" : "white",
+        opacity: isHitSnp ? "1.0" : "0.6",
+      },
+      text: {
+        x: labelX,
+        y: isEven
+          ? TEXT_STARTING_Y_EVEN - yOffsets[snpIndex][1]
+          : TEXT_STARTING_Y_ODD - yOffsets[snpIndex][1],
+        className: isHitSnp ? "fill-white" : null,
+        rsid: snp.rsid,
+      },
+    };
+    chartElements.push(lineChartElement);
+  });
+  chartElements.sort((a, b) => {
+    if (a.line.y1 < b.line.y1) {
+      return -1;
+    }
+    if (a.line.y1 > b.line.y1) {
+      return 1;
+    }
+    return 0;
+  });
 
   return (
     <>
@@ -106,12 +115,12 @@ export default function NearbySNPsDrawing({ data }) {
               <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
           </defs>
-          <g id="xGrid">
+          <g id="x-axis">
             <line
-              x1="10"
-              x2="990"
-              y1="75"
-              y2="75"
+              x1={LINE_STARTING_X}
+              x2={LINE_ENDING_X}
+              y1={LINE_Y}
+              y2={LINE_Y}
               markerEnd="url(#arrow)"
               markerStart="url(#arrow)"
               stroke="#7F7F7F"
@@ -119,147 +128,35 @@ export default function NearbySNPsDrawing({ data }) {
             />
           </g>
           <g className="text-sm">
-            {data.nearby_snps.map((snp, snpIndex) => {
-              const snpX =
-                920 *
-                  ((+snp.coordinates.lt - startNearbySnps) /
-                    (endNearbySnps - startNearbySnps)) +
-                40;
-              if (snpIndex % 2 === 0) {
-                if (snpX === coordinateX) {
-                  return (
-                    <g key={`tick${snpIndex}`}>
-                      <line
-                        x1={String(snpX)}
-                        x2={String(snpX)}
-                        y1={60 - coordinateYOffset[snpIndex]}
-                        y2="75"
-                        stroke="#c13b42"
-                        strokeWidth="2"
-                      />
-                    </g>
-                  );
-                }
-                return (
-                  <g key={`tick${snpIndex}`}>
-                    <line
-                      x1={String(snpX)}
-                      x2={String(snpX)}
-                      y1={60 - coordinateYOffset[snpIndex]}
-                      y2="75"
-                      stroke="#7F7F7F"
-                      strokeWidth="2"
-                    />
-                  </g>
-                );
-              }
-              if (snpX === coordinateX) {
-                return (
-                  <g key={`tick${snpIndex}`}>
-                    <line
-                      x1={String(snpX)}
-                      x2={String(snpX)}
-                      y1={90 + coordinateYOffset[snpIndex]}
-                      y2="75"
-                      stroke="#c13b42"
-                      strokeWidth="2"
-                    />
-                  </g>
-                );
-              }
+            {chartElements.map((item) => {
               return (
-                <g key={`tick${snpIndex}`}>
+                <g key={item.text.rsid}>
                   <line
-                    x1={String(snpX)}
-                    x2={String(snpX)}
-                    y1={90 + coordinateYOffset[snpIndex]}
-                    y2="75"
-                    stroke="#7F7F7F"
+                    id="tick"
+                    x1={item.line.x1}
+                    x2={item.line.x2}
+                    y1={item.line.y1}
+                    y2={LINE_Y}
+                    stroke={item.line.stroke}
                     strokeWidth="2"
                   />
-                </g>
-              );
-            })}
-            {data.nearby_snps.map((snp, snpIndex) => {
-              const snpX =
-                920 *
-                  ((snp.coordinates.lt - startNearbySnps) /
-                    (endNearbySnps - startNearbySnps)) +
-                40;
-              const labelX = snpX - 40;
-              const labelWidth = snp.rsid.length * 9;
-              if (snpIndex % 2 === 0) {
-                if (snpX === coordinateX) {
-                  return (
-                    <g key={`snp${snpIndex}`}>
-                      <rect
-                        x={labelX - 8}
-                        y={42 - coordinateYOffset[snpIndex]}
-                        height="18"
-                        width={labelWidth}
-                        fill="#c13b42"
-                        opacity="1.0"
-                        rx="2px"
-                      />
-                      <text
-                        x={labelX}
-                        y={55 - coordinateYOffset[snpIndex]}
-                        className="fill-white"
-                      >
-                        {snp.rsid}
-                      </text>
-                    </g>
-                  );
-                }
-                return (
-                  <g key={`snp${snpIndex}`}>
-                    <rect
-                      x={labelX - 8}
-                      y={43 - coordinateYOffset[snpIndex]}
-                      height="15"
-                      width={labelWidth}
-                      fill="white"
-                      opacity="0.6"
-                    />
-                    <text x={labelX} y={55 - coordinateYOffset[snpIndex]}>
-                      {snp.rsid}
-                    </text>
-                  </g>
-                );
-              }
-              if (snpX === coordinateX) {
-                return (
-                  <g key={`snp${snpIndex}`}>
-                    <rect
-                      x={labelX - 8}
-                      y={87 + coordinateYOffset[snpIndex]}
-                      height="22"
-                      width={labelWidth}
-                      fill="#c13b42"
-                      opacity="1.0"
-                    />
-                    <text
-                      x={labelX}
-                      y={105 + coordinateYOffset[snpIndex]}
-                      className="fill-white"
-                    >
-                      {snp.rsid}
-                    </text>
-                  </g>
-                );
-              }
-              return (
-                <g key={`snp${snpIndex}`}>
                   <rect
-                    x={labelX - 8}
-                    y={89 + coordinateYOffset[snpIndex]}
-                    height="20"
-                    width={labelWidth}
-                    fill="white"
-                    opacity="0.6"
+                    id="lable-background-color"
+                    x={item.rect.x}
+                    y={item.rect.y}
+                    height={LABEL_HEIGHT}
+                    width={item.rect.width}
+                    fill={item.rect.fill}
+                    opacity={item.rect.opacity}
+                    rx="2px"
                   />
-                  <text x={labelX} y={105 + coordinateYOffset[snpIndex]}>
-                    {snp.rsid}
+                  <text
+                    id="lable-text"
+                    x={item.text.x}
+                    y={item.text.y}
+                    className={item.text.className}
+                  >
+                    {item.text.rsid}
                   </text>
                 </g>
               );
@@ -271,6 +168,15 @@ export default function NearbySNPsDrawing({ data }) {
   );
 }
 
-NearbySNPsDrawing.propTypes = {
+SnpsDiagram.propTypes = {
   data: PropTypes.object.isRequired,
 };
+
+function getX(snpCoordinate, startSnpCoordinate, endSnpCoordinate) {
+  return (
+    DISTANCE_BETWEEN_FIRST_AND_LAST_SNP *
+      ((snpCoordinate - startSnpCoordinate) /
+        (endSnpCoordinate - startSnpCoordinate)) +
+    MIN_DITANCE_BETWEEN_LABELS / 2
+  );
+}

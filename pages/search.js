@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
+import _ from "underscore";
 import Breadcrumbs from "../components/breadcrumbs";
 import {
   DataArea,
@@ -11,7 +12,7 @@ import { Button } from "../components/form-elements";
 import Notifications from "../components/notifications";
 import PagePreamble from "../components/page-preamble";
 import RegulomeVersionTag from "../components/regulome-version-tag";
-import NearbySNPsDrawing from "../components/snps-diagram";
+import SnpsDiagram from "../components/snps-diagram";
 import errorObjectToProps from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
 import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
@@ -27,23 +28,72 @@ export default function Search({ data }) {
     const { hitSnps, sortedPopulations } = getSnpsInfo(data);
     const coordinates = data.query_coordinates[0];
     const allData = data["@graph"] || [];
+    const QTLData = allData.filter(
+      (d) => d.method && d.method.indexOf("QTL") !== -1
+    );
+
     const chromatinData = allData.filter((d) => d.method === "chromatin state");
-    const chipDataFilteredCount = filterOverlappingPeaks(
+    const [chipData, chipDataFilteredCount] = filterOverlappingPeaks(
       allData.filter((d) => d.method === "ChIP-seq")
-    )[1];
-    const dnaseDataFilteredCount = filterOverlappingPeaks(
+    );
+    const [dnaseData, dnaseDataFilteredCount] = filterOverlappingPeaks(
       allData.filter(
         (d) =>
           d.method === "FAIRE-seq" ||
           d.method === "DNase-seq" ||
           d.method === "ATAC-seq"
       )
-    )[1];
+    );
+    const [histoneData, histoneDataFilteredCount] = filterOverlappingPeaks(
+      allData.filter((d) => d.method === "Histone ChIP-seq")
+    );
+
+    const duplicatedExperimentDatasets = data["@graph"].filter((d) =>
+      d.dataset.includes("experiment")
+    );
+    // for some reason we are getting duplicates here so we need to filter those out
+    const experimentDatasets = _.uniq(
+      duplicatedExperimentDatasets,
+      (d) => d.dataset
+    );
+    experimentDatasets.sort((a, b) => (a.method > b.method ? 1 : -1));
+    // genome browser files
+    let filesForGenomeBrowser = [];
+    experimentDatasets.forEach((dataset) => {
+      const files = dataset.files_for_genome_browser;
+      let target = "";
+      // use target labels instead of gene symbols for histone ChIP-seq targets
+      if (dataset.method === "Histone ChIP-seq") {
+        target = dataset.target_label ? dataset.target_label : "";
+      } else {
+        target = dataset.targets ? dataset.targets.join(", ") : "";
+      }
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < files.length; i++) {
+        files[i].assay_term_name = dataset.method;
+        files[i].biosample_ontology = dataset.biosample_ontology;
+        files[i].file_format = files[i].href.split(".")[1];
+        files[i].dataset = dataset.dataset_rel;
+        files[i].title = files[i].accession;
+        files[i].target = target;
+        files[i].biosample = dataset.biosample_ontology.term_name || "";
+        files[i].assay = dataset.method || "";
+        files[i].organ =
+          dataset.biosample_ontology.classification === "tissue"
+            ? dataset.biosample_ontology.organ_slims.join(", ")
+            : dataset.biosample_ontology.cell_slims.join(", ");
+      }
+      filesForGenomeBrowser = filesForGenomeBrowser.concat(
+        dataset.files_for_genome_browser
+      );
+    });
+
     const numberOfPeaks =
       allData.length -
       chromatinData.length -
       chipDataFilteredCount -
-      dnaseDataFilteredCount;
+      dnaseDataFilteredCount -
+      histoneDataFilteredCount;
     return (
       <>
         <Breadcrumbs />
@@ -55,12 +105,26 @@ export default function Search({ data }) {
             <DataItemValue>{coordinates}</DataItemValue>
             <DataItemLabel>Genome Assembly</DataItemLabel>
             <DataItemValue>{data.assembly}</DataItemValue>
-            <DataItemLabel>Number of Peaks</DataItemLabel>
-            <DataItemValue>{numberOfPeaks}</DataItemValue>
             <DataItemLabel>Rank</DataItemLabel>
             <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
             <DataItemLabel>Score</DataItemLabel>
             <DataItemValue>{data.regulome_score.probability}</DataItemValue>
+            <DataItemLabel>Number of Total Peaks</DataItemLabel>
+            <DataItemValue>{numberOfPeaks}</DataItemValue>
+            <DataItemLabel>Number of ChIP-seq Peaks</DataItemLabel>
+            <DataItemValue>{chipData.length}</DataItemValue>
+            <DataItemLabel>Number of Accessibility Peaks</DataItemLabel>
+            <DataItemValue>{dnaseData.length}</DataItemValue>
+            <DataItemLabel>Number of QTL Peaks</DataItemLabel>
+            <DataItemValue>{QTLData.length}</DataItemValue>
+            <DataItemLabel>Number of Histone ChIP-seq Peaks</DataItemLabel>
+            <DataItemValue>{histoneData.length}</DataItemValue>
+            <DataItemLabel>
+              Number of Files to Show in Genome Browser
+            </DataItemLabel>
+            <DataItemValue>{filesForGenomeBrowser.length}</DataItemValue>
+            <DataItemLabel>Number of Chromatin State Datasets</DataItemLabel>
+            <DataItemValue>{chromatinData.length}</DataItemValue>
             {Object.keys(hitSnps).map((rsid) => (
               <React.Fragment key={rsid}>
                 <DataItemLabel>{rsid}</DataItemLabel>
@@ -97,9 +161,8 @@ export default function Search({ data }) {
             ))}
           </DataArea>
         </DataPanel>
-        {data.nearby_snps && data.nearby_snps.length > 0 ? (
-          <NearbySNPsDrawing data={data} />
-        ) : null}
+        {data.nearby_snps?.length > 0 ? <SnpsDiagram data={data} /> : null}
+        <div id="container"></div>
       </>
     );
   }
@@ -118,10 +181,12 @@ Search.propTypes = {
 };
 
 export async function getServerSideProps({ query }) {
+  console.log(query);
   const queryString = getQueryStringFromServerQuery(query);
   const request = new FetchRequest();
   const data = await request.getObject(`/search?${queryString}`);
   if (FetchRequest.isResponseSuccess(data)) {
+    console.log(typeof data.nearby_snps[0].coordinates.lt);
     const breadcrumbs = [
       {
         title: "Search",
