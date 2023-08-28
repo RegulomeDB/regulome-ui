@@ -120,7 +120,7 @@ class PipelineConfig:
     )
 
 
-def build_config_from_name(name: str, **kwargs: Any) -> Dict[str, Any]:
+def build_config_from_name(name: str, **kwargs: Any) -> Config:
     return Config(
         **{
             **config['environment'][name],
