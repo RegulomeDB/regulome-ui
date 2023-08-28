@@ -1,0 +1,62 @@
+{
+    "vpc-provider:account=281708499374:filter.vpc-id=vpc-01cc749b85d4735a3:region=us-west-2:returnAsymmetricSubnets=true": {
+        "vpcId": "vpc-01cc749b85d4735a3",
+        "vpcCidrBlock": "10.4.0.0/16",
+        "ownerAccountId": "281708499374",
+        "availabilityZones": [],
+        "subnetGroups": [
+            {
+                "name": "public",
+                "type": "Public",
+                "subnets": [
+                    {
+                        "subnetId": "subnet-01d98ac6043b9ac6a",
+                        "cidr": "10.4.0.0/20",
+                        "availabilityZone": "us-west-2a",
+                        "routeTableId": "rtb-0ec2f95423065ff16"
+                    },
+                    {
+                        "subnetId": "subnet-0f8d4d056395f78b7",
+                        "cidr": "10.4.16.0/20",
+                        "availabilityZone": "us-west-2b",
+                        "routeTableId": "rtb-04699623f533dbc44"
+                    },
+                    {
+                        "subnetId": "subnet-066264653f9e681c4",
+                        "cidr": "10.4.32.0/20",
+                        "availabilityZone": "us-west-2c",
+                        "routeTableId": "rtb-03e0087419c5639ca"
+                    }
+                ]
+            },
+            {
+                "name": "isolated",
+                "type": "Isolated",
+                "subnets": [
+                    {
+                        "subnetId": "subnet-0395195219918074c",
+                        "cidr": "10.4.48.0/20",
+                        "availabilityZone": "us-west-2a",
+                        "routeTableId": "rtb-09042b49662a5e89d"
+                    },
+                    {
+                        "subnetId": "subnet-064f63f24d023d9dc",
+                        "cidr": "10.4.64.0/20",
+                        "availabilityZone": "us-west-2b",
+                        "routeTableId": "rtb-0e79f821cb8e6d8dd"
+                    },
+                    {
+                        "subnetId": "subnet-05552a8423cdb6b60",
+                        "cidr": "10.4.80.0/20",
+                        "availabilityZone": "us-west-2c",
+                        "routeTableId": "rtb-009b31ec88d119397"
+                    }
+                ]
+            }
+        ]
+    },
+    "hosted-zone:account=281708499374:domainName=regulomedb.org:region=us-west-2": {
+        "Id": "/hostedzone/Z3V3JC2C4CL6UF",
+        "Name": "regulomedb.org."
+    }
+}
