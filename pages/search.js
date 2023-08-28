@@ -188,12 +188,10 @@ Search.propTypes = {
 };
 
 export async function getServerSideProps({ query }) {
-  console.log(query);
   const queryString = getQueryStringFromServerQuery(query);
   const request = new FetchRequest();
   const data = await request.getObject(`/search?${queryString}`);
   if (FetchRequest.isResponseSuccess(data)) {
-    console.log(typeof data.nearby_snps[0].coordinates.lt);
     const breadcrumbs = [
       {
         title: "Search",
