@@ -33,8 +33,8 @@ export default function SnpsDiagram({ data }) {
     const isEven = snpIndex % 2 === 0;
     const snpX = getX(snp.coordinates.lt, startSnpCoordinate, endSnpCoordinate);
     const isHitSnp = snpX === hitSnpX;
-    const labelX = snpX - MIN_DITANCE_BETWEEN_LABELS / 2;
     const labelWidth = snp.rsid.length * CHAR_SIZE;
+    const textX = snpX - labelWidth / 2;
     let yOffset = 0;
     const xYOffset = [snpX];
     yOffsets.push(xYOffset);
@@ -57,7 +57,7 @@ export default function SnpsDiagram({ data }) {
         stroke: isHitSnp ? "#c13b42" : "#7F7F7F",
       },
       rect: {
-        x: labelX - 2,
+        x: textX - 2,
         y: isEven
           ? TICK_STARTING_Y_EVEN - LABEL_HEIGHT - yOffsets[snpIndex][1]
           : TICK_STARTING_Y_ODD - yOffsets[snpIndex][1],
@@ -66,7 +66,7 @@ export default function SnpsDiagram({ data }) {
         opacity: isHitSnp ? "1.0" : "0.6",
       },
       text: {
-        x: labelX,
+        x: textX,
         y: isEven
           ? TEXT_STARTING_Y_EVEN - yOffsets[snpIndex][1]
           : TEXT_STARTING_Y_ODD - yOffsets[snpIndex][1],
@@ -90,7 +90,7 @@ export default function SnpsDiagram({ data }) {
           Chromosome {data.nearby_snps[0].chrom.split("chr")[1]}
         </div>
         <svg
-          viewBox="0 -30 1050 220"
+          viewBox="-10 -30 1050 220"
           preserveAspectRatio="xMidYMid meet"
           aria-labelledby="diagram-of-nearby-snps"
           role="img"
