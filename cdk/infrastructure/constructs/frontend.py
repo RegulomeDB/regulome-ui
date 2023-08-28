@@ -126,7 +126,7 @@ class Frontend(Construct):
 
     def _configure_health_check(self) -> None:
         self.fargate_service.target_group.configure_health_check(
-            interval=Duration.seconds(60),
+            interval=Duration.seconds(180),
         )
 
     def _add_tags_to_fargate_service(self) -> None:
