@@ -82,7 +82,7 @@ def test_config_build_config_from_name():
     assert config.branch == 'my-branch'
     assert config.frontend
     assert config.name == 'dev'
-    assert config.backend_url == 'https://igvfd-dev.demo.igvf.org'
+    assert config.backend_url == 'https://gds-for-regulome-demo.demo.regulomedb.org'
 
 
 def test_config_build_config_from_name_demo(mocker):
@@ -160,7 +160,7 @@ def test_config_get_raw_config_from_name():
     assert raw_config['branch'] == 'my-branch'
     assert raw_config['frontend']
     assert raw_config['name'] == 'dev'
-    assert raw_config['backend_url'] == 'https://igvfd-dev.demo.igvf.org'
+    assert raw_config['backend_url'] == 'https://gds-for-regulome-demo.demo.regulomedb.org'
 
 
 def test_config_get_raw_config_from_name_demo():
