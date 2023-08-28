@@ -77,13 +77,7 @@ export default function SnpsDiagram({ data }) {
     chartElements.push(lineChartElement);
   });
   chartElements.sort((a, b) => {
-    if (a.line.y1 < b.line.y1) {
-      return -1;
-    }
-    if (a.line.y1 > b.line.y1) {
-      return 1;
-    }
-    return 0;
+    return Math.abs(a.line.y1 - b.line.y1) * -1;
   });
 
   return (

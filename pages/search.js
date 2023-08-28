@@ -25,7 +25,7 @@ const defaultDisplayCount = 3;
 export default function Search({ data }) {
   const [showMoreFreqs, setShowMoreFreqs] = useState(false);
   if (Object.keys(data.notifications).length === 0) {
-    const { hitSnps, sortedPopulations } = getSnpsInfo(data);
+    const hitSnps = getSnpsInfo(data);
     const coordinates = data.query_coordinates[0];
     const allData = data["@graph"] || [];
     const QTLData = allData.filter(
@@ -33,10 +33,10 @@ export default function Search({ data }) {
     );
 
     const chromatinData = allData.filter((d) => d.method === "chromatin state");
-    const [chipData, chipDataFilteredCount] = filterOverlappingPeaks(
+    const chipData = filterOverlappingPeaks(
       allData.filter((d) => d.method === "ChIP-seq")
     );
-    const [dnaseData, dnaseDataFilteredCount] = filterOverlappingPeaks(
+    const dnaseData = filterOverlappingPeaks(
       allData.filter(
         (d) =>
           d.method === "FAIRE-seq" ||
@@ -44,8 +44,12 @@ export default function Search({ data }) {
           d.method === "ATAC-seq"
       )
     );
-    const [histoneData, histoneDataFilteredCount] = filterOverlappingPeaks(
+    const histoneData = filterOverlappingPeaks(
       allData.filter((d) => d.method === "Histone ChIP-seq")
+    );
+
+    const motifsData = filterOverlappingPeaks(
+      allData.filter((d) => d.method === "footprints" || d.method === "PWMs")
     );
 
     const duplicatedExperimentDatasets = data["@graph"].filter((d) =>
@@ -89,11 +93,12 @@ export default function Search({ data }) {
     });
 
     const numberOfPeaks =
-      allData.length -
-      chromatinData.length -
-      chipDataFilteredCount -
-      dnaseDataFilteredCount -
-      histoneDataFilteredCount;
+      chipData.length +
+      dnaseData.length +
+      histoneData.length +
+      QTLData.length +
+      motifsData.length;
+
     return (
       <>
         <Breadcrumbs />
@@ -115,6 +120,8 @@ export default function Search({ data }) {
             <DataItemValue>{chipData.length}</DataItemValue>
             <DataItemLabel>Number of Accessibility Peaks</DataItemLabel>
             <DataItemValue>{dnaseData.length}</DataItemValue>
+            <DataItemLabel>Number of Motifs Peaks</DataItemLabel>
+            <DataItemValue>{motifsData.length}</DataItemValue>
             <DataItemLabel>Number of QTL Peaks</DataItemLabel>
             <DataItemValue>{QTLData.length}</DataItemValue>
             <DataItemLabel>Number of Histone ChIP-seq Peaks</DataItemLabel>
@@ -130,29 +137,29 @@ export default function Search({ data }) {
                 <DataItemLabel>{rsid}</DataItemLabel>
                 <DataItemValue>
                   <div>
-                    {sortedPopulations[rsid].slice(0, 3).map((population) => (
+                    {hitSnps[rsid].slice(0, 3).map((populationInfo) => (
                       <div
-                        key={population}
-                      >{`${hitSnps[rsid][population]} (${population})`}</div>
+                        key={populationInfo.population}
+                      >{`${populationInfo.info} (${populationInfo.population})`}</div>
                     ))}
                   </div>
-                  {sortedPopulations[rsid].length > 3 && showMoreFreqs ? (
+                  {hitSnps[rsid].length > 3 && showMoreFreqs ? (
                     <div>
-                      {sortedPopulations[rsid]
+                      {hitSnps[rsid]
                         .slice(3, hitSnps[rsid].length)
-                        .map((population) => (
+                        .map((populationInfo) => (
                           <div
-                            key={population}
-                          >{`${hitSnps[rsid][population]} (${population})`}</div>
+                            key={populationInfo.population}
+                          >{`${populationInfo.info} (${populationInfo.population})`}</div>
                         ))}
                     </div>
                   ) : null}
-                  {sortedPopulations[rsid].length > defaultDisplayCount ? (
+                  {hitSnps[rsid].length > defaultDisplayCount ? (
                     <Button
                       type="secondary"
                       onClick={() => setShowMoreFreqs(!showMoreFreqs)}
                     >
-                      {sortedPopulations[rsid].length - 3}{" "}
+                      {hitSnps[rsid].length - 3}{" "}
                       {showMoreFreqs ? "fewer" : "more"}
                     </Button>
                   ) : null}
