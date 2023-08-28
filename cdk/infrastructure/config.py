@@ -120,37 +120,14 @@ class PipelineConfig:
     )
 
 
-def get_raw_config_from_name(name: str, **kwargs: Any) -> Dict[str, Any]:
-    return {
-        **config['environment'][name],
-        **kwargs,
-        **{'name': name},
-    }
-
-
-def maybe_add_backend_url(calculated_config: Dict[str, Any]) -> None:
-    if 'backend_url' not in calculated_config:
-        calculated_config['backend_url'] = get_backend_url_from_branch(
-            calculated_config['branch']
-        )
-
-
-def fill_in_calculated_config(raw_config: Dict[str, Any]) -> Dict[str, Any]:
-    calculated_config = deepcopy(raw_config)
-    maybe_add_backend_url(calculated_config)
-    return calculated_config
-
-
-def config_factory(**kwargs: Any) -> Config:
+def build_config_from_name(name: str, **kwargs: Any) -> Dict[str, Any]:
     return Config(
-        **kwargs
+        **{
+            **config['environment'][name],
+            **kwargs,
+            **{'name': name},
+        }
     )
-
-
-def build_config_from_name(name: str, **kwargs: Any) -> Config:
-    raw_config = get_raw_config_from_name(name, **kwargs)
-    calculated_config = fill_in_calculated_config(raw_config)
-    return config_factory(**calculated_config)
 
 
 def build_pipeline_config_from_name(name: str, **kwargs: Any) -> PipelineConfig:
@@ -175,7 +152,3 @@ def get_pipeline_config_name_from_branch(branch: str) -> str:
     if branch == 'main':
         return 'production'
     return 'demo'
-
-
-def get_backend_url_from_branch(branch: str) -> str:
-    return f'https://regulome-ui-{branch}.regulomedb.org'

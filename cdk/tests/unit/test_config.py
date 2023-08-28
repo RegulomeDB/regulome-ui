@@ -87,22 +87,13 @@ def test_config_build_config_from_name():
 
 def test_config_build_config_from_name_demo(mocker):
     from infrastructure.config import build_config_from_name
-    mocker.patch(
-        'infrastructure.config.get_raw_config_from_name',
-        return_value={
-            'frontend': {},
-            'branch': 'my-branch',
-            'name': 'demo',
-            'tags': [('time-to-live-hours', '3')]
-        }
-    )
     config = build_config_from_name(
         'demo',
         branch='my-branch',
         # Overrides.
         frontend={}
     )
-    assert config.backend_url == 'https://regulome-ui-my-branch.regulomedb.org'
+    assert config.backend_url == 'https://gds-for-regulome-demo.demo.regulomedb.org'
 
 
 def test_config_build_pipeline_config_from_name():
@@ -151,95 +142,16 @@ def test_config_get_pipeline_config_name_from_branch():
     assert config_name == 'production'
 
 
-def test_config_get_raw_config_from_name():
-    from infrastructure.config import get_raw_config_from_name
-    raw_config = get_raw_config_from_name(
-        'dev',
-        branch='my-branch',
-    )
-    assert raw_config['branch'] == 'my-branch'
-    assert raw_config['frontend']
-    assert raw_config['name'] == 'dev'
-    assert raw_config['backend_url'] == 'https://gds-for-regulome-demo.demo.regulomedb.org'
-
-
-def test_config_get_raw_config_from_name_demo():
-    from infrastructure.config import get_raw_config_from_name
-    raw_config = get_raw_config_from_name(
-        'demo',
-        branch='my-branch',
-        frontend={},
-    )
-    assert raw_config['branch'] == 'my-branch'
-    assert raw_config['frontend'] == {}
-    assert raw_config['name'] == 'demo'
-    raw_config = get_raw_config_from_name(
-        'demo',
-        branch='my-branch',
-        frontend={},
-        backend_url='http://my-specific-endpoint.org',
-        tags=[('abc', '123')]
-    )
-    assert raw_config['branch'] == 'my-branch'
-    assert raw_config['frontend'] == {}
-    assert raw_config['name'] == 'demo'
-    assert raw_config['backend_url'] == 'http://my-specific-endpoint.org'
-    assert raw_config['tags'] == [('abc', '123')]
-
-
-def test_config_maybe_add_backend_url():
-    from infrastructure.config import maybe_add_backend_url
-    calculated_config = {}
-    with pytest.raises(KeyError):
-        maybe_add_backend_url(calculated_config)
-    calculated_config['branch'] = 'IGVF-my-cool-feature-branch'
-    maybe_add_backend_url(calculated_config)
-    assert calculated_config['backend_url'] == 'https://regulome-ui-IGVF-my-cool-feature-branch.regulomedb.org'
-    calculated_config
-    calculated_config['branch'] = 'IGVF-my-cool-feature-branch'
-    calculated_config['backend_url'] = 'http://someotherendpoint.org'
-    maybe_add_backend_url(calculated_config)
-    assert calculated_config['backend_url'] == 'http://someotherendpoint.org'
-
-
-def test_config_fill_in_calculated_config():
-    from infrastructure.config import fill_in_calculated_config
-    from infrastructure.config import get_raw_config_from_name
-    raw_config = get_raw_config_from_name(
-        'demo',
-        branch='my-branch',
-        frontend={},
-        tags=[('xyz', '123')],
-    )
-    raw_config.pop('backend_url', None)
-    calculated_config = fill_in_calculated_config(raw_config)
-    assert calculated_config == {
-        'frontend': {},
-        'branch': 'my-branch',
-        'name': 'demo',
-        'backend_url': 'https://regulome-ui-my-branch.regulomedb.org',
-        'tags': [('xyz', '123')]
-    }
-
-
-def test_config_config_factory_init():
-    from infrastructure.config import config_factory
+def test_config_Config():
     from infrastructure.config import Config
-    with pytest.raises(TypeError):
-        config = config_factory(a='b')
     kwargs = {
         'name': 'some-name',
         'branch': 'some-branch',
         'frontend': {},
-        'backend_url': 'some-backend-url',
         'tags': [('abc', '123')]
     }
-    config = config_factory(**kwargs)
+    with pytest.raises(TypeError):
+        config = Config(**kwargs)
+    kwargs.update({'backend_url': 'some-backend-url'})
+    config = Config(**kwargs)
     assert isinstance(config, Config)
-
-
-def test_config_get_backend_url_from_branch():
-    from infrastructure.config import get_backend_url_from_branch
-    assert get_backend_url_from_branch(
-        'IGVF-my-feature-branch-123'
-    ) == 'https://regulome-ui-IGVF-my-feature-branch-123.regulomedb.org'
