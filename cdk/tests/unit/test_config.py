@@ -82,7 +82,7 @@ def test_config_build_config_from_name():
     assert config.branch == 'my-branch'
     assert config.frontend
     assert config.name == 'dev'
-    assert config.backend_url == 'https://gds-for-regulome-demo.demo.regulomedb.org'
+    assert config.backend_url == 'https://regulome-es-2-2-rc.demo.regulomedb.org'
 
 
 def test_config_build_config_from_name_demo(mocker):
