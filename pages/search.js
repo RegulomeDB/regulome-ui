@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-import _ from "underscore";
+import _ from "lodash";
 import Breadcrumbs from "../components/breadcrumbs";
 import {
   DataArea,
@@ -56,9 +56,9 @@ export default function Search({ data }) {
       d.dataset.includes("experiment")
     );
     // for some reason we are getting duplicates here so we need to filter those out
-    const experimentDatasets = _.uniq(
+    const experimentDatasets = _.uniqBy(
       duplicatedExperimentDatasets,
-      (d) => d.dataset
+      "dataset"
     );
     experimentDatasets.sort((a, b) => (a.method > b.method ? 1 : -1));
     // genome browser files

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { DataAreaTitle, DataPanel } from "./data-area";
 
-const MIN_DITANCE_BETWEEN_LABELS = 90;
+const MIN_DISTANCE_BETWEEN_LABELS = 90;
 const TEXT_VERTICAL_DISTANCE = 20;
 const LABEL_HEIGHT = 18;
 const CHAR_SIZE = 8.5;
@@ -39,7 +39,7 @@ export default function SnpsDiagram({ data }) {
     const xYOffset = [snpX];
     yOffsets.push(xYOffset);
 
-    if (snpX - yOffsets[snpIndex - 2]?.[0] < MIN_DITANCE_BETWEEN_LABELS) {
+    if (snpX - yOffsets[snpIndex - 2]?.[0] < MIN_DISTANCE_BETWEEN_LABELS) {
       yOffset = yOffsets[snpIndex - 2][1]
         ? yOffsets[snpIndex - 2][1] + TEXT_VERTICAL_DISTANCE * numberSign
         : TEXT_VERTICAL_DISTANCE * numberSign;
@@ -171,6 +171,6 @@ function getX(snpCoordinate, startSnpCoordinate, endSnpCoordinate) {
     DISTANCE_BETWEEN_FIRST_AND_LAST_SNP *
       ((snpCoordinate - startSnpCoordinate) /
         (endSnpCoordinate - startSnpCoordinate)) +
-    MIN_DITANCE_BETWEEN_LABELS / 2
+    MIN_DISTANCE_BETWEEN_LABELS / 2
   );
 }

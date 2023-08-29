@@ -28,8 +28,7 @@
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
-    "react-dom": "^18.2.0",
-    "underscore": "^1.13.6"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.4",
