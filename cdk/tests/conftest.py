@@ -122,7 +122,7 @@ def existing_resources(mocker, domain, network, secret, chatbot, sns_topic):
     mock.network = network
     mock.docker_hub_credentials.secret = secret
     mock.code_star_connection.arn = 'some-code-star-arn'
-    mock.notification.encode_dcc_chatbot = chatbot
+    mock.notification.regulomedb_chatbot = chatbot
     mock.notification.alarm_notification_topic = sns_topic
     return mock
 
@@ -139,7 +139,7 @@ def config():
             'desired_count': 1,
             'max_capacity': 4,
         },
-        backend_url='https://igvfd-some-test-backend.demo.igvf.org',
+        backend_url='https://gds-some-test-backend.regulomedb.org',
         tags=[
             ('test', 'tag')
         ],
@@ -149,13 +149,13 @@ def config():
 @pytest.fixture
 def pipeline_config():
     from infrastructure.config import PipelineConfig
-    from infrastructure.constructs.existing import igvf_dev
+    from infrastructure.constructs.existing import regulome_dev
     return PipelineConfig(
         name='demo',
         branch='some-branch',
         pipeline='xyz',
-        existing_resources_class=igvf_dev.Resources,
-        account_and_region=igvf_dev.US_WEST_2,
+        existing_resources_class=regulome_dev.Resources,
+        account_and_region=regulome_dev.US_WEST_2,
         tags=[
             ('test', 'tag'),
         ]
@@ -165,14 +165,13 @@ def pipeline_config():
 @pytest.fixture
 def production_pipeline_config():
     from infrastructure.config import PipelineConfig
-    from infrastructure.constructs.existing import igvf_dev
+    from infrastructure.constructs.existing import regulome_dev
     return PipelineConfig(
         name='production',
         branch='some-branch',
         pipeline='xyz',
-        existing_resources_class=igvf_dev.Resources,
-        account_and_region=igvf_dev.US_WEST_2,
-        cross_account_keys=True,
+        existing_resources_class=regulome_dev.Resources,
+        account_and_region=regulome_dev.US_WEST_2,
         tags=[
             ('test', 'tag'),
         ]

@@ -1,6 +1,6 @@
 from aws_cdk import App
 
-from infrastructure.constructs.existing import igvf_dev
+from infrastructure.constructs.existing import regulome_dev
 
 from infrastructure.config import PipelineConfig
 from infrastructure.config import build_pipeline_config_from_name

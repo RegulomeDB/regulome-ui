@@ -1,13 +1,12 @@
 from constructs import Construct
 
-from shared_infrastructure.igvf_staging.connection import CodeStarConnection
-from shared_infrastructure.igvf_staging.environment import US_WEST_2 as US_WEST_2
-from shared_infrastructure.igvf_staging.domain import Domain
-from shared_infrastructure.igvf_staging.secret import DockerHubCredentials
-from shared_infrastructure.igvf_staging.network import Network
-from shared_infrastructure.igvf_staging.notification import Notification
-from shared_infrastructure.igvf_staging.bus import Bus
-from shared_infrastructure.igvf_staging.secret import PortalCredentials
+from regulome_infrastructure.regulome_prod.connection import CodeStarConnection
+from regulome_infrastructure.regulome_prod.environment import US_WEST_2 as US_WEST_2
+from regulome_infrastructure.regulome_prod.domain import Domain
+from regulome_infrastructure.regulome_prod.secret import DockerHubCredentials
+from regulome_infrastructure.regulome_prod.network import Network
+from regulome_infrastructure.regulome_prod.notification import Notification
+from regulome_infrastructure.regulome_prod.bus import Bus
 
 from typing import Any
 
@@ -27,10 +26,6 @@ class Resources(Construct):
         self.docker_hub_credentials = DockerHubCredentials(
             self,
             'DockerHubCredentials',
-        )
-        self.portal_credentials = PortalCredentials(
-            self,
-            'PortalCredentials',
         )
         self.code_star_connection = CodeStarConnection(
             self,

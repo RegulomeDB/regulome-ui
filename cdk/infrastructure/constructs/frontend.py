@@ -37,7 +37,7 @@ from dataclasses import dataclass
 def get_url_prefix(config: Config) -> str:
     if config.url_prefix is not None:
         return config.url_prefix
-    return f'igvf-ui-{config.branch}'
+    return f'regulome-ui-{config.branch}'
 
 
 @dataclass
@@ -127,6 +127,8 @@ class Frontend(Construct):
     def _configure_health_check(self) -> None:
         self.fargate_service.target_group.configure_health_check(
             interval=Duration.seconds(60),
+            healthy_http_codes='200',
+            path='/query',
         )
 
     def _add_tags_to_fargate_service(self) -> None:

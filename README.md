@@ -1,7 +1,7 @@
 [![CircleCI](https://circleci.com/gh/RegulomeDB/regulome-ui/tree/dev.svg?style=svg)](https://circleci.com/gh/RegulomeDB/regulome-ui/tree/dev)
 [![Coverage Status](https://coveralls.io/repos/github/RegulomeDB/regulome-ui/badge.svg)](https://coveralls.io/github/RegulomeDB/regulome-ui)
 
-# RegulomeDB
+# Regulome-ui
 
 This is the UI portion of the RegulomeDB project bootstrapped with [Next.js](https://nextjs.org). This relies on the [Genomic Data Services
 ](https://github.com/ENCODE-DCC/genomic-data-service) project to supply its data.
