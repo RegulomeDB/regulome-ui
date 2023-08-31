@@ -60,12 +60,11 @@ export default function ChipDataBarChart({ chipData }) {
           },
         },
       },
-      // x:
-      //   {
-      //       ticks: {
-      //           autoSkip: false,
-      //     },
-      // },
+      x: {
+        ticks: {
+          autoSkip: true,
+        },
+      },
     },
     plugins: {
       legend: {

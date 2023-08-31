@@ -1,10 +1,9 @@
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import ChipDataTable from "./chip-data-table";
 import { DataAreaTitle, DataPanel } from "./data-area";
-
-import dynamic from "next/dynamic";
 
 const ChipDataBar = dynamic(() => import("./chip-data-bar-chart"), {
   ssr: false,

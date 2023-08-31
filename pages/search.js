@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import _ from "lodash";
+import { AccessibilityDataView } from "../components/accessibility-view";
 import Breadcrumbs from "../components/breadcrumbs";
+import { ChipDataView } from "../components/chip-data-view";
 import {
   DataArea,
   DataAreaTitle,
@@ -13,20 +16,17 @@ import { Button } from "../components/form-elements";
 import Notifications from "../components/notifications";
 import PagePreamble from "../components/page-preamble";
 import RegulomeVersionTag from "../components/regulome-version-tag";
+import {
+  ScoreDataArea,
+  ScoreDataItem,
+} from "../components/score-view-data-area";
+import SearchPageHeader from "../components/search-page-header";
 import SnpsDiagram from "../components/snps-diagram";
 import errorObjectToProps from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
 import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
 import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
-import { ChipDataView } from "../components/chip-data-view";
-import SearchPageHeader from "../components/search-page-header";
-import { useRouter } from "next/router";
-import { AccessibilityDataView } from "../components/accessibility-view";
-import {
-  ScoreDataArea,
-  ScoreDataItem,
-} from "../components/score-view-data-area";
 
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
