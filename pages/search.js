@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import Breadcrumbs from "../components/breadcrumbs";
 import {
   DataArea,
+  DataAreaTitle,
   DataItemLabel,
   DataItemValue,
   DataPanel,
@@ -18,12 +19,41 @@ import FetchRequest from "../lib/fetch-request";
 import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
 import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
+import { ChipDataView } from "../components/chip-data-view";
+import SearchPageHeader from "../components/search-page-header";
+import { useRouter } from "next/router";
+import { AccessibilityDataView } from "../components/accessibility-view";
+import {
+  ScoreDataArea,
+  ScoreDataItem,
+} from "../components/score-view-data-area";
 
 // Default number of populations to display for allele frequencies.
-const defaultDisplayCount = 3;
+const DEFAULT_DISPLAY_COUNT = 3;
 
-export default function Search({ data }) {
+export function useScore() {
+  const [showScoreView, setShowScoreView] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const path = router.asPath;
+    if (path.endsWith(`#!chip`) || path.endsWith(`#!accessibility`)) {
+      setShowScoreView(false);
+    }
+  }, [router]);
+  return showScoreView;
+}
+
+export default function Search({ data, queryString }) {
   const [showMoreFreqs, setShowMoreFreqs] = useState(false);
+  const [showSoreView, setShowScoreView] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const isScoreView = !router.asPath.includes(`#!`);
+    setShowScoreView(isScoreView);
+  }, [router]);
+
   if (Object.keys(data.notifications).length === 0) {
     const hitSnps = getSnpsInfo(data);
     const coordinates = data.query_coordinates[0];
@@ -104,72 +134,114 @@ export default function Search({ data }) {
         <Breadcrumbs />
         <RegulomeVersionTag />
         <PagePreamble />
-        <DataPanel>
-          <DataArea>
-            <DataItemLabel>Searched Coordinates</DataItemLabel>
-            <DataItemValue>{coordinates}</DataItemValue>
-            <DataItemLabel>Genome Assembly</DataItemLabel>
-            <DataItemValue>{data.assembly}</DataItemValue>
-            <DataItemLabel>Rank</DataItemLabel>
-            <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
-            <DataItemLabel>Score</DataItemLabel>
-            <DataItemValue>{data.regulome_score.probability}</DataItemValue>
-            <DataItemLabel>Number of Total Peaks</DataItemLabel>
-            <DataItemValue>{numberOfPeaks}</DataItemValue>
-            <DataItemLabel>Number of ChIP-seq Peaks</DataItemLabel>
-            <DataItemValue>{chipData.length}</DataItemValue>
-            <DataItemLabel>Number of Accessibility Peaks</DataItemLabel>
-            <DataItemValue>{dnaseData.length}</DataItemValue>
-            <DataItemLabel>Number of Motifs Peaks</DataItemLabel>
-            <DataItemValue>{motifsData.length}</DataItemValue>
-            <DataItemLabel>Number of QTL Peaks</DataItemLabel>
-            <DataItemValue>{QTLData.length}</DataItemValue>
-            <DataItemLabel>Number of Histone ChIP-seq Peaks</DataItemLabel>
-            <DataItemValue>{histoneData.length}</DataItemValue>
-            <DataItemLabel>
-              Number of Files to Show in Genome Browser
-            </DataItemLabel>
-            <DataItemValue>{filesForGenomeBrowser.length}</DataItemValue>
-            <DataItemLabel>Number of Chromatin State Datasets</DataItemLabel>
-            <DataItemValue>{chromatinData.length}</DataItemValue>
-            {Object.keys(hitSnps).map((rsid) => (
-              <React.Fragment key={rsid}>
-                <DataItemLabel>{rsid}</DataItemLabel>
-                <DataItemValue>
-                  <div>
-                    {hitSnps[rsid].slice(0, 3).map((populationInfo) => (
-                      <div
-                        key={populationInfo.population}
-                      >{`${populationInfo.info} (${populationInfo.population})`}</div>
+        <SearchPageHeader queryString={queryString} />
+        {showSoreView && (
+          <>
+            <DataAreaTitle>Score</DataAreaTitle>
+            <DataPanel>
+              <ScoreDataArea>
+                <ScoreDataItem
+                  label="Searched Coordinates"
+                  value={coordinates}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Genome Assembly"
+                  value={data.assembly}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Rank"
+                  value={data.regulome_score.ranking}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Score"
+                  value={data.regulome_score.probability}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Number of Total Peaks"
+                  value={numberOfPeaks}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Number of ChIP-seq Peaks"
+                  value={chipData.length}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Number of Accessibility Peaks"
+                  value={dnaseData.length}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Number of Motifs Peaks"
+                  value={motifsData.length}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Number of QTL Peaks"
+                  value={QTLData.length}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Number of Histone ChIP-seq Peaks"
+                  value={histoneData.length}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Number of Files to Show in Genome Browser"
+                  value={filesForGenomeBrowser.length}
+                ></ScoreDataItem>
+                <ScoreDataItem
+                  label="Number of Chromatin State Datasets"
+                  value={chromatinData.length}
+                ></ScoreDataItem>
+              </ScoreDataArea>
+            </DataPanel>
+            {Object.keys(hitSnps).length > 0 && (
+              <>
+                <DataAreaTitle>
+                  SNPs Matching Searched Coordinates
+                </DataAreaTitle>
+                <DataPanel>
+                  <DataArea>
+                    {Object.keys(hitSnps).map((rsid) => (
+                      <React.Fragment key={rsid}>
+                        <DataItemLabel>{rsid}</DataItemLabel>
+                        <DataItemValue>
+                          <div>
+                            {hitSnps[rsid].slice(0, 3).map((populationInfo) => (
+                              <div
+                                key={populationInfo.population}
+                              >{`${populationInfo.info} (${populationInfo.population})`}</div>
+                            ))}
+                          </div>
+                          {hitSnps[rsid].length > 3 && showMoreFreqs ? (
+                            <div>
+                              {hitSnps[rsid]
+                                .slice(3, hitSnps[rsid].length)
+                                .map((populationInfo) => (
+                                  <div
+                                    key={populationInfo.population}
+                                  >{`${populationInfo.info} (${populationInfo.population})`}</div>
+                                ))}
+                            </div>
+                          ) : null}
+                          {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT ? (
+                            <Button
+                              type="secondary"
+                              onClick={() => setShowMoreFreqs(!showMoreFreqs)}
+                            >
+                              {hitSnps[rsid].length - 3}{" "}
+                              {showMoreFreqs ? "fewer" : "more"}
+                            </Button>
+                          ) : null}
+                        </DataItemValue>
+                      </React.Fragment>
                     ))}
-                  </div>
-                  {hitSnps[rsid].length > 3 && showMoreFreqs ? (
-                    <div>
-                      {hitSnps[rsid]
-                        .slice(3, hitSnps[rsid].length)
-                        .map((populationInfo) => (
-                          <div
-                            key={populationInfo.population}
-                          >{`${populationInfo.info} (${populationInfo.population})`}</div>
-                        ))}
-                    </div>
-                  ) : null}
-                  {hitSnps[rsid].length > defaultDisplayCount ? (
-                    <Button
-                      type="secondary"
-                      onClick={() => setShowMoreFreqs(!showMoreFreqs)}
-                    >
-                      {hitSnps[rsid].length - 3}{" "}
-                      {showMoreFreqs ? "fewer" : "more"}
-                    </Button>
-                  ) : null}
-                </DataItemValue>
-              </React.Fragment>
-            ))}
-          </DataArea>
-        </DataPanel>
-        {data.nearby_snps?.length > 0 ? <SnpsDiagram data={data} /> : null}
-        <div id="container"></div>
+                  </DataArea>
+                </DataPanel>
+              </>
+            )}
+
+            {data.nearby_snps?.length > 0 ? <SnpsDiagram data={data} /> : null}
+            <div id="container"></div>
+          </>
+        )}
+        <ChipDataView chipData={chipData}></ChipDataView>
+        <AccessibilityDataView data={dnaseData}></AccessibilityDataView>
       </>
     );
   }
@@ -185,6 +257,7 @@ export default function Search({ data }) {
 
 Search.propTypes = {
   data: PropTypes.object.isRequired,
+  queryString: PropTypes.string.isRequired,
 };
 
 export async function getServerSideProps({ query }) {
@@ -206,8 +279,9 @@ export async function getServerSideProps({ query }) {
           title:
             data.query_coordinates.length < 1
               ? "Search"
-              : data.query_coordinates[0],
+              : `${data.query_coordinates[0]} (${data.regulome_score.probability})`,
         },
+        queryString,
       },
     };
   }
