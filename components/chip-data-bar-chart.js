@@ -24,6 +24,16 @@ ChartJS.register(
 );
 
 export default function ChipDataBarChart({ chipData }) {
+  /**
+   * Group datasets by dataset.targets and get a count for each group.
+   * the counts looks like this:
+   * {
+   *   ARID3A: 4,
+   *   ARID4A: 1,
+   *   ARID4B: 1,
+   * }
+   *
+   **/
   const counts = chipData.reduce((groupCountBytarget, dataset) => {
     const target = dataset.targets;
     if (target in groupCountBytarget) {
@@ -33,27 +43,30 @@ export default function ChipDataBarChart({ chipData }) {
     }
     return groupCountBytarget;
   }, {});
-  console.log(counts);
-  const labels = Object.keys(counts).sort((a, b) => {
+  // targets are target names for bar chart x labels, and are sorted by its group count
+  const targets = Object.keys(counts).sort((a, b) => {
     return counts[b] - counts[a];
   });
-  const values = labels.map((label) => {
+  const groupCounts = targets.map((label) => {
     return counts[label];
   });
   const data = {
-    labels,
+    labels: targets,
     datasets: [
       {
         label: "Number of ChIP-seq datasets",
-        data: values,
+        data: groupCounts,
         backgroundColor: "#276A8E",
       },
     ],
   };
+  // Check here for options setting detail: https://react-chartjs-2.js.org/components/bar
   const options = {
+    // Resizes the chart canvas when its container does
     responsive: true,
     scales: {
       y: {
+        // only diplay tick when it is a integer
         ticks: {
           callback: (val) => {
             return Number.isInteger(val) ? val : "";
@@ -62,12 +75,14 @@ export default function ChipDataBarChart({ chipData }) {
       },
       x: {
         ticks: {
+          //autoSkip to prevent over crowded ticks
           autoSkip: true,
         },
       },
     },
     plugins: {
       legend: {
+        //put legend on top
         position: "top",
       },
       zoom: {
@@ -87,7 +102,6 @@ export default function ChipDataBarChart({ chipData }) {
       },
     },
   };
-
   return <Bar options={options} data={data} />;
 }
 

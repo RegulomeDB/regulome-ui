@@ -8,20 +8,43 @@ import { ButtonLink } from "./form-elements";
  * the left and right side of the header to show different components.
  */
 export default function SearchPageHeader({ queryString }) {
-  const buttonStyle = useButtonFocus();
+  const [buttonInFocus, setButtonInFocus] = useState("score");
+  const router = useRouter();
+
+  useEffect(() => {
+    const path = router.asPath;
+    if (path.endsWith(`#!chip`)) {
+      setButtonInFocus("chip");
+    } else if (path.endsWith(`#!accessibility`)) {
+      setButtonInFocus("accessibility");
+    } else {
+      setButtonInFocus("score");
+    }
+  }, [router]);
 
   return (
     <>
       <div className="mb-1 flex justify-between">
         <div className="flex justify-end gap-1">
-          <ScoreViewLink queryString={queryString} buttonStyle={buttonStyle} />
-          <ChipDataViewLink
+          <HeaderButton
             queryString={queryString}
-            buttonStyle={buttonStyle}
+            buttonInFocus={buttonInFocus}
+            buttonType="score"
+            buttonText="Score"
           />
-          <AccessibilityDataViewLink
+          <HeaderButton
             queryString={queryString}
-            buttonStyle={buttonStyle}
+            buttonInFocus={buttonInFocus}
+            buttonType="chip"
+            buttonText="ChIP Data"
+            suffix
+          />
+          <HeaderButton
+            queryString={queryString}
+            buttonInFocus={buttonInFocus}
+            buttonType="accessibility"
+            buttonText="Accessibility Data"
+            suffix
           />
         </div>
       </div>
@@ -33,100 +56,44 @@ SearchPageHeader.propTypes = {
   queryString: PropTypes.string.isRequired,
 };
 
-function useButtonFocus() {
-  /**
-   * check which button need to be in focus
-   */
-  const [buttonStyle, setButtonStyle] = useState("score");
-  const router = useRouter();
-
-  useEffect(() => {
-    const path = router.asPath;
-    if (path.endsWith(`#!chip`)) {
-      setButtonStyle("chip");
-    } else if (path.endsWith(`#!accessibility`)) {
-      setButtonStyle("accessibility");
-    } else {
-      setButtonStyle("score");
-    }
-  }, [router]);
-  return buttonStyle;
-}
-
-function ChipDataViewLink({ queryString, buttonStyle }) {
-  const editPath = `/search?${queryString}#!chip`;
-  let className = "bg-button-secondary text-button-secondary border-brand ";
-  if (buttonStyle === "chip") {
-    className = "text-button-primary outline-none bg-button-primary";
-  }
+function HeaderButton({
+  queryString,
+  buttonInFocus,
+  buttonType,
+  buttonText,
+  suffix,
+}) {
+  const path = suffix
+    ? `/search?${queryString}#!${buttonType}`
+    : `/search?${queryString}`;
+  const className =
+    buttonInFocus === buttonType
+      ? "text-button-primary outline-none bg-button-primary"
+      : "bg-button-secondary text-button-secondary border-brand ";
   return (
     <div className="flex justify-end">
       <ButtonLink
         className={className}
-        label="Chip"
-        href={editPath}
+        label={buttonType}
+        href={path}
         type="primary"
         size="sm"
         hasIconOnly
       >
-        ChIP Data
+        {buttonText}
       </ButtonLink>
     </div>
   );
 }
-ChipDataViewLink.propTypes = {
+HeaderButton.propTypes = {
+  // the query string for this page
   queryString: PropTypes.string.isRequired,
-  buttonStyle: PropTypes.string.isRequired,
-};
-
-function AccessibilityDataViewLink({ queryString, buttonStyle }) {
-  const editPath = `/search?${queryString}#!accessibility`;
-  let className = "bg-button-secondary text-button-secondary border-brand ";
-  if (buttonStyle === "accessibility") {
-    className = "text-button-primary outline-none bg-button-primary";
-  }
-  return (
-    <div className="flex justify-end">
-      <ButtonLink
-        className={className}
-        label="Accessibility"
-        href={editPath}
-        type="primary"
-        size="sm"
-        hasIconOnly
-      >
-        Accessibility Data
-      </ButtonLink>
-    </div>
-  );
-}
-AccessibilityDataViewLink.propTypes = {
-  queryString: PropTypes.string.isRequired,
-  buttonStyle: PropTypes.string.isRequired,
-};
-
-function ScoreViewLink({ queryString, buttonStyle }) {
-  const editPath = `/search?${queryString}`;
-  let className = "bg-button-secondary text-button-secondary border-brand ";
-  if (buttonStyle === "score") {
-    className = "text-button-primary outline-none bg-button-primary";
-  }
-  return (
-    <div className="flex justify-end">
-      <ButtonLink
-        className={className}
-        label="Edit"
-        href={editPath}
-        type="primary"
-        size="sm"
-        hasIconOnly
-      >
-        Score
-      </ButtonLink>
-    </div>
-  );
-}
-ScoreViewLink.propTypes = {
-  queryString: PropTypes.string.isRequired,
-  buttonStyle: PropTypes.string.isRequired,
+  // which button to add focus style
+  buttonInFocus: PropTypes.string.isRequired,
+  // the button type to display
+  buttonType: PropTypes.string.isRequired,
+  // the text shown on the button
+  buttonText: PropTypes.string.isRequired,
+  // whether the url path need to add button type as suffix
+  suffix: PropTypes.bool,
 };

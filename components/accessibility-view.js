@@ -1,39 +1,35 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { DataAreaTitle, DataPanel } from "./data-area";
 
-export function useAccessibilityData() {
-  const [showChipData, setShowChipData] = useState(false);
+/**
+ * This is the view for display accessibility data for a variant.
+ */
+export function AccessibilityDataView({ data }) {
+  const [showAccessibilityData, setShowAccessibilityData] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const isChip = router.asPath.endsWith(`#!accessibility`);
-    setShowChipData(isChip);
+    setShowAccessibilityData(isChip);
   }, [router]);
-  return showChipData;
-}
-/**
- * This is the view for diasplay accessibility data for a variant.
- */
-export function AccessibilityDataView({ data }) {
-  const showData = useAccessibilityData();
-  return showData ? (
-    <React.Fragment>
-      {data.length > 0 ? (
-        <DataAreaTitle>Accessibility Data</DataAreaTitle>
-      ) : (
-        <React.Fragment>
+  return (
+    showAccessibilityData && (
+      <>
+        {data.length > 0 ? (
+          <DataAreaTitle>Accessibility Data</DataAreaTitle>
+        ) : (
           <DataPanel>
             <DataAreaTitle>
               No accessibility data available to display, please choose a
               different SNP.
             </DataAreaTitle>
           </DataPanel>
-        </React.Fragment>
-      )}
-    </React.Fragment>
-  ) : null;
+        )}
+      </>
+    )
+  );
 }
 
 AccessibilityDataView.propTypes = {

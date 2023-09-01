@@ -134,24 +134,6 @@ export default function Query() {
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
               ></textarea>
-              <div className="flex space-x-4">
-                <span>Click for example entry: </span>
-                <Button
-                  label="multiple dbSNPs"
-                  type="secondary"
-                  onClick={() => setTextInput(exampleSnps)}
-                >
-                  multiple dbSNPs
-                </Button>
-                <span> or </span>
-                <Button
-                  label="coordinates ranges"
-                  type="secondary"
-                  onClick={() => setTextInput(exampleCoordinates)}
-                >
-                  coordinates ranges
-                </Button>
-              </div>
             </div>
           </div>
 
@@ -170,6 +152,26 @@ export default function Query() {
               />
             </div>
           </div>
+
+          <div className=" space-x-4 mb-6 flex">
+            <div>Click for example entry: </div>
+            <Button
+              label="multiple dbSNPs"
+              type="secondary"
+              onClick={() => setTextInput(exampleSnps)}
+            >
+              multiple dbSNPs
+            </Button>
+            <div> or </div>
+            <Button
+              label="coordinates ranges"
+              type="secondary"
+              onClick={() => setTextInput(exampleCoordinates)}
+            >
+              coordinates ranges
+            </Button>
+          </div>
+
           <div className="flex items-center">
             <div className="w-1/3"></div>
             <div className="w-2/3">

@@ -46,7 +46,7 @@ export function useScore() {
 
 export default function Search({ data, queryString }) {
   const [showMoreFreqs, setShowMoreFreqs] = useState(false);
-  const [showSoreView, setShowScoreView] = useState(true);
+  const [showScoreView, setShowScoreView] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function Search({ data, queryString }) {
         <RegulomeVersionTag />
         <PagePreamble />
         <SearchPageHeader queryString={queryString} />
-        {showSoreView && (
+        {showScoreView && (
           <>
             <DataAreaTitle>Score</DataAreaTitle>
             <DataPanel>
