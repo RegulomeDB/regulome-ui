@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 import ChipDataTable from "./chip-data-table";
 import { DataAreaTitle, DataPanel } from "./data-area";
 
-// To dynamically load component ChipDataBar on the client side,
-// use the ssr option to disable server-rendering since ChipDataBar relies on browser APIs like window.
-const ChipDataBar = dynamic(() => import("./chip-data-bar-chart"), {
+// To dynamically load component ChipDataBarChart on the client side,
+// use the ssr option to disable server-rendering since ChipDataBarChart relies on browser APIs like window.
+const ChipDataBarChart = dynamic(() => import("./chip-data-bar-chart"), {
   ssr: false,
 });
 
@@ -29,7 +29,7 @@ export function ChipDataView({ chipData }) {
           <>
             <DataAreaTitle>ChIP Data</DataAreaTitle>
             <DataPanel>
-              <ChipDataBar chipData={chipData}></ChipDataBar>
+              <ChipDataBarChart chipData={chipData}></ChipDataBarChart>
             </DataPanel>
             <DataAreaTitle>Datasets Table</DataAreaTitle>
             <DataPanel>
