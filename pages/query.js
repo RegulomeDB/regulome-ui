@@ -13,6 +13,11 @@ const inputClassName =
 const buttonClassName =
   "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
 
+const exampleSnps =
+  "rs75982468\nrs10117931\nrs11749731\nrs11160830\nrs2808110\nrs2839467\nrs147375898\nrs111686660\nrs11145227\nrs190318542\nrs148232663\nrs74792881\nrs3087079\nrs2166521\nrs62319725";
+const exampleCoordinates =
+  "chr12:69360231-69360232\nchr10:5852536-5852537\nchr10:11699181-11699182\nchr1:39026790-39026791\nchr1:109726205-109726206";
+
 export default function Query() {
   const [fileInput, setFileInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -123,7 +128,7 @@ export default function Query() {
                 className={inputClassName}
                 id="regions"
                 name="regions"
-                rows="4"
+                rows="8"
                 cols="50"
                 placeholder="Enter rsID(s) OR region(s), one per line. For example: rs75982468, chr12:69360231-69360232."
                 value={textInput}
@@ -147,6 +152,26 @@ export default function Query() {
               />
             </div>
           </div>
+
+          <div className=" space-x-4 mb-6 flex">
+            <div>Click for example entry: </div>
+            <Button
+              label="multiple dbSNPs"
+              type="secondary"
+              onClick={() => setTextInput(exampleSnps)}
+            >
+              multiple dbSNPs
+            </Button>
+            <div> or </div>
+            <Button
+              label="coordinates ranges"
+              type="secondary"
+              onClick={() => setTextInput(exampleCoordinates)}
+            >
+              coordinates ranges
+            </Button>
+          </div>
+
           <div className="flex items-center">
             <div className="w-1/3"></div>
             <div className="w-2/3">

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { DataAreaTitle, DataPanel } from "./data-area";
 
-const MIN_DISTANCE_BETWEEN_LABELS = 90;
+const MIN_DISTANCE_BETWEEN_LABELS = 94;
 const TEXT_VERTICAL_DISTANCE = 20;
 const LABEL_HEIGHT = 18;
 const CHAR_SIZE = 8.5;
