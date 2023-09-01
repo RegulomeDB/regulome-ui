@@ -12,7 +12,7 @@ const ChipDataBarChart = dynamic(() => import("./chip-data-bar-chart"), {
 });
 
 /**
- * This is the view for diasplay ChIP-seq data for a variant.
+ * This is the view for display ChIP-seq data for a variant.
  */
 export function ChipDataView({ chipData }) {
   const [showChipData, setShowChipData] = useState(false);
