@@ -6,7 +6,7 @@ import { DataAreaTitle, DataPanel } from "./data-area";
 import AccessibilityDataTable from "./accessibility-table";
 
 // To dynamically load component ChipDataBarChart on the client side,
-// use the ssr option to disable server-rendering since ChipDataBarChart relies on browser APIs like window.
+// use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
 const AccessibilityChart = dynamic(() => import("./accessibility-chart"), {
   ssr: false,
 });
