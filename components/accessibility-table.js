@@ -56,6 +56,7 @@ const accessibilityDataColumns = [
 
 /**
  * Display a sortable table of the given accessibility data.
+ * The data can be filtered by biosample term name.
  */
 export default function AccessibilityDataTable({ data }) {
   const [textInput, setTextInput] = useState("");
@@ -69,17 +70,20 @@ export default function AccessibilityDataTable({ data }) {
         );
   return (
     <div className="grid gap-y-2">
-      <div className="flex items-center gap-2 px-2 py-1">
-        <MagnifyingGlassIcon className="h-4 w-4" />
+      <label
+        htmlFor="email"
+        className="relative text-gray-400 focus-within:text-gray-600 block"
+      >
+        <MagnifyingGlassIcon className="absolute top-1/3 left-1 w-6 h-4" />
         <input
-          className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-brand"
+          className="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-7 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-brand"
           type="search"
           aria-label="search to filter biosample results"
           placeholder="Search for a biosample name"
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
         />
-      </div>
+      </label>
       <DataGridContainer>
         <SortableGrid data={data} columns={accessibilityDataColumns} />
       </DataGridContainer>

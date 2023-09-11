@@ -28,9 +28,9 @@ export default function AccessibilityChart({ accessibilityData }) {
    * Group datasets by dataset.biosample_ontology.term_name and get a count for each group.
    * the counts looks like this:
    * {
-   *   ARID3A: 4,
-   *   ARID4A: 1,
-   *   ARID4B: 1,
+   *   spleen: 4,
+   *   ovary: 1,
+   *   pancreas: 1,
    * }
    *
    **/
