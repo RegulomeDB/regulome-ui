@@ -66,7 +66,7 @@ export default function ChipDataBarChart({ chipData }) {
     responsive: true,
     scales: {
       y: {
-        // only diplay tick when it is a integer
+        // only display tick when it is a integer
         ticks: {
           callback: (val) => {
             return Number.isInteger(val) ? val : "";

@@ -70,10 +70,7 @@ export default function AccessibilityDataTable({ data }) {
         );
   return (
     <div className="grid gap-y-2">
-      <label
-        htmlFor="email"
-        className="relative text-gray-400 focus-within:text-gray-600 block"
-      >
+      <label className="relative text-gray-400 focus-within:text-gray-600 block">
         <MagnifyingGlassIcon className="absolute top-1/3 left-1 w-6 h-4" />
         <input
           className="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-7 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-brand"
