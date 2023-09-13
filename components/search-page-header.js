@@ -17,6 +17,8 @@ export default function SearchPageHeader({ queryString }) {
       setButtonInFocus("chip");
     } else if (path.endsWith(`#!accessibility`)) {
       setButtonInFocus("accessibility");
+    } else if (path.endsWith(`#!qtl`)) {
+      setButtonInFocus("qtl");
     } else {
       setButtonInFocus("score");
     }
@@ -44,6 +46,13 @@ export default function SearchPageHeader({ queryString }) {
             buttonInFocus={buttonInFocus}
             buttonType="accessibility"
             buttonText="Accessibility Data"
+            suffix
+          />
+          <HeaderButton
+            queryString={queryString}
+            buttonInFocus={buttonInFocus}
+            buttonType="qtl"
+            buttonText="QTL Data"
             suffix
           />
         </div>

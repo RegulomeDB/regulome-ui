@@ -27,6 +27,7 @@ import FetchRequest from "../lib/fetch-request";
 import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
 import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
+import { QTLDataView } from "../components/qtl-data-view";
 
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
@@ -242,6 +243,7 @@ export default function Search({ data, queryString }) {
         )}
         <ChipDataView chipData={chipData}></ChipDataView>
         <AccessibilityDataView data={dnaseData}></AccessibilityDataView>
+        <QTLDataView data={QTLData}></QTLDataView>
       </>
     );
   }

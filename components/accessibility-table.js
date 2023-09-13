@@ -19,13 +19,13 @@ const accessibilityDataColumns = [
     sorter: (source) => Number(source.start),
   },
   {
-    id: "biosample_ontology",
+    id: "biosample_ontology.term_name",
     title: "Biosample",
     display: ({ source }) =>
       source.biosample_ontology ? source.biosample_ontology.term_name : "",
   },
   {
-    id: "organ_slims",
+    id: "biosample_ontology.organ_slims",
     title: "Organ",
     display: ({ source }) =>
       source.biosample_ontology?.organ_slims?.length > 0
