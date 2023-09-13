@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { DataAreaTitle, DataPanel } from "./data-area";
 import CaQTLDataTable from "./caqtl-table";
+import { DataAreaTitle, DataPanel } from "./data-area";
 import EQTLDataTable from "./eqtl-table";
 
 /**
