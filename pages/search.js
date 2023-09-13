@@ -15,6 +15,7 @@ import {
 import { Button } from "../components/form-elements";
 import Notifications from "../components/notifications";
 import PagePreamble from "../components/page-preamble";
+import { QTLDataView } from "../components/qtl-data-view";
 import RegulomeVersionTag from "../components/regulome-version-tag";
 import {
   ScoreDataArea,
@@ -242,6 +243,7 @@ export default function Search({ data, queryString }) {
         )}
         <ChipDataView chipData={chipData}></ChipDataView>
         <AccessibilityDataView data={dnaseData}></AccessibilityDataView>
+        <QTLDataView data={QTLData}></QTLDataView>
       </>
     );
   }

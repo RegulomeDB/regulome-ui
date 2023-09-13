@@ -4,14 +4,14 @@ import PropTypes from "prop-types";
 import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
-const chipDataColumns = [
+const caqtlDataColumns = [
   {
     id: "method",
     title: "Method",
   },
   {
     id: "peak",
-    title: "Peak",
+    title: "QTL location",
     display: ({ source }) => `${source.chrom}:${source.start}-${source.end}`,
     sorter: (source) => Number(source.start),
   },
@@ -22,21 +22,11 @@ const chipDataColumns = [
       source.biosample_ontology ? source.biosample_ontology.term_name : "",
   },
   {
-    id: "targets",
-    title: "Targets",
-    display: ({ source }) =>
-      source.targets && source.targets.length > 0
-        ? source.targets.join(", ")
-        : "",
+    id: "ancestry",
+    title: "Population",
+    display: ({ source }) => source.ancestry || "N/A",
   },
-  {
-    id: "biosample_ontology.organ_slims",
-    title: "Organ",
-    display: ({ source }) =>
-      source.biosample_ontology
-        ? source.biosample_ontology.organ_slims.join(", ")
-        : "",
-  },
+
   {
     id: "dataset",
     title: "Dataset",
@@ -53,23 +43,19 @@ const chipDataColumns = [
       </a>
     ),
   },
-  {
-    id: "value",
-    title: "Value",
-  },
 ];
 
 /**
  * Display a sortable table of the given data.
- */ export default function ChipDataTable({ data }) {
+ */ export default function CaQTLDataTable({ data }) {
   return (
     <DataGridContainer>
-      <SortableGrid data={data} columns={chipDataColumns} />
+      <SortableGrid data={data} columns={caqtlDataColumns} />
     </DataGridContainer>
   );
 }
 
-ChipDataTable.propTypes = {
+CaQTLDataTable.propTypes = {
   // data to display
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
