@@ -23,38 +23,38 @@ ChartJS.register(
   zoomPlugin
 );
 
-export default function ChipDataBarChart({ chipData }) {
+export default function AccessibilityChart({ accessibilityData }) {
   /**
-   * Group datasets by dataset.targets and get a count for each group.
+   * Group datasets by dataset.biosample_ontology.term_name and get a count for each group.
    * the counts looks like this:
    * {
-   *   ARID3A: 4,
-   *   ARID4A: 1,
-   *   ARID4B: 1,
+   *   spleen: 4,
+   *   ovary: 1,
+   *   pancreas: 1,
    * }
    *
    **/
-  const counts = chipData.reduce((groupCountBytarget, dataset) => {
-    const target = dataset.targets;
-    if (target in groupCountBytarget) {
-      groupCountBytarget[target] += 1;
+  const counts = accessibilityData.reduce((groupCountByBiosample, dataset) => {
+    const biosample = dataset.biosample_ontology.term_name;
+    if (biosample in groupCountByBiosample) {
+      groupCountByBiosample[biosample] += 1;
     } else {
-      groupCountBytarget[target] = 1;
+      groupCountByBiosample[biosample] = 1;
     }
-    return groupCountBytarget;
+    return groupCountByBiosample;
   }, {});
-  // targets are target names for bar chart x labels, and are sorted by its group count
-  const targets = Object.keys(counts).sort((a, b) => {
+  // biosamples are sorted by its group count
+  const biosamples = Object.keys(counts).sort((a, b) => {
     return counts[b] - counts[a];
   });
-  const groupCounts = targets.map((label) => {
+  const groupCounts = biosamples.map((label) => {
     return counts[label];
   });
   const data = {
-    labels: targets,
+    labels: biosamples,
     datasets: [
       {
-        label: "Number of ChIP-seq datasets",
+        label: "Number of accessibility datasets",
         data: groupCounts,
         backgroundColor: "#276A8E",
       },
@@ -105,6 +105,6 @@ export default function ChipDataBarChart({ chipData }) {
   return <Bar options={options} data={data} />;
 }
 
-ChipDataBarChart.propTypes = {
-  chipData: PropTypes.array.isRequired,
+AccessibilityChart.propTypes = {
+  accessibilityData: PropTypes.array.isRequired,
 };
