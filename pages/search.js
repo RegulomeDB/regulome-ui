@@ -28,24 +28,13 @@ import FetchRequest from "../lib/fetch-request";
 import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
 import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
+import Motifs from "../components/motifs-view";
+import fetchMotifDoc from "../lib/fetch-motif-doc";
 
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
 
-export function useScore() {
-  const [showScoreView, setShowScoreView] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    const path = router.asPath;
-    if (path.endsWith(`#!chip`) || path.endsWith(`#!accessibility`)) {
-      setShowScoreView(false);
-    }
-  }, [router]);
-  return showScoreView;
-}
-
-export default function Search({ data, queryString }) {
+export default function Search({ data, motifDocList, queryString }) {
   const [showMoreFreqs, setShowMoreFreqs] = useState(false);
   const [showScoreView, setShowScoreView] = useState(true);
   const router = useRouter();
@@ -103,7 +92,6 @@ export default function Search({ data, queryString }) {
       } else {
         target = dataset.targets ? dataset.targets.join(", ") : "";
       }
-      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < files.length; i++) {
         files[i].assay_term_name = dataset.method;
         files[i].biosample_ontology = dataset.biosample_ontology;
@@ -244,6 +232,12 @@ export default function Search({ data, queryString }) {
         <ChipDataView chipData={chipData}></ChipDataView>
         <AccessibilityDataView data={dnaseData}></AccessibilityDataView>
         <QTLDataView data={QTLData}></QTLDataView>
+        <Motifs
+          motifsList={motifDocList}
+          sequence={data.sequence}
+          coordinates={coordinates}
+          assembly={data.assembly}
+        ></Motifs>
       </>
     );
   }
@@ -260,6 +254,7 @@ export default function Search({ data, queryString }) {
 Search.propTypes = {
   data: PropTypes.object.isRequired,
   queryString: PropTypes.string.isRequired,
+  motifDocList: PropTypes.array.isRequired,
 };
 
 export async function getServerSideProps({ query }) {
@@ -267,6 +262,11 @@ export async function getServerSideProps({ query }) {
   const request = new FetchRequest();
   const data = await request.getObject(`/search?${queryString}`);
   if (FetchRequest.isResponseSuccess(data)) {
+    let motifDocList = [];
+    if (data.query_coordinates.length === 1) {
+      motifDocList = await fetchMotifDoc(request, data["@graph"]);
+    }
+
     const breadcrumbs = [
       {
         title: "Search",
@@ -276,6 +276,7 @@ export async function getServerSideProps({ query }) {
     return {
       props: {
         data,
+        motifDocList,
         breadcrumbs,
         pageContext: {
           title:

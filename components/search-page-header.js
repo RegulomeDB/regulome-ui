@@ -19,6 +19,8 @@ export default function SearchPageHeader({ queryString }) {
       setButtonInFocus("accessibility");
     } else if (path.endsWith(`#!qtl`)) {
       setButtonInFocus("qtl");
+    } else if (path.endsWith(`#!motifs`)) {
+      setButtonInFocus("motifs");
     } else {
       setButtonInFocus("score");
     }
@@ -53,6 +55,13 @@ export default function SearchPageHeader({ queryString }) {
             buttonInFocus={buttonInFocus}
             buttonType="qtl"
             buttonText="QTL Data"
+            suffix
+          />
+          <HeaderButton
+            queryString={queryString}
+            buttonInFocus={buttonInFocus}
+            buttonType="motifs"
+            buttonText="Motifs"
             suffix
           />
         </div>
