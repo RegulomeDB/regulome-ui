@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Base from "./base";
 import _ from "lodash";
+import Base from "./base";
 
 const BACKGROUND_FREQUENCY = 0.25;
 const HEIGHT = 100;
