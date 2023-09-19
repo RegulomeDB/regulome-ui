@@ -46,7 +46,7 @@ function G() {
   );
 }
 /**
- * Draw one symble at given scale.
+ * Draw one base at given scale.
  *
  */
 export default function Base({ yscale, xscale, base }) {

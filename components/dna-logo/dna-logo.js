@@ -7,7 +7,6 @@ const BACKGROUND_FREQUENCY = 0.25;
 const HEIGHT = 100;
 const BASE_WIDTH = 40;
 const VIEW_BOX_WIDTH_OFFSET = 100;
-const START_POSITION = 1;
 const FONT_SIZE = 18;
 const Y_AXIS_WIDTH = 65;
 const BASE_START_X = 80;
@@ -131,15 +130,15 @@ function XAxis({ n, baseMaxHeight }) {
       transform={`translate(${BASE_START_X},${xLableStartY})`}
     >
       <text x="0" y="35">
-        5'
+        5&apos;
       </text>
       <text x={BASE_WIDTH * n} y="35">
-        3'
+        3&apos;
       </text>
       <g transform="rotate(-90)">
         {numbers.map((n) => (
           <text x="0" y={BASE_WIDTH * n + 30} textAnchor="end" key={n}>
-            {n + START_POSITION}
+            {n + 1}
           </text>
         ))}
       </g>
@@ -212,7 +211,7 @@ SnpBox.propTypes = {
 };
 
 /**
- * Renders a DNA logo with x- and y-axes.
+ * Renders a DNA logo with x- and y-axes and the box highlight the snp.
  *
  */
 function LogoRef({ pwm, strand, snpCoordinate, hideY, heightScale }, ref) {
