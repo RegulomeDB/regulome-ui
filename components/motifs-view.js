@@ -202,7 +202,7 @@ export default function Motifs({
           <>
             <DataAreaTitle>Motifs</DataAreaTitle>
             <DataPanel>
-              <div className="grid grid-cols-2 gap-4 bg-white	 sticky top-0">
+              <div className="grid grid-cols-2 gap-4 bg-white sticky top-0">
                 <DataItemValue>
                   {assembly} Reference {windowStartPos + 1}-{windowEndPos}
                 </DataItemValue>

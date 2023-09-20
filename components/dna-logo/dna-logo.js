@@ -216,12 +216,17 @@ SnpBox.propTypes = {
  */
 function LogoRef({ pwm, strand, snpCoordinate, hideY, heightScale }, ref) {
   if (pwm.length === 0 || pwm[0].length === 0) return <div />;
-  const likelihood = pwm.map((r) => {
-    let sum = 0.0;
-    r.map(
-      (x) => (sum += x === 0 ? 0 : x * Math.log2(x / BACKGROUND_FREQUENCY))
+  const likelihood = pwm.map((row) => {
+    const sum = row.reduce(
+      (accumulator, currentValue) =>
+        (accumulator +=
+          currentValue === 0
+            ? 0
+            : currentValue * Math.log2(currentValue / BACKGROUND_FREQUENCY)),
+      0
     );
-    return r.map((x) => {
+
+    return row.map((x) => {
       const v = x * sum;
       return v <= 0.0 ? 0.0 : v;
     });
