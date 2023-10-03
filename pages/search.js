@@ -30,6 +30,8 @@ import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
 import Motifs from "../components/motifs-view";
 import fetchMotifDoc from "../lib/fetch-motif-doc";
+import { ChromatinView } from "../components/chromatin-view";
+import { getChromatinData } from "../lib/chromatin-data";
 
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
@@ -52,7 +54,8 @@ export default function Search({ data, motifDocList, queryString }) {
       (d) => d.method && d.method.indexOf("QTL") !== -1
     );
 
-    const chromatinData = allData.filter((d) => d.method === "chromatin state");
+    // const chromatinData = allData.filter((d) => d.method === "chromatin state");
+    const chromatinData = getChromatinData(allData);
     const chipData = filterOverlappingPeaks(
       allData.filter((d) => d.method === "ChIP-seq")
     );
@@ -238,6 +241,7 @@ export default function Search({ data, motifDocList, queryString }) {
           coordinates={coordinates}
           assembly={data.assembly}
         ></Motifs>
+        <ChromatinView data={chromatinData} assembly={data.assembly} />
       </>
     );
   }
