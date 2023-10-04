@@ -9,10 +9,6 @@ import { BodyMapThumbnailAndModal } from "./body-map";
 import ChromatinStateFacets from "./chromatin-state-facets";
 import {
   ASSOCIATED_ORGAN_MAP,
-  COMPLETE_CELLS_LIST_GRCH38,
-  COMPLETE_CELLS_LIST_HG19,
-  COMPLETE_ORGAN_LIST_GRCH38,
-  COMPLETE_ORGAN_LIST_HG19,
   getFilteredChromatinData,
 } from "../lib/chromatin-data";
 import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
@@ -80,29 +76,37 @@ export function ChromatinView({ data, assembly }) {
     [],
     biosampleFilters
   );
-  const organList =
-    assembly === "hg19" ? COMPLETE_ORGAN_LIST_HG19 : COMPLETE_ORGAN_LIST_GRCH38;
-  const cellList =
-    assembly === "hg19" ? COMPLETE_CELLS_LIST_HG19 : COMPLETE_CELLS_LIST_GRCH38;
 
-  function handleClickOrgan(organ) {
-    if (organList.includes(organ) | cellList.includes(organ)) {
-      let filters = [...organFilters];
-      if (filters.includes(organ)) {
-        if (organ in ASSOCIATED_ORGAN_MAP) {
-          ASSOCIATED_ORGAN_MAP[organ].forEach((element) => {
-            filters = _.without(filters, element);
-          });
+  function handleClickOrgan(organ, organList, enabledOrganList) {
+    let filters = [...organFilters];
+    if (organList && enabledOrganList) {
+      if (organList.includes(organ) && enabledOrganList.includes(organ)) {
+        if (filters.includes(organ)) {
+          if (organ in ASSOCIATED_ORGAN_MAP) {
+            ASSOCIATED_ORGAN_MAP[organ].forEach((associatedOrgan) => {
+              if (enabledOrganList.includes(associatedOrgan)) {
+                filters = _.without(filters, associatedOrgan);
+              }
+            });
+          }
+          filters = _.without(filters, organ);
+        } else {
+          filters.push(organ);
+          if (organ in ASSOCIATED_ORGAN_MAP) {
+            ASSOCIATED_ORGAN_MAP[organ].forEach((associatedOrgan) => {
+              if (
+                enabledOrganList.includes(associatedOrgan) &&
+                !filters.includes(associatedOrgan)
+              ) {
+                filters.push(associatedOrgan);
+              }
+            });
+          }
         }
-        filters = _.without(filters, organ);
-      } else {
-        filters.push(organ);
-        if (organ in ASSOCIATED_ORGAN_MAP) {
-          ASSOCIATED_ORGAN_MAP[organ].forEach((element) => {
-            filters.push(element);
-          });
-        }
+        setOrganFilters(filters);
       }
+    } else {
+      filters = _.without(filters, organ);
       setOrganFilters(filters);
     }
   }
@@ -140,8 +144,6 @@ export function ChromatinView({ data, assembly }) {
                     <BodyMapThumbnailAndModal
                       data={filteredDataForBodyMap}
                       assembly={assembly}
-                      organList={organList}
-                      cellList={cellList}
                       organFilters={organFilters}
                       handleClickOrgan={handleClickOrgan}
                     />

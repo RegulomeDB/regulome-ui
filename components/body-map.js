@@ -8,7 +8,14 @@ import {
   ArrowsPointingInIcon,
   FunnelIcon,
 } from "@heroicons/react/20/solid";
-import { getFillColorTailwind, getOrganFacets } from "../lib/chromatin-data";
+import {
+  COMPLETE_CELLS_LIST_GRCH38,
+  COMPLETE_CELLS_LIST_HG19,
+  COMPLETE_ORGAN_LIST_GRCH38,
+  COMPLETE_ORGAN_LIST_HG19,
+  getFillColorTailwind,
+  getOrganFacets,
+} from "../lib/chromatin-data";
 
 export function HumanCells({
   facets,
@@ -33,7 +40,10 @@ export function HumanCells({
             type="button"
             id={cell}
             disabled={isDisabled}
-            onClick={handleClickOrgan && (() => handleClickOrgan(cell))}
+            onClick={
+              handleClickOrgan &&
+              (() => handleClickOrgan(cell, cellList, enabledBodyMapFilters))
+            }
             key={`${cell}-bodymap-cellslist`}
           >
             <div className="relative">
@@ -115,7 +125,13 @@ export function BodyMapModal({
                           isSelected && "border-solid border-2 border-brand"
                         }`}
                         tabIndex="0"
-                        onClick={(e) => handleClickOrgan(e.target.id)}
+                        onClick={(e) =>
+                          handleClickOrgan(
+                            e.target.id,
+                            organList,
+                            enabledBodyMapFilters
+                          )
+                        }
                       >
                         {organ}
                       </button>
@@ -145,7 +161,13 @@ export function BodyMapModal({
                         role="button"
                         tabIndex="0"
                         disabled={isDisabled}
-                        onClick={(e) => handleClickOrgan(e.target.id)}
+                        onClick={(e) =>
+                          handleClickOrgan(
+                            e.target.id,
+                            cellList,
+                            enabledBodyMapFilters
+                          )
+                        }
                         className={`hover:bg-slate-200 ${
                           isDisabled && "text-slate-400"
                         } ${
@@ -259,14 +281,16 @@ BodyMapThumbnail.propTypes = {
 export function BodyMapThumbnailAndModal({
   data,
   assembly,
-  organList,
-  cellList,
   organFilters,
   handleClickOrgan,
 }) {
   const [isThumbnailExpanded, setIsThumbnailExpanded] = useState(false);
   const facets = getOrganFacets(data, assembly);
   const enabledBodyMapFilters = Object.keys(facets);
+  const organList =
+    assembly === "hg19" ? COMPLETE_ORGAN_LIST_HG19 : COMPLETE_ORGAN_LIST_GRCH38;
+  const cellList =
+    assembly === "hg19" ? COMPLETE_CELLS_LIST_HG19 : COMPLETE_CELLS_LIST_GRCH38;
 
   return (
     <div>
@@ -297,8 +321,6 @@ export function BodyMapThumbnailAndModal({
 BodyMapThumbnailAndModal.propTypes = {
   data: PropTypes.array.isRequired,
   assembly: PropTypes.string.isRequired,
-  organList: PropTypes.array.isRequired,
-  cellList: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
   handleClickOrgan: PropTypes.func.isRequired,
 };
