@@ -12,6 +12,7 @@ import {
   getFilteredChromatinData,
 } from "../lib/chromatin-data";
 import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
+import { Button } from "./form-elements";
 
 // Display selected filters and allow user to de-select them
 function Selections({ filters, clearFilterFunc }) {
@@ -131,6 +132,12 @@ export function ChromatinView({ data, assembly }) {
     setBiosampleFilters(filters);
   }
 
+  function clearAllFilters() {
+    setBiosampleFilters([]);
+    setOrganFilters([]);
+    setStateFilters([]);
+  }
+
   return (
     showChromatinData && (
       <>
@@ -139,7 +146,7 @@ export function ChromatinView({ data, assembly }) {
             <>
               <DataAreaTitle>Chromatin State</DataAreaTitle>
               <DataPanel>
-                <div className="grid grid-cols-5 gap-1 h-100">
+                <div className="grid grid-cols-5 gap-1 h-100 mb-2">
                   <div>
                     <BodyMapThumbnailAndModal
                       data={filteredDataForBodyMap}
@@ -161,6 +168,12 @@ export function ChromatinView({ data, assembly }) {
                       biosampleFilters={biosampleFilters}
                       handleClickBiosample={handleClickBiosample}
                     />
+                    {biosampleFilters.length > 0 && (
+                      <Selections
+                        filters={biosampleFilters}
+                        clearFilterFunc={handleClickBiosample}
+                      />
+                    )}
                   </div>
                   <div>
                     <ChromatinStateFacets
@@ -177,6 +190,7 @@ export function ChromatinView({ data, assembly }) {
                     )}
                   </div>
                 </div>
+                <Button onClick={clearAllFilters}>Clear all filters </Button>
               </DataPanel>
               <DataPanel>
                 <ChromatinTable data={filteredData} />
