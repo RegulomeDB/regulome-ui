@@ -1,5 +1,4 @@
 import pytest
-import json
 
 from aws_cdk.assertions import Template
 

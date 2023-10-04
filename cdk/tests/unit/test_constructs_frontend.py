@@ -217,6 +217,19 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                                 'Arn'
                             ]
                         }
+                    },
+                    {
+                        'Action': [
+                            'logs:CreateLogStream',
+                            'logs:PutLogEvents'
+                        ],
+                        'Effect': 'Allow',
+                        'Resource': {
+                            'Fn::GetAtt': [
+                                'TestFrontendFargateTaskDefApplicationContainerLogGroupB905B11F',
+                                'Arn'
+                            ]
+                        }
                     }
                 ],
                 'Version': '2012-10-17'

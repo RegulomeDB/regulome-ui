@@ -71,6 +71,7 @@ class Frontend(Construct):
         self._define_docker_assets()
         self._define_domain_name()
         self._define_fargate_service()
+        self._add_application_container_to_task()
         self._configure_health_check()
         self._add_tags_to_fargate_service()
         self._enable_exec_command()
