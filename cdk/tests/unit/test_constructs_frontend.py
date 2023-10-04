@@ -25,142 +25,6 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
         1
     )
     template.has_resource_properties(
-        'AWS::ECS::Service',
-        {
-            'Cluster': {
-                'Ref': 'EcsDefaultClusterMnL3mNNYNTestVpc4872C696'
-            },
-            'DeploymentConfiguration': {
-                'DeploymentCircuitBreaker': {
-                    'Enable': True,
-                    'Rollback': True
-                },
-                'MaximumPercent': 200,
-                'MinimumHealthyPercent': 50
-            },
-            'DeploymentController': {
-                'Type': 'ECS'
-            },
-            'DesiredCount': 4,
-            'EnableECSManagedTags': False,
-            'EnableExecuteCommand': True,
-            'HealthCheckGracePeriodSeconds': 60,
-            'LaunchType': 'FARGATE',
-            'LoadBalancers': [
-                {
-                    'ContainerName': 'nextjs',
-                    'ContainerPort': 3000,
-                    'TargetGroupArn': {
-                        'Ref': 'TestFrontendFargateLBPublicListenerECSGroup92AD1119'
-                    }
-                }
-            ],
-            'NetworkConfiguration': {
-                'AwsvpcConfiguration': {
-                    'AssignPublicIp': 'ENABLED',
-                    'SecurityGroups': [
-                        {
-                            'Fn::GetAtt': [
-                                'TestFrontendFargateServiceSecurityGroup9DFF92D3',
-                                'GroupId'
-                            ]
-                        }
-                    ],
-                    'Subnets': [
-                        {
-                            'Ref': 'TestVpcpublicSubnet1Subnet4F70BC85'
-                        },
-                        {
-                            'Ref': 'TestVpcpublicSubnet2Subnet96FF72E6'
-                        }
-                    ]
-                }
-            },
-            'Tags': [
-                {
-                    'Key': 'backend_url',
-                    'Value': 'https://gds-some-test-backend.regulomedb.org'
-                },
-                {
-                    'Key': 'branch',
-                    'Value': 'some-branch'
-                }
-            ],
-            'TaskDefinition': {
-                'Ref': 'TestFrontendFargateTaskDef5DCA46EA',
-            }
-        }
-    )
-    template.has_resource_properties(
-        'AWS::ECS::TaskDefinition',
-        {
-            'ContainerDefinitions': [
-                {
-                    'Essential': True,
-                    'Environment': [
-                        {
-                            'Name': 'NODE_ENV',
-                            'Value': 'production'
-                        },
-                        {
-                            'Name': 'BACKEND_URL',
-                            'Value': 'https://gds-some-test-backend.regulomedb.org'
-                        }
-                    ],
-                    'LogConfiguration': {
-                        'LogDriver': 'awslogs',
-                        'Options': {
-                            'awslogs-group': {
-                                'Ref': 'TestFrontendFargateTaskDefnextjsLogGroup59CC3BA2'
-                            },
-                            'awslogs-stream-prefix': 'nextjs',
-                            'awslogs-region': {
-                                'Ref': 'AWS::Region'
-                            },
-                            'mode': 'non-blocking'
-                        }
-                    },
-                    'Name': 'nextjs',
-                    'PortMappings': [
-                        {
-                            'ContainerPort': 3000,
-                            'Protocol': 'tcp'
-                        }
-                    ]
-                }
-            ],
-            'Cpu': '2048',
-            'ExecutionRoleArn': {
-                'Fn::GetAtt': [
-                    'TestFrontendFargateTaskDefExecutionRoleA7F6270B',
-                    'Arn'
-                ]
-            },
-            'Family': 'TestFrontendFargateTaskDef851C82A9',
-            'Memory': '4096',
-            'NetworkMode': 'awsvpc',
-            'RequiresCompatibilities': [
-                'FARGATE'
-            ],
-            'Tags': [
-                {
-                    'Key': 'backend_url',
-                    'Value': 'https://gds-some-test-backend.regulomedb.org'
-                },
-                {
-                    'Key': 'branch',
-                    'Value': 'some-branch'
-                }
-            ],
-            'TaskRoleArn': {
-                'Fn::GetAtt': [
-                    'TestFrontendFargateTaskDefTaskRole92D4E800',
-                    'Arn'
-                ]
-            }
-        }
-    )
-    template.has_resource_properties(
         'AWS::ElasticLoadBalancingV2::LoadBalancer',
         {
             'LoadBalancerAttributes': [
@@ -251,8 +115,8 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                     'GroupId'
                 ]
             },
-            'FromPort': 3000,
-            'ToPort': 3000
+            'FromPort': 80,
+            'ToPort': 80
         }
     )
     template.has_resource_properties(
@@ -349,7 +213,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                         'Effect': 'Allow',
                         'Resource': {
                             'Fn::GetAtt': [
-                                'TestFrontendFargateTaskDefnextjsLogGroup59CC3BA2',
+                                'TestFrontendFargateTaskDefnginxfeLogGroupEB332E29',
                                 'Arn'
                             ]
                         }
