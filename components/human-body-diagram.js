@@ -45,7 +45,13 @@ import {
  * large intestine and colon share the same svf <LargeIntestine />
  *
  */
-function HumanBodyDiagram({ facets, organFilters, handleClickOrgan }) {
+function HumanBodyDiagram({
+  facets,
+  organFilters,
+  handleClickOrgan,
+  organList,
+  enabledBodyMapFilters,
+}) {
   const opacity = 0.4;
   return (
     <svg
@@ -58,7 +64,12 @@ function HumanBodyDiagram({ facets, organFilters, handleClickOrgan }) {
       viewBox="0 0 607 768"
       onClick={
         handleClickOrgan
-          ? (e) => handleClickOrgan(e.target.classList[0].replaceAll("-", " "))
+          ? (e) =>
+              handleClickOrgan(
+                e.target.classList[0].replaceAll("-", " "),
+                organList,
+                enabledBodyMapFilters
+              )
           : null
       }
     >
@@ -160,6 +171,8 @@ HumanBodyDiagram.propTypes = {
   handleClickOrgan: PropTypes.func,
   facets: PropTypes.object.isRequired,
   organFilters: PropTypes.array.isRequired,
+  organList: PropTypes.array.isRequired,
+  enabledBodyMapFilters: PropTypes.array.isRequired,
 };
 
 export default HumanBodyDiagram;
