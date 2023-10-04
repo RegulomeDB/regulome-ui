@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import {
   SkinOfBody,
@@ -41,8 +40,7 @@ import {
 } from "./human-body-parts";
 
 /**
- * There are 37 parts in the human body diagram. Other than that, some parts share the same svg.
- * large intestine and colon share the same svf <LargeIntestine />
+ * HumanBodyDiagram is separated into 37 parts for easy management.
  *
  */
 function HumanBodyDiagram({

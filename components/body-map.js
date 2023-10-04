@@ -1,13 +1,13 @@
-import PropTypes from "prop-types";
-import { useState } from "react";
-import HumanBodyDiagram from "./human-body-diagram";
-import Image from "next/image";
-import Modal from "./modal";
 import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
   FunnelIcon,
 } from "@heroicons/react/20/solid";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import Image from "next/image";
+import HumanBodyDiagram from "./human-body-diagram";
+import Modal from "./modal";
 import {
   COMPLETE_CELLS_LIST_GRCH38,
   COMPLETE_CELLS_LIST_HG19,
@@ -17,6 +17,13 @@ import {
   getOrganFacets,
 } from "../lib/chromatin-data";
 
+/**
+ * HumanCells component display the list of cell images.
+ * each cell image is colored by it's highest chromatin state.
+ * if the cell image is disabled then there is no coloring.
+ * Each cell image is clickable. Click the image will select or deselect the cell type.
+ * If the cell image is selected, then the color will have a higher opacity compare to unselected.
+ */
 export function HumanCells({
   facets,
   cellList,
@@ -48,9 +55,11 @@ export function HumanCells({
           >
             <div className="relative">
               <Image src={src} alt="clickable image" width="50" height="50" />
-              <div
-                className={`absolute inset-0 ${color} ${opacity} rounded-full`}
-              />
+              {color && (
+                <div
+                  className={`absolute inset-0 ${color} ${opacity} rounded-full`}
+                />
+              )}
             </div>
           </button>
         );
@@ -67,15 +76,17 @@ HumanCells.propTypes = {
   enabledBodyMapFilters: PropTypes.array,
 };
 
-// The BodyMap component is comprised of several different elements:
-// (1) List of system slims ("central nervous system", "skeletal system", "digestive system")
-// (2) Diagram of body in svg format with selectable organs
-// (3) List of organ slims selectable on body diagram ("adrenal gland", "bone element")
-// (4) Inset images representing organ slims difficult to represent on a body diagram ("adipose tissue")
-// (5) List of organ slims represented by inset images
-// (6) A button (could be optional) to clear organ and system slims selected on BodyMap
-// All of these components are responsive (they stack and change position relative to each other based on screen width)
-export function BodyMapModal({
+/**
+ * The BodyMap component is comprised of several different elements:
+ * (1) Diagram of body in svg format with selectable organs
+ * (2) List of organ slims selectable on body diagram ( for example: "adrenal gland", "bone element")
+ * (3) Inset images representing organ slims difficult to represent on a body diagram ("adipose tissue")
+ * (4) List of organ slims represented by inset images
+ * Each image representing a organ slim is colored by it's highest chromatin state if enabled, colored white if disabled
+ * Each image and text item in list are clickable if enabled for selecting or deselecting the filter the user wants.
+ * If the organ slim is selected then the responding image's color opacity will increase compare to unselected.
+ */
+export function BodyMap({
   facets,
   organList,
   cellList,
@@ -188,7 +199,7 @@ export function BodyMapModal({
   );
 }
 
-BodyMapModal.propTypes = {
+BodyMap.propTypes = {
   facets: PropTypes.object.isRequired,
   organList: PropTypes.array.isRequired,
   cellList: PropTypes.array.isRequired,
@@ -199,9 +210,10 @@ BodyMapModal.propTypes = {
   setIsThumbnailExpanded: PropTypes.func.isRequired,
 };
 
-// Clickable thumbnail
-// Comprised of body map svg and inset images, with expand icon and instructions
-// Button to display the actual body map facet <BodyMapModal>
+/**
+ * It is a clickable thumbnail comprised of body map svg and inset images, with expand icon and instructions
+ * Click the thumbnail will display the actual body map.
+ */
 export function BodyMapThumbnail({
   organList,
   cellList,
@@ -254,9 +266,11 @@ export function BodyMapThumbnail({
                     width="50"
                     height="50"
                   />
-                  <div
-                    className={`absolute inset-0 ${color} ${opacity} rounded-full`}
-                  />
+                  {color && (
+                    <div
+                      className={`absolute inset-0 ${color} ${opacity} rounded-full`}
+                    />
+                  )}
                 </div>
               </li>
             );
@@ -277,7 +291,9 @@ BodyMapThumbnail.propTypes = {
   setIsThumbnailExpanded: PropTypes.func.isRequired,
 };
 
-// Combining the body map thumbnail and the body map modal into one component
+/**
+ * Combining the BodyMapThumbnail and BodyMap into one component
+ */
 export function BodyMapThumbnailAndModal({
   data,
   assembly,
@@ -304,7 +320,7 @@ export function BodyMapThumbnailAndModal({
         isThumbnailExpanded={isThumbnailExpanded}
       />
 
-      <BodyMapModal
+      <BodyMap
         facets={facets}
         organList={organList}
         cellList={cellList}

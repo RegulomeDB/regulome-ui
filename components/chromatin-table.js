@@ -4,33 +4,6 @@ import PropTypes from "prop-types";
 import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
-export const mapChromatinNames = {
-  EnhA1: "Active enhancer 1",
-  EnhA2: "Active enhancer 2",
-  EnhBiv: "Bivalent Enhancer",
-  EnhG1: "Genic enhancer 1",
-  EnhG2: "Genic enhancer 2",
-  EnhWk: "Weak enhancer",
-  Het: "Heterochromatin",
-  Quies: "Quiescent/Low",
-  ReprPC: "Repressed PolyComb",
-  ReprPCWk: "Weak Repressed PolyComb",
-  TssA: "Active TSS",
-  TssBiv: "Bivalent/Poised TSS",
-  TssFlnk: "Flanking TSS",
-  TssFlnkD: "Flanking TSS downstream",
-  TssFlnkU: "Flanking TSS upstream",
-  Tx: "Strong transcription",
-  TxWk: "Weak transcription",
-  "ZNF/Rpts": "ZNF genes & repeats",
-
-  Enh: "Enhancers",
-  BivFlnk: "Flanking Bivalent TSS/Enh",
-  TssAFlnk: "Flanking Active TSS",
-  TxFlnk: "Transcr. at gene 5' and 3'",
-  EnhG: "Genic enhancers",
-};
-
 const chromatinDataColumns = [
   {
     id: "chromatin_state",
@@ -68,8 +41,7 @@ const chromatinDataColumns = [
 ];
 
 /**
- * Display a sortable table of the given accessibility data.
- * The data can be filtered by biosample term name.
+ * Display a sortable table of the given chromatin data.
  */
 export default function ChromatinTable({ data }) {
   return (

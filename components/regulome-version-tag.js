@@ -15,6 +15,7 @@ export default function RegulomeVersionTag({ version = "2.2" }) {
           alt="clickable image"
           width="300"
           height="96"
+          priority
         />
         <span className="sr-only">Home</span>
       </Link>

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { ChromatinStateColor } from "./chromatin-state-facets";
+import { ChromatinStateColor } from "../lib/chromatin-data";
 
 const BAR_HEIGHT = 20;
 const WIDTH_PER_DATASET = 10;
@@ -7,7 +7,13 @@ const TEXT_X = 10;
 const TEXT_Y = 18;
 
 /**
- * Display SNPs Matching Searched Coordinates and Nearby SNPs using line chart
+ * Display a horizontal bar line matching the number of files for different chromatin states for a give biosample.
+ * The bars along the line is sorted by chromatin states from high transcription activity to low transcription activity
+ * the states contains count for each states. Example data looks like this:
+ * {
+ *   "Flanking TSS upstream": 1
+ *   "Active enhancer": 3
+ * }
  */
 export default function BiosampleStateBar({ states }) {
   const total = Object.keys(states).reduce(
@@ -31,12 +37,12 @@ export default function BiosampleStateBar({ states }) {
   });
   return (
     <svg height="35px">
-      <g className="text-sm">
+      <g>
         {rectsData.map((rect) => {
           return (
             <g key={rect.key}>
               <rect
-                id="lable-background-color"
+                id="bar"
                 x={rect.x}
                 height={BAR_HEIGHT}
                 width={rect.width}

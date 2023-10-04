@@ -14,7 +14,9 @@ import {
 import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
 import { Button } from "./form-elements";
 
-// Display selected filters and allow user to de-select them
+/**
+ *  Display selected filters and allow user to de-select them.
+ */
 function Selections({ filters, clearFilterFunc }) {
   return (
     <div>
@@ -42,12 +44,14 @@ Selections.propTypes = {
 
 /**
  * This is the view for display chromatin state data for a variant.
+ * It contains three facets group: Organ slim facets, biosample facets and chromatin state facets
+ * and a cortable table to display the chromatin state datasets
  */
 export function ChromatinView({ data, assembly }) {
   const router = useRouter();
   useEffect(() => {
-    const isQTL = router.asPath.endsWith(`#!chromatin`);
-    setShowChromatinData(isQTL);
+    const isChromatin = router.asPath.endsWith(`#!chromatin`);
+    setShowChromatinData(isChromatin);
   }, [router]);
   const [showChromatinData, setShowChromatinData] = useState(false);
   const [organFilters, setOrganFilters] = useState([]);
