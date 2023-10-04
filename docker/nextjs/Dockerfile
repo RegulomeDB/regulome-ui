@@ -1,4 +1,4 @@
-FROM node:18.16.0-alpine
+FROM node:18.16.1-bookworm-slim
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -21,5 +21,3 @@ RUN npm run build
 EXPOSE 3000
 
 ENTRYPOINT ["/docker/entrypoint.sh"]
-
-CMD ["npm", "run", "start"]
