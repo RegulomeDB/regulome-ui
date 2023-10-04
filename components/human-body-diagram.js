@@ -45,15 +45,7 @@ import {
  * large intestine and colon share the same svf <LargeIntestine />
  *
  */
-function HumanBodyDiagram({
-  handleHighlight,
-  organList,
-  facet,
-  stateFilters,
-  organFilters,
-  handleClickOrgan,
-}) {
-  console.log(facet);
+function HumanBodyDiagram({ facets, organFilters, handleClickOrgan }) {
   const opacity = 0.4;
   return (
     <svg
@@ -61,7 +53,6 @@ function HumanBodyDiagram({
       stroke="#545659"
       id="BodyMap"
       className="human-map"
-      data-name="Layer 1"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 607 768"
@@ -70,243 +61,104 @@ function HumanBodyDiagram({
           ? (e) => handleClickOrgan(e.target.classList[0].replaceAll("-", " "))
           : null
       }
-      onMouseOver={
-        handleHighlight ? (e) => handleHighlight(e, organList) : null
-      }
     >
       <title>Homo sapiens clickable body map</title>
       <SkinOfBody
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Limb
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Stomach
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Limb facets={facets} opacity={0.8} organFilters={organFilters} />
+      <Stomach facets={facets} opacity={opacity} organFilters={organFilters} />
       <ArterialBloodVessel
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Vein
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Nerve
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Pancreas
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Vein facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Nerve facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Pancreas facets={facets} opacity={opacity} organFilters={organFilters} />
       <MusculatureOfBody
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Lung
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Bronchus
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Lung facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Bronchus facets={facets} opacity={opacity} organFilters={organFilters} />
       <SmallIntestine
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
       <LargeIntestine
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Liver
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Kidney
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Liver facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Kidney facets={facets} opacity={opacity} organFilters={organFilters} />
       <AdrenalGland
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
       <UrinaryBladder
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
       <Esophagus
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Mouth
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Nose
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Mouth facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Nose facets={facets} opacity={opacity} organFilters={organFilters} />
       <ThyroidGland
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Thymus
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Heart
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Testis
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Ureter
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Uterus
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Ovary
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Penis
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Thymus facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Heart facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Testis facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Ureter facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Uterus facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Ovary facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Penis facets={facets} opacity={opacity} organFilters={organFilters} />
       <SpinalCord
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Brain
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Eye
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Breast
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Brain facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Eye facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Breast facets={facets} opacity={opacity} organFilters={organFilters} />
       <MammaryGland
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Tongue
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Tongue facets={facets} opacity={opacity} organFilters={organFilters} />
       <BoneElement
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
       <ProstateGland
-        facet={facet}
+        facets={facets}
         opacity={opacity}
-        stateFilters={stateFilters}
         organFilters={organFilters}
       />
-      <Spleen
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <Vagina
-        facet={facet}
-        opacity={opacity}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
+      <Spleen facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Vagina facets={facets} opacity={opacity} organFilters={organFilters} />
     </svg>
   );
 }
 
 HumanBodyDiagram.propTypes = {
   handleClickOrgan: PropTypes.func,
-  handleHighlight: PropTypes.func,
-  organList: PropTypes.array,
-  facet: PropTypes.object.isRequired,
-  stateFilters: PropTypes.array.isRequired,
+  facets: PropTypes.object.isRequired,
   organFilters: PropTypes.array.isRequired,
 };
 

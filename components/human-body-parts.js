@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import { getFillColor } from "../lib/chromatin-data";
+import { getFillColorHex } from "../lib/chromatin-data";
 
-export function SkinOfBody({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "skin of body");
+export function SkinOfBody({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "skin of body");
   opacity = organFilters.includes("skin of body") ? 0.8 : opacity;
 
   return (
@@ -56,16 +56,16 @@ export function SkinOfBody({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 SkinOfBody.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Limb({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "limb");
+export function Limb({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "limb");
 
-  opacity = organFilters.includes("limb") ? 0.8 : opacity;
+  opacity = organFilters.includes("limb") ? 1 : opacity;
 
   return (
     <g className="limb" fill={fill} opacity={opacity}>
@@ -77,14 +77,13 @@ export function Limb({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Limb.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Spleen({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "spleen");
+export function Spleen({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "spleen");
   opacity = organFilters.includes("spleen") ? 0.8 : opacity;
 
   return (
@@ -97,14 +96,14 @@ export function Spleen({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Spleen.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Stomach({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "stomach");
+export function Stomach({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "stomach");
   opacity = organFilters.includes("stomach") ? 0.8 : opacity;
 
   return (
@@ -117,24 +116,14 @@ export function Stomach({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Stomach.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function ArterialBloodVessel({
-  facet,
-  opacity,
-  stateFilters,
-  organFilters,
-}) {
-  const fill = getFillColor(
-    facet,
-    stateFilters,
-    organFilters,
-    "arterial blood vessel"
-  );
+export function ArterialBloodVessel({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "arterial blood vessel");
   opacity = organFilters.includes("arterial blood vessel") ? 0.8 : opacity;
 
   return (
@@ -837,14 +826,14 @@ export function ArterialBloodVessel({
   );
 }
 ArterialBloodVessel.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Vein({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "vein");
+export function Vein({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "vein");
   opacity = organFilters.includes("vein") ? 0.8 : opacity;
 
   return (
@@ -857,14 +846,14 @@ export function Vein({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Vein.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Nerve({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "nerve");
+export function Nerve({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "nerve");
   opacity = organFilters.includes("nerve") ? 0.8 : opacity;
 
   return (
@@ -993,14 +982,14 @@ export function Nerve({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Nerve.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Pancreas({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "pancreas");
+export function Pancreas({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "pancreas");
   opacity = organFilters.includes("pancreas") ? 0.8 : opacity;
 
   return (
@@ -1097,14 +1086,14 @@ export function Pancreas({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Pancreas.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Lung({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "lung");
+export function Lung({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "lung");
   opacity = organFilters.includes("lung") ? 0.8 : opacity;
 
   return (
@@ -1129,14 +1118,14 @@ export function Lung({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Lung.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Bronchus({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "bronchus");
+export function Bronchus({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "bronchus");
   opacity = organFilters.includes("bronchus") ? 0.8 : opacity;
 
   return (
@@ -1153,19 +1142,14 @@ export function Bronchus({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Bronchus.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function UrinaryBladder({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(
-    facet,
-    stateFilters,
-    organFilters,
-    "urinary bladder"
-  );
+export function UrinaryBladder({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "urinary bladder");
   opacity = organFilters.includes("urinary bladder") ? 0.8 : opacity;
 
   return (
@@ -1178,19 +1162,14 @@ export function UrinaryBladder({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 UrinaryBladder.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function SmallIntestine({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(
-    facet,
-    stateFilters,
-    organFilters,
-    "small intestine"
-  );
+export function SmallIntestine({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "small intestine");
   opacity = organFilters.includes("small intestine") ? 0.8 : opacity;
 
   return (
@@ -1259,19 +1238,14 @@ export function SmallIntestine({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 SmallIntestine.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function LargeIntestine({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(
-    facet,
-    stateFilters,
-    organFilters,
-    "large intestine"
-  );
+export function LargeIntestine({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "large intestine");
   opacity = organFilters.includes("large intestine") ? 0.8 : opacity;
 
   return (
@@ -1304,26 +1278,26 @@ export function LargeIntestine({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 LargeIntestine.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Gallbladder({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "gallbladder");
+export function Gallbladder({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "gallbladder");
   opacity = organFilters.includes("gallbladder") ? 0.8 : opacity;
 
   return <circle fill={fill} opacity={opacity} cx="262" cy="445" r="9" />;
 }
 Gallbladder.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
-export function Liver({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "liver");
+export function Liver({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "liver");
   opacity = organFilters.includes("liver") ? 0.8 : opacity;
 
   return (
@@ -1340,14 +1314,14 @@ export function Liver({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Liver.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Kidney({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "kidney");
+export function Kidney({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "kidney");
   opacity = organFilters.includes("kidney") ? 0.8 : opacity;
 
   return (
@@ -1364,14 +1338,14 @@ export function Kidney({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Kidney.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function AdrenalGland({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "adrenal gland");
+export function AdrenalGland({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "adrenal gland");
   opacity = organFilters.includes("adrenal gland") ? 0.8 : opacity;
 
   return (
@@ -1392,14 +1366,14 @@ export function AdrenalGland({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 AdrenalGland.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Esophagus({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "esophagus");
+export function Esophagus({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "esophagus");
   opacity = organFilters.includes("esophagus") ? 0.8 : opacity;
 
   return (
@@ -1468,13 +1442,13 @@ export function Esophagus({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Esophagus.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
-export function Trachea({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "trachea");
+export function Trachea({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "trachea");
   opacity = organFilters.includes("trachea") ? 0.8 : opacity;
 
   return (
@@ -1543,14 +1517,14 @@ export function Trachea({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Trachea.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Mouth({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "mouth");
+export function Mouth({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "mouth");
   opacity = organFilters.includes("mouth") ? 0.8 : opacity;
 
   return (
@@ -1570,14 +1544,14 @@ export function Mouth({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Mouth.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Nose({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "nose");
+export function Nose({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "nose");
   opacity = organFilters.includes("nose") ? 0.8 : opacity;
 
   return (
@@ -1590,14 +1564,14 @@ export function Nose({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Nose.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function ThyroidGland({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "thyroid gland");
+export function ThyroidGland({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "thyroid gland");
   opacity = organFilters.includes("thyroid gland") ? 0.8 : opacity;
 
   return (
@@ -1636,14 +1610,14 @@ export function ThyroidGland({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 ThyroidGland.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Thymus({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "thymus");
+export function Thymus({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "thymus");
 
   opacity = organFilters.includes("thymus") ? 0.8 : opacity;
 
@@ -1700,14 +1674,14 @@ export function Thymus({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Thymus.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Heart({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "heart");
+export function Heart({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "heart");
   opacity = organFilters.includes("heart") ? 0.8 : opacity;
 
   return (
@@ -1768,14 +1742,14 @@ export function Heart({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Heart.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Pericardium({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "pericardium");
+export function Pericardium({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "pericardium");
   opacity = organFilters.includes("pericardium") ? 0.8 : opacity;
 
   return (
@@ -1804,14 +1778,14 @@ export function Pericardium({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Pericardium.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Testis({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "testis");
+export function Testis({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "testis");
   opacity = organFilters.includes("testis") ? 0.8 : opacity;
 
   return (
@@ -1828,19 +1802,14 @@ export function Testis({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Testis.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function ProstateGland({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(
-    facet,
-    stateFilters,
-    organFilters,
-    "prostate gland"
-  );
+export function ProstateGland({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "prostate gland");
   opacity = organFilters.includes("prostate gland") ? 0.8 : opacity;
 
   return (
@@ -1853,14 +1822,14 @@ export function ProstateGland({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 ProstateGland.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Urethra({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "urethra");
+export function Urethra({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "urethra");
   opacity = organFilters.includes("urethra") ? 0.8 : opacity;
 
   return (
@@ -1877,13 +1846,13 @@ export function Urethra({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Urethra.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
-export function Ureter({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "ureter");
+export function Ureter({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "ureter");
   opacity = organFilters.includes("ureter") ? 0.8 : opacity;
 
   return (
@@ -1900,13 +1869,13 @@ export function Ureter({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Ureter.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
-export function Penis({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "penis");
+export function Penis({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "penis");
   opacity = organFilters.includes("penis") ? 0.8 : opacity;
 
   return (
@@ -1919,14 +1888,14 @@ export function Penis({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Penis.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Uterus({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "uterus");
+export function Uterus({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "uterus");
   opacity = organFilters.includes("uterus") ? 0.8 : opacity;
 
   return (
@@ -1973,14 +1942,14 @@ export function Uterus({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Uterus.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Vagina({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "vagina");
+export function Vagina({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "vagina");
   opacity = organFilters.includes("vagina") ? 0.8 : opacity;
 
   return (
@@ -1997,14 +1966,14 @@ export function Vagina({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Vagina.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Ovary({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "ovary");
+export function Ovary({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "ovary");
   opacity = organFilters.includes("ovary") ? 0.8 : opacity;
 
   return (
@@ -2017,14 +1986,14 @@ export function Ovary({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Ovary.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function SpinalCord({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "spinal cord");
+export function SpinalCord({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "spinal cord");
   opacity = organFilters.includes("spinal cord") ? 0.8 : opacity;
 
   return (
@@ -2037,14 +2006,14 @@ export function SpinalCord({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 SpinalCord.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Brain({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "brain");
+export function Brain({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "brain");
   opacity = organFilters.includes("brain") ? 0.8 : opacity;
 
   return (
@@ -2197,14 +2166,14 @@ export function Brain({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Brain.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Epiglottis({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "epiglottis");
+export function Epiglottis({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "epiglottis");
   opacity = organFilters.includes("epiglottis") ? 0.8 : opacity;
 
   return (
@@ -2217,14 +2186,14 @@ export function Epiglottis({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Epiglottis.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Eye({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "eye");
+export function Eye({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "eye");
   opacity = organFilters.includes("eye") ? 0.8 : opacity;
 
   return (
@@ -2259,24 +2228,14 @@ export function Eye({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Eye.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function MusculatureOfBody({
-  facet,
-  opacity,
-  stateFilters,
-  organFilters,
-}) {
-  const fill = getFillColor(
-    facet,
-    stateFilters,
-    organFilters,
-    "musculature of body"
-  );
+export function MusculatureOfBody({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "musculature of body");
   opacity = organFilters.includes("musculature of body") ? 0.8 : opacity;
 
   return (
@@ -2473,14 +2432,14 @@ export function MusculatureOfBody({
   );
 }
 MusculatureOfBody.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function BoneElement({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "bone element");
+export function BoneElement({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "bone element");
   opacity = organFilters.includes("bone element") ? 0.8 : opacity;
 
   return (
@@ -2549,14 +2508,14 @@ export function BoneElement({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 BoneElement.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Breast({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "breast");
+export function Breast({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "breast");
   opacity = organFilters.includes("breast") ? 0.8 : opacity;
 
   return (
@@ -2880,14 +2839,14 @@ export function Breast({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Breast.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function BoneMarrow({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "bone marrow");
+export function BoneMarrow({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "bone marrow");
   opacity = organFilters.includes("bone marrow") ? 0.8 : opacity;
 
   return (
@@ -2944,14 +2903,14 @@ export function BoneMarrow({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 BoneMarrow.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function MammaryGland({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "mammary gland");
+export function MammaryGland({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "mammary gland");
   opacity = organFilters.includes("mammary gland") ? 0.8 : opacity;
 
   return (
@@ -3220,14 +3179,14 @@ export function MammaryGland({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 MammaryGland.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };
 
-export function Tongue({ facet, opacity, stateFilters, organFilters }) {
-  const fill = getFillColor(facet, stateFilters, organFilters, "tongue");
+export function Tongue({ facets, opacity, organFilters }) {
+  const fill = getFillColorHex(facets, "tongue");
   opacity = organFilters.includes("tongue") ? 0.8 : opacity;
 
   return (
@@ -3240,8 +3199,8 @@ export function Tongue({ facet, opacity, stateFilters, organFilters }) {
   );
 }
 Tongue.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
-  stateFilters: PropTypes.array.isRequired,
+
   organFilters: PropTypes.array.isRequired,
 };

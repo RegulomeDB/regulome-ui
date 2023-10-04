@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { FunnelIcon } from "@heroicons/react/20/solid";
+import { getDisplayedStatesFacets } from "../lib/chromatin-data";
 
 export const ChromatinStateColor = {
   "Active TSS": {
@@ -96,41 +98,50 @@ export const ChromatinStateColor = {
 };
 
 export default function ChromatinStateFacets({
-  facets,
-  filters,
+  data,
+  assembly,
+  stateFilters,
   handleClickState,
 }) {
-  // function handleClick(key) {
-  //     alert(key);
-  // }
+  const facets = getDisplayedStatesFacets(data, assembly);
 
   return (
-    <div className="grid-rows-1">
-      {facets.map((d) => {
-        const dKey = d.replace(/[^\w\s]/gi, "").toLowerCase();
-        const isSelected = filters.includes(d);
-        return (
-          <div key={dKey} className="flex items-center justify-between">
-            <button
-              className={`flex-grow hover:bg-slate-100 ${
-                isSelected && "border-solid border-2 border-brand"
-              }`}
-              onClick={() => handleClickState(d)}
-            >
-              {d}
-            </button>
-            <label
-              className={`box-content h-3 w-3 p-1 ${ChromatinStateColor[d].tailwind}`}
-            ></label>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <div className="flex">
+        <FunnelIcon className="h-5" />
+        <div>Filter by chromatin state </div>
+      </div>
+      <div className="text-data-label text-sm italic">
+        Ordered by transcription activity
+      </div>
+      <div className="grid-rows-1 border-2 border-black">
+        {facets.map((d) => {
+          const dKey = d.replace(/[^\w\s]/gi, "").toLowerCase();
+          const isSelected = stateFilters.includes(d);
+          return (
+            <div key={dKey} className="flex items-center justify-between">
+              <button
+                className={`flex-grow hover:bg-slate-100 ${
+                  isSelected && "border-solid border-2 border-brand"
+                }`}
+                onClick={() => handleClickState(d)}
+              >
+                {d}
+              </button>
+              <label
+                className={`box-content h-3 w-3 p-1 ${ChromatinStateColor[d].tailwind}`}
+              ></label>
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 }
 
 ChromatinStateFacets.propTypes = {
-  facets: PropTypes.array.isRequired,
-  filters: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
+  assembly: PropTypes.string.isRequired,
+  stateFilters: PropTypes.array.isRequired,
   handleClickState: PropTypes.func.isRequired,
 };

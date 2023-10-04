@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { XCircleIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
@@ -12,40 +13,24 @@ import {
   COMPLETE_CELLS_LIST_HG19,
   COMPLETE_ORGAN_LIST_GRCH38,
   COMPLETE_ORGAN_LIST_HG19,
-  filterDataByStateAndOrgan,
-  getBiosampleFacets,
-  getOrganFacets,
-  getOrgansByStates,
-  getStateFacets,
-  getStatesbyOrgans,
+  getFilteredChromatinData,
 } from "../lib/chromatin-data";
 import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
 
 // Display selected filters and allow user to de-select them
 function Selections({ filters, clearFilterFunc }) {
   return (
-    <div className="selections">
-      <span className="selections-hed">Selected filters:</span>
-      {filters.map((f) => {
-        let label = f;
-        // if (filterType === 'biosample') {
-        //     label = keyArray.find(k => sanitizedString(k) === f);
-        // } else if (filterType === 'state') {
-        //     label = keyArray.find(k => (!isLetter(k[0]) ? (classString(sanitizedString(k)) === f) : (sanitizedString(k) === f)));
-        // }
-        let clearInput = f;
-        // if (filterType === 'biosample') {
-        //     clearInput = sanitizedString(f);
-        // } else if (filterType === 'chromatin') {
-        //     clearInput = classString(sanitizedString(f));
-        // }
+    <div>
+      <span>Selected filters:</span>
+      {filters.map((filter) => {
         return (
           <button
-            key={`${f}-selected-filter`}
-            onClick={() => clearFilterFunc(clearInput)}
+            key={`${filter}-selected-filter`}
+            onClick={() => clearFilterFunc(filter)}
+            className="flex text-data-label text-sm"
           >
-            <i className="icon icon-times-circle" />
-            {label}
+            <XCircleIcon className="h-5" />
+            {filter}
           </button>
         );
       })}
@@ -55,82 +40,91 @@ function Selections({ filters, clearFilterFunc }) {
 
 Selections.propTypes = {
   filters: PropTypes.array.isRequired,
-  filterType: PropTypes.string.isRequired, // filterType can be "bodymap", "biosample", or "state"
   clearFilterFunc: PropTypes.func.isRequired,
-  keyArray: PropTypes.array,
 };
 
 /**
  * This is the view for display chromatin state data for a variant.
  */
 export function ChromatinView({ data, assembly }) {
-  const [showChromatinData, setShowChromatinData] = useState(false);
-  const [organFilters, setOrganFilters] = useState([]);
-  const [stateFilters, setStateFilters] = useState([]);
-  const [biosampleFilters, setBiosampleFilters] = useState([]);
-  const [filteredData, setFilteredData] = useState(data);
   const router = useRouter();
   useEffect(() => {
     const isQTL = router.asPath.endsWith(`#!chromatin`);
     setShowChromatinData(isQTL);
   }, [router]);
-
-  const stateFacets = getStateFacets(data, assembly);
-  const organFacets = getOrganFacets(data, assembly);
-  const biosampleFacet = getBiosampleFacets(data);
-  const [displayedStateFacet, setDisplayedStateFacet] = useState(stateFacets);
+  const [showChromatinData, setShowChromatinData] = useState(false);
+  const [organFilters, setOrganFilters] = useState([]);
+  const [stateFilters, setStateFilters] = useState([]);
+  const [biosampleFilters, setBiosampleFilters] = useState([]);
+  const filteredData = getFilteredChromatinData(
+    data,
+    stateFilters,
+    organFilters,
+    biosampleFilters
+  );
+  const filteredDataForState = getFilteredChromatinData(
+    data,
+    [],
+    organFilters,
+    biosampleFilters
+  );
+  const filteredDataForBiosample = getFilteredChromatinData(
+    data,
+    stateFilters,
+    organFilters,
+    []
+  );
+  const filteredDataForBodyMap = getFilteredChromatinData(
+    data,
+    stateFilters,
+    [],
+    biosampleFilters
+  );
   const organList =
     assembly === "hg19" ? COMPLETE_ORGAN_LIST_HG19 : COMPLETE_ORGAN_LIST_GRCH38;
   const cellList =
     assembly === "hg19" ? COMPLETE_CELLS_LIST_HG19 : COMPLETE_CELLS_LIST_GRCH38;
-  const [enabledBodyMapFilters, setEnabledBodyMapFilters] = useState(
-    organList.concat(cellList)
-  );
 
   function handleClickOrgan(organ) {
-    let filters = organFilters;
-    if (filters.includes(organ)) {
-      if (organ in ASSOCIATED_ORGAN_MAP) {
-        ASSOCIATED_ORGAN_MAP[organ].forEach((element) => {
-          filters = _.without(filters, element);
-        });
+    if (organList.includes(organ) | cellList.includes(organ)) {
+      let filters = [...organFilters];
+      if (filters.includes(organ)) {
+        if (organ in ASSOCIATED_ORGAN_MAP) {
+          ASSOCIATED_ORGAN_MAP[organ].forEach((element) => {
+            filters = _.without(filters, element);
+          });
+        }
+        filters = _.without(filters, organ);
+      } else {
+        filters.push(organ);
+        if (organ in ASSOCIATED_ORGAN_MAP) {
+          ASSOCIATED_ORGAN_MAP[organ].forEach((element) => {
+            filters.push(element);
+          });
+        }
       }
-      filters = _.without(filters, organ);
-    } else {
-      filters.push(organ);
-      if (organ in ASSOCIATED_ORGAN_MAP) {
-        ASSOCIATED_ORGAN_MAP[organ].forEach((element) => {
-          filters.push(element);
-        });
-      }
+      setOrganFilters(filters);
     }
-    if (filters.length === 0) {
-      setDisplayedStateFacet(stateFacets);
-    } else {
-      setDisplayedStateFacet(getStatesbyOrgans(filters, data, assembly));
-    }
-    setOrganFilters(filters);
-    setFilteredData(filterDataByStateAndOrgan(data, stateFilters, filters));
   }
 
   function handleClickState(d) {
-    let filters = stateFilters;
+    let filters = [...stateFilters];
     if (filters.includes(d)) {
       filters = _.without(filters, d);
     } else {
       filters.push(d);
     }
-    if (filters.length === 0) {
-      setEnabledBodyMapFilters(organList);
-    } else {
-      setEnabledBodyMapFilters(getOrgansByStates(filters, data, assembly));
-    }
     setStateFilters(filters);
-    setFilteredData(filterDataByStateAndOrgan(data, filters, organFilters));
   }
 
   function handleClickBiosample(biosample) {
-    alert(biosample);
+    let filters = [...biosampleFilters];
+    if (filters.includes(biosample)) {
+      filters = _.without(filters, biosample);
+    } else {
+      filters.push(biosample);
+    }
+    setBiosampleFilters(filters);
   }
 
   return (
@@ -142,39 +136,42 @@ export function ChromatinView({ data, assembly }) {
               <DataAreaTitle>Chromatin State</DataAreaTitle>
               <DataPanel>
                 <div className="grid grid-cols-5 gap-1 h-100">
-                  <div className="border-2 border-black">
+                  <div>
                     <BodyMapThumbnailAndModal
-                      facet={organFacets}
-                      organism={"Homo sapiens"}
+                      data={filteredDataForBodyMap}
+                      assembly={assembly}
                       organList={organList}
-                      enabledBodyMapFilters={enabledBodyMapFilters}
-                      originalFilters={organFilters}
+                      cellList={cellList}
                       organFilters={organFilters}
-                      stateFilters={stateFilters}
                       handleClickOrgan={handleClickOrgan}
                     />
                     {organFilters.length > 0 && (
-                      <Selections filters={organFilters} />
+                      <Selections
+                        filters={organFilters}
+                        clearFilterFunc={handleClickOrgan}
+                      />
                     )}
                   </div>
-                  <div className="col-span-3 border-2 border-black">
-                    <div className="col-span-3 border-2 ">
-                      <ChromatinBiosampleFacets
-                        facets={biosampleFacet}
-                        biosampleFilters={biosampleFilters}
-                        stateFilters={stateFilters}
-                        handleClickBiosample={handleClickBiosample}
-                      />
-                    </div>
+                  <div className="col-span-3">
+                    <ChromatinBiosampleFacets
+                      data={filteredDataForBiosample}
+                      assembly={assembly}
+                      biosampleFilters={biosampleFilters}
+                      handleClickBiosample={handleClickBiosample}
+                    />
                   </div>
-                  <div className="border-2 border-black">
+                  <div>
                     <ChromatinStateFacets
-                      facets={displayedStateFacet}
-                      filters={stateFilters}
+                      data={filteredDataForState}
+                      assembly={assembly}
+                      stateFilters={stateFilters}
                       handleClickState={handleClickState}
                     />
                     {stateFilters.length > 0 && (
-                      <Selections filters={stateFilters} />
+                      <Selections
+                        filters={stateFilters}
+                        clearFilterFunc={handleClickState}
+                      />
                     )}
                   </div>
                 </div>

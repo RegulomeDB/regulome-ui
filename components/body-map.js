@@ -6,102 +6,24 @@ import Modal from "./modal";
 import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
+  FunnelIcon,
 } from "@heroicons/react/20/solid";
-import { getFillColorTailwind } from "../lib/chromatin-data";
-
-// Mapping from cells and tissue types to inset images
-// All mappings are empty because there are no paths or shapes that correspond to the inset images
-//     (each has one associated image with a name corresponding to the cell or tissue term)
-const HUMAN_CELLS_LIST = {
-  "adipose tissue": [],
-  blood: [],
-  "blood vessel": [],
-  "bone marrow": [],
-  "connective tissue": [],
-  embryo: [],
-  epithelium: [],
-  "lymphoid tissue": [],
-  "lymph node": [],
-  "lymphatic vessel": [],
-  placenta: [],
-};
-
-// Mapping for systems slims
-// Systems slims are mapped to organs in the "BodyList"
-export const HumanSystemsList = {
-  "central nervous system": ["brain", "spinal cord"],
-  "circulatory system": [
-    "blood",
-    "blood vessel",
-    "arterial blood vessel",
-    "heart",
-    "pericardium",
-    "vein",
-    "lymphatic vessel",
-  ],
-  "digestive system": [
-    "esophagus",
-    "intestine",
-    "small intestine",
-    "large intestine",
-    "liver",
-    "gallbladder",
-    "mouth",
-    "spleen",
-    "stomach",
-    "tongue",
-    "colon",
-  ],
-  "endocrine system": [
-    "adrenal gland",
-    "liver",
-    "gallbladder",
-    "pancreas",
-    "thymus",
-    "thyroid gland",
-  ],
-  "excretory system": ["urinary bladder", "kidney", "ureter"],
-  "exocrine system": ["mammary gland", "liver"],
-  "immune system": [
-    "lymphoid tissue",
-    "spleen",
-    "thymus",
-    "bone marrow",
-    "lymph node",
-    "lymphatic vessel",
-  ],
-  musculature: ["musculature of body", "limb"],
-  "peripheral nervous system": ["nerve"],
-  "reproductive system": [
-    "gonad",
-    "ovary",
-    "penis",
-    "placenta",
-    "prostate gland",
-    "testis",
-    "uterus",
-    "vagina",
-  ],
-  "respiratory system": ["trachea", "bronchus", "lung"],
-  "sensory system": ["eye", "nose", "tongue"],
-  "skeletal system": ["bone element", "skeleton", "bone marrow", "limb"],
-  "integumental system": ["mammary gland", "skin of body"],
-};
+import { getFillColorTailwind, getOrganFacets } from "../lib/chromatin-data";
 
 export function HumanCells({
-  facet,
-  stateFilters,
+  facets,
+  cellList,
   organFilters,
   enabledBodyMapFilters,
   handleClickOrgan,
 }) {
   return (
     <>
-      {Object.keys(HUMAN_CELLS_LIST).map((cell) => {
+      {cellList.map((cell) => {
         const src = ["lymph node", "lymphatic vessel"].includes(cell)
           ? `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.png`
           : `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.svg`;
-        const color = getFillColorTailwind(facet, stateFilters, cell);
+        const color = getFillColorTailwind(facets, cell);
         const opacity = organFilters.includes(cell)
           ? "opacity-60"
           : "opacity-30";
@@ -128,8 +50,8 @@ export function HumanCells({
 }
 
 HumanCells.propTypes = {
-  facet: PropTypes.object.isRequired,
-  stateFilters: PropTypes.array.isRequired,
+  facets: PropTypes.object.isRequired,
+  cellList: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
   handleClickOrgan: PropTypes.func,
   enabledBodyMapFilters: PropTypes.array,
@@ -144,13 +66,12 @@ HumanCells.propTypes = {
 // (6) A button (could be optional) to clear organ and system slims selected on BodyMap
 // All of these components are responsive (they stack and change position relative to each other based on screen width)
 export function BodyMapModal({
-  facet,
+  facets,
   organList,
+  cellList,
   enabledBodyMapFilters,
-  stateFilters,
   organFilters,
   handleClickOrgan,
-  toggleThumbnail,
   isThumbnailExpanded,
   setIsThumbnailExpanded,
 }) {
@@ -164,7 +85,7 @@ export function BodyMapModal({
           <button
             className="flex"
             type="button"
-            onClick={() => toggleThumbnail()}
+            onClick={() => setIsThumbnailExpanded(false)}
           >
             <ArrowsPointingInIcon className="h-6" />
             <div>Hide body diagram</div>
@@ -172,9 +93,9 @@ export function BodyMapModal({
           <div className="grid grid-cols-2 gap-4">
             <HumanBodyDiagram
               organList={organList}
-              facet={facet}
-              stateFilters={stateFilters}
+              facets={facets}
               organFilters={organFilters}
+              enabledBodyMapFilters={enabledBodyMapFilters}
               handleClickOrgan={handleClickOrgan}
             />
             <div>
@@ -195,8 +116,6 @@ export function BodyMapModal({
                         }`}
                         tabIndex="0"
                         onClick={(e) => handleClickOrgan(e.target.id)}
-                        // onMouseEnter={e => highlightOrgan(e, BodyList, CellsList, HumanSystemsList)}
-                        // onMouseLeave={unHighlightOrgan}
                       >
                         {organ}
                       </button>
@@ -207,8 +126,8 @@ export function BodyMapModal({
             </div>
             <div>
               <HumanCells
-                facet={facet}
-                stateFilters={stateFilters}
+                facets={facets}
+                cellList={cellList}
                 organFilters={organFilters}
                 handleClickOrgan={handleClickOrgan}
                 enabledBodyMapFilters={enabledBodyMapFilters}
@@ -216,7 +135,7 @@ export function BodyMapModal({
             </div>
             <div>
               <ul className="list-disc grid grid-cols-2 gap-2">
-                {Object.keys(HUMAN_CELLS_LIST).map((cell) => {
+                {cellList.map((cell) => {
                   const isSelected = organFilters.includes(cell);
                   const isDisabled = !enabledBodyMapFilters.includes(cell);
                   return (
@@ -248,13 +167,12 @@ export function BodyMapModal({
 }
 
 BodyMapModal.propTypes = {
-  facet: PropTypes.object.isRequired,
+  facets: PropTypes.object.isRequired,
   organList: PropTypes.array.isRequired,
-  stateFilters: PropTypes.array.isRequired,
+  cellList: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
   handleClickOrgan: PropTypes.func.isRequired,
   enabledBodyMapFilters: PropTypes.array,
-  toggleThumbnail: PropTypes.func.isRequired,
   isThumbnailExpanded: PropTypes.bool.isRequired,
   setIsThumbnailExpanded: PropTypes.func.isRequired,
 };
@@ -263,102 +181,110 @@ BodyMapModal.propTypes = {
 // Comprised of body map svg and inset images, with expand icon and instructions
 // Button to display the actual body map facet <BodyMapModal>
 export function BodyMapThumbnail({
-  toggleThumbnail,
   organList,
-  facet,
-  stateFilters,
+  cellList,
+  facets,
   organFilters,
+  enabledBodyMapFilters,
+  isThumbnailExpanded,
+  setIsThumbnailExpanded,
 }) {
-  const CellsList = HUMAN_CELLS_LIST;
   return (
     <div
       role="button"
       tabIndex={0}
-      onClick={() => toggleThumbnail()}
-      onKeyDown={() => toggleThumbnail()}
+      onClick={() => setIsThumbnailExpanded(!isThumbnailExpanded)}
     >
-      <div>Filter results by body diagram</div>
-      <ArrowsPointingOutIcon className="h-6" />
-      <HumanBodyDiagram
-        organList={organList}
-        facet={facet}
-        stateFilters={stateFilters}
-        organFilters={organFilters}
-      />
-      <ul className="flex">
-        {Object.keys(CellsList).map((cell) => {
-          const src = ["lymph node", "lymphatic vessel"].includes(cell)
-            ? `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.png`
-            : `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.svg`;
-          const color = getFillColorTailwind(facet, stateFilters, cell);
-          const opacity = organFilters.includes(cell)
-            ? "opacity-60"
-            : "opacity-30";
-          return (
-            <li
-              className={`body-inset ${cell}`}
-              id={cell}
-              key={`${cell}-bodymap-cellslist`}
-            >
-              <div className="relative">
-                <Image src={src} alt="clickable image" width="50" height="50" />
-                <div
-                  className={`absolute inset-0 ${color} ${opacity} rounded-full`}
-                />
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      <div className="flex">
+        <FunnelIcon className="h-5" />
+        <div>Filter by body diagram</div>
+      </div>
+      <div className="text-data-label text-sm italic">
+        Colored by most active state
+      </div>
+      <div className="border-2 border-black">
+        <ArrowsPointingOutIcon className="h-6" />
+        <HumanBodyDiagram
+          organList={organList}
+          facets={facets}
+          organFilters={organFilters}
+          enabledBodyMapFilters={enabledBodyMapFilters}
+        />
+        <ul className="flex">
+          {cellList.map((cell) => {
+            const src = ["lymph node", "lymphatic vessel"].includes(cell)
+              ? `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.png`
+              : `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.svg`;
+            const color = getFillColorTailwind(facets, cell);
+            const opacity = organFilters.includes(cell)
+              ? "opacity-60"
+              : "opacity-30";
+            return (
+              <li
+                className={`body-inset ${cell}`}
+                id={cell}
+                key={`${cell}-bodymap-cellslist`}
+              >
+                <div className="relative">
+                  <Image
+                    src={src}
+                    alt="clickable image"
+                    width="50"
+                    height="50"
+                  />
+                  <div
+                    className={`absolute inset-0 ${color} ${opacity} rounded-full`}
+                  />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
 
 BodyMapThumbnail.propTypes = {
-  toggleThumbnail: PropTypes.func.isRequired,
   organList: PropTypes.array.isRequired,
-  facet: PropTypes.object.isRequired,
-  stateFilters: PropTypes.array.isRequired,
+  cellList: PropTypes.array.isRequired,
+  facets: PropTypes.object.isRequired,
   organFilters: PropTypes.array.isRequired,
+  enabledBodyMapFilters: PropTypes.array.isRequired,
+  isThumbnailExpanded: PropTypes.bool.isRequired,
+  setIsThumbnailExpanded: PropTypes.func.isRequired,
 };
 
 // Combining the body map thumbnail and the body map modal into one component
 export function BodyMapThumbnailAndModal({
-  facet,
+  data,
+  assembly,
   organList,
-  enabledBodyMapFilters,
-  stateFilters,
+  cellList,
   organFilters,
   handleClickOrgan,
 }) {
   const [isThumbnailExpanded, setIsThumbnailExpanded] = useState(false);
-
-  // const BodyList = HumanList;
-  // const CellsList = HumanCellsList;
-
-  function toggleThumbnail() {
-    setIsThumbnailExpanded(!isThumbnailExpanded);
-  }
+  const facets = getOrganFacets(data, assembly);
+  const enabledBodyMapFilters = Object.keys(facets);
 
   return (
     <div>
       <BodyMapThumbnail
-        key={facet.organ_slims}
-        toggleThumbnail={toggleThumbnail}
         organList={organList}
-        facet={facet}
-        stateFilters={stateFilters}
+        cellList={cellList}
+        facets={facets}
         organFilters={organFilters}
         enabledBodyMapFilters={enabledBodyMapFilters}
+        setIsThumbnailExpanded={setIsThumbnailExpanded}
+        isThumbnailExpanded={isThumbnailExpanded}
       />
 
       <BodyMapModal
-        key={facet.organ_slims + 2}
-        toggleThumbnail={toggleThumbnail}
-        facet={facet}
+        facets={facets}
         organList={organList}
+        cellList={cellList}
         enabledBodyMapFilters={enabledBodyMapFilters}
-        stateFilters={stateFilters}
         organFilters={organFilters}
         handleClickOrgan={handleClickOrgan}
         setIsThumbnailExpanded={setIsThumbnailExpanded}
@@ -369,10 +295,10 @@ export function BodyMapThumbnailAndModal({
 }
 
 BodyMapThumbnailAndModal.propTypes = {
-  facet: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
+  assembly: PropTypes.string.isRequired,
   organList: PropTypes.array.isRequired,
-  enabledBodyMapFilters: PropTypes.array.isRequired,
-  stateFilters: PropTypes.array.isRequired,
+  cellList: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
   handleClickOrgan: PropTypes.func.isRequired,
 };
