@@ -4,7 +4,7 @@ import { ChromatinStateColor, getStatesFacets } from "../lib/chromatin-data";
 
 /**
  * ChromatinStateFacets display the state facets for chromatin data.
- * Each facet contain the state name at the left and the coresponding color at the right.
+ * Each facet contain the state name at the left and the corresponding color at the right.
  * You can select the facets to filter the chromatin data.
  */
 export default function ChromatinStateFacets({

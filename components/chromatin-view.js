@@ -147,59 +147,57 @@ export function ChromatinView({ data, assembly }) {
       <>
         {data.length > 0 ? (
           <>
-            <>
-              <DataAreaTitle>Chromatin State</DataAreaTitle>
-              <DataPanel>
-                <div className="grid grid-cols-5 gap-1 h-100 mb-2">
-                  <div>
-                    <BodyMapThumbnailAndModal
-                      data={filteredDataForBodyMap}
-                      assembly={assembly}
-                      organFilters={organFilters}
-                      handleClickOrgan={handleClickOrgan}
+            <DataAreaTitle>Chromatin State</DataAreaTitle>
+            <DataPanel>
+              <div className="grid grid-cols-5 gap-1 h-100 mb-2">
+                <div>
+                  <BodyMapThumbnailAndModal
+                    data={filteredDataForBodyMap}
+                    assembly={assembly}
+                    organFilters={organFilters}
+                    handleClickOrgan={handleClickOrgan}
+                  />
+                  {organFilters.length > 0 && (
+                    <Selections
+                      filters={organFilters}
+                      clearFilterFunc={handleClickOrgan}
                     />
-                    {organFilters.length > 0 && (
-                      <Selections
-                        filters={organFilters}
-                        clearFilterFunc={handleClickOrgan}
-                      />
-                    )}
-                  </div>
-                  <div className="col-span-3">
-                    <ChromatinBiosampleFacets
-                      data={filteredDataForBiosample}
-                      assembly={assembly}
-                      biosampleFilters={biosampleFilters}
-                      handleClickBiosample={handleClickBiosample}
-                    />
-                    {biosampleFilters.length > 0 && (
-                      <Selections
-                        filters={biosampleFilters}
-                        clearFilterFunc={handleClickBiosample}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <ChromatinStateFacets
-                      data={filteredDataForState}
-                      assembly={assembly}
-                      stateFilters={stateFilters}
-                      handleClickState={handleClickState}
-                    />
-                    {stateFilters.length > 0 && (
-                      <Selections
-                        filters={stateFilters}
-                        clearFilterFunc={handleClickState}
-                      />
-                    )}
-                  </div>
+                  )}
                 </div>
-                <Button onClick={clearAllFilters}>Clear all filters </Button>
-              </DataPanel>
-              <DataPanel>
-                <ChromatinTable data={filteredData} />
-              </DataPanel>
-            </>
+                <div className="col-span-3">
+                  <ChromatinBiosampleFacets
+                    data={filteredDataForBiosample}
+                    assembly={assembly}
+                    biosampleFilters={biosampleFilters}
+                    handleClickBiosample={handleClickBiosample}
+                  />
+                  {biosampleFilters.length > 0 && (
+                    <Selections
+                      filters={biosampleFilters}
+                      clearFilterFunc={handleClickBiosample}
+                    />
+                  )}
+                </div>
+                <div>
+                  <ChromatinStateFacets
+                    data={filteredDataForState}
+                    assembly={assembly}
+                    stateFilters={stateFilters}
+                    handleClickState={handleClickState}
+                  />
+                  {stateFilters.length > 0 && (
+                    <Selections
+                      filters={stateFilters}
+                      clearFilterFunc={handleClickState}
+                    />
+                  )}
+                </div>
+              </div>
+              <Button onClick={clearAllFilters}>Clear all filters </Button>
+            </DataPanel>
+            <DataPanel>
+              <ChromatinTable data={filteredData} />
+            </DataPanel>
           </>
         ) : (
           <DataPanel>

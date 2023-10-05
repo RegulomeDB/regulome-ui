@@ -19,7 +19,7 @@ import {
 
 /**
  * HumanCells component display the list of cell images.
- * each cell image is colored by it's highest chromatin state.
+ * each cell image is colored by its highest chromatin state.
  * if the cell image is disabled then there is no coloring.
  * Each cell image is clickable. Click the image will select or deselect the cell type.
  * If the cell image is selected, then the color will have a higher opacity compare to unselected.
