@@ -21,6 +21,8 @@ export default function SearchPageHeader({ queryString }) {
       setButtonInFocus("qtl");
     } else if (path.endsWith(`#!motifs`)) {
       setButtonInFocus("motifs");
+    } else if (path.endsWith(`#!chromatin`)) {
+      setButtonInFocus("chromatin");
     } else {
       setButtonInFocus("score");
     }
@@ -62,6 +64,13 @@ export default function SearchPageHeader({ queryString }) {
             buttonInFocus={buttonInFocus}
             buttonType="motifs"
             buttonText="Motifs"
+            suffix
+          />
+          <HeaderButton
+            queryString={queryString}
+            buttonInFocus={buttonInFocus}
+            buttonType="chromatin"
+            buttonText="Chromatin state"
             suffix
           />
         </div>

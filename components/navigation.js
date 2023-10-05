@@ -544,6 +544,7 @@ function NavigationLogo({ toggleNavCollapsed, isNavCollapsed }) {
             alt="clickable image"
             width="300"
             height="96"
+            priority
           />
         </div>
         <span className="sr-only">Home</span>

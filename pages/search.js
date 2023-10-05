@@ -5,6 +5,7 @@ import _ from "lodash";
 import { AccessibilityDataView } from "../components/accessibility-view";
 import Breadcrumbs from "../components/breadcrumbs";
 import { ChipDataView } from "../components/chip-data-view";
+import { ChromatinView } from "../components/chromatin-view";
 import {
   DataArea,
   DataAreaTitle,
@@ -13,6 +14,7 @@ import {
   DataPanel,
 } from "../components/data-area";
 import { Button } from "../components/form-elements";
+import Motifs from "../components/motifs-view";
 import Notifications from "../components/notifications";
 import PagePreamble from "../components/page-preamble";
 import { QTLDataView } from "../components/qtl-data-view";
@@ -23,13 +25,13 @@ import {
 } from "../components/score-view-data-area";
 import SearchPageHeader from "../components/search-page-header";
 import SnpsDiagram from "../components/snps-diagram";
+import { getChromatinData } from "../lib/chromatin-data";
 import errorObjectToProps from "../lib/errors";
+import fetchMotifDoc from "../lib/fetch-motif-doc";
 import FetchRequest from "../lib/fetch-request";
 import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
 import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
-import Motifs from "../components/motifs-view";
-import fetchMotifDoc from "../lib/fetch-motif-doc";
 
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
@@ -52,7 +54,7 @@ export default function Search({ data, motifDocList, queryString }) {
       (d) => d.method && d.method.indexOf("QTL") !== -1
     );
 
-    const chromatinData = allData.filter((d) => d.method === "chromatin state");
+    const chromatinData = getChromatinData(allData);
     const chipData = filterOverlappingPeaks(
       allData.filter((d) => d.method === "ChIP-seq")
     );
@@ -238,6 +240,7 @@ export default function Search({ data, motifDocList, queryString }) {
           coordinates={coordinates}
           assembly={data.assembly}
         ></Motifs>
+        <ChromatinView data={chromatinData} assembly={data.assembly} />
       </>
     );
   }
