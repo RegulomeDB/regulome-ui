@@ -1,6 +1,6 @@
 module.exports = {
   darkMode: "class",
-  content: ["./pages/**/*.js", "./components/**/*.js"],
+  content: ["./pages/**/*.js", "./components/**/*.js", "./lib/**/*.js"],
   theme: {
     container: {
       center: true,
