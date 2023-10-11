@@ -16,7 +16,6 @@ const TEXT_Y = 18;
  * }
  */
 export default function BiosampleStateBar({ states }) {
-  console.log(states);
   const total = Object.keys(states).reduce((sum, key) => sum + states[key], 0);
   const rectsData = [];
   let startX = 0;

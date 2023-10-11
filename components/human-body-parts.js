@@ -68,7 +68,7 @@ SkinOfBody.propTypes = {
   facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Limb({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -99,7 +99,7 @@ Limb.propTypes = {
   facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Spleen({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -130,7 +130,7 @@ Spleen.propTypes = {
   facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Stomach({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -161,7 +161,7 @@ Stomach.propTypes = {
   facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function ArterialBloodVessel({
@@ -253,7 +253,7 @@ ArterialBloodVessel.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Vein({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -285,7 +285,7 @@ Vein.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Nerve({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -568,7 +568,7 @@ Nerve.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Pancreas({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -777,7 +777,7 @@ Pancreas.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Lung({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -824,7 +824,7 @@ Lung.propTypes = {
   facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Bronchus({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -868,7 +868,7 @@ Bronchus.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function UrinaryBladder({
@@ -906,7 +906,7 @@ UrinaryBladder.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function SmallIntestine({
@@ -1056,7 +1056,7 @@ SmallIntestine.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function LargeIntestine({
@@ -1134,7 +1134,7 @@ LargeIntestine.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Gallbladder({
@@ -1157,7 +1157,7 @@ Gallbladder.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 export function Liver({ facets, opacity, organFilters, highlightedOrgans }) {
   const fill = getFillColorHex(facets, "liver");
@@ -1196,7 +1196,7 @@ Liver.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Kidney({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -1236,7 +1236,7 @@ Kidney.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function AdrenalGland({
@@ -1290,7 +1290,7 @@ AdrenalGland.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Esophagus({
@@ -1450,7 +1450,7 @@ Esophagus.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 export function Trachea({ facets, opacity, organFilters, highlightedOrgans }) {
   const fill = getFillColorHex(facets, "trachea");
@@ -1529,7 +1529,7 @@ Trachea.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Mouth({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -1575,7 +1575,7 @@ Mouth.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Nose({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -1607,7 +1607,7 @@ Nose.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function ThyroidGland({
@@ -1707,7 +1707,7 @@ ThyroidGland.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Thymus({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -1834,7 +1834,7 @@ Thymus.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Heart({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -1962,7 +1962,7 @@ Heart.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Pericardium({
@@ -2008,7 +2008,7 @@ Pericardium.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Testis({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -2057,7 +2057,7 @@ Testis.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function ProstateGland({
@@ -2101,7 +2101,7 @@ ProstateGland.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Urethra({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -2129,7 +2129,7 @@ Urethra.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 export function Ureter({ facets, opacity, organFilters, highlightedOrgans }) {
   const fill = getFillColorHex(facets, "ureter");
@@ -2177,7 +2177,7 @@ Ureter.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 export function Penis({ facets, opacity, organFilters, highlightedOrgans }) {
   const fill = getFillColorHex(facets, "penis");
@@ -2208,7 +2208,7 @@ Penis.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Uterus({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -2308,7 +2308,7 @@ Uterus.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Vagina({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -2357,7 +2357,7 @@ Vagina.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Ovary({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -2389,7 +2389,7 @@ Ovary.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function SpinalCord({
@@ -2427,7 +2427,7 @@ SpinalCord.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Brain({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -2739,7 +2739,7 @@ Brain.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Epiglottis({
@@ -2769,7 +2769,7 @@ Epiglottis.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Eye({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -2858,7 +2858,7 @@ Eye.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function MusculatureOfBody({
@@ -3264,7 +3264,7 @@ MusculatureOfBody.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function BoneElement({
@@ -3420,7 +3420,7 @@ BoneElement.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Breast({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -4098,7 +4098,7 @@ Breast.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function BoneMarrow({
@@ -4172,7 +4172,7 @@ BoneMarrow.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function MammaryGland({
@@ -4768,7 +4768,7 @@ MammaryGland.propTypes = {
   opacity: PropTypes.number,
 
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };
 
 export function Tongue({ facets, opacity, organFilters, highlightedOrgans }) {
@@ -4802,5 +4802,5 @@ Tongue.propTypes = {
   facets: PropTypes.object.isRequired,
   opacity: PropTypes.number,
   organFilters: PropTypes.array.isRequired,
-  highlightedOrgans: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
 };

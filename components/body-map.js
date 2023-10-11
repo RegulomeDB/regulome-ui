@@ -78,11 +78,11 @@ HumanCells.propTypes = {
   facets: PropTypes.object.isRequired,
   cellList: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
-  handleClickOrgan: PropTypes.func,
+  handleClickOrgan: PropTypes.func.isRequired,
   enabledBodyMapFilters: PropTypes.array,
-  highlightedOrgans: PropTypes.array,
-  highlightOrgans: PropTypes.func,
-  setHighlightedOrgans: PropTypes.func,
+  highlightedOrgans: PropTypes.array.isRequired,
+  highlightOrgans: PropTypes.func.isRequired,
+  setHighlightedOrgans: PropTypes.func.isRequired,
 };
 
 /**
