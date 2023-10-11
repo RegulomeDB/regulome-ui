@@ -1,5 +1,4 @@
 import pytest
-
 from aws_cdk.assertions import Template
 
 
@@ -19,7 +18,6 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
         )
     )
     template = Template.from_stack(stack)
-    # Then
     template.resource_count_is(
         'AWS::ECS::Cluster',
         1
@@ -31,6 +29,11 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                 'Ref': 'EcsDefaultClusterMnL3mNNYNTestVpc4872C696'
             },
             'DeploymentConfiguration': {
+                'Alarms': {
+                    'AlarmNames': [],
+                    'Enable': False,
+                    'Rollback': False
+                },
                 'DeploymentCircuitBreaker': {
                     'Enable': True,
                     'Rollback': True
@@ -48,8 +51,8 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'LaunchType': 'FARGATE',
             'LoadBalancers': [
                 {
-                    'ContainerName': 'nextjs',
-                    'ContainerPort': 3000,
+                    'ContainerName': 'nginxfe',
+                    'ContainerPort': 80,
                     'TargetGroupArn': {
                         'Ref': 'TestFrontendFargateLBPublicListenerECSGroup92AD1119'
                     }
@@ -76,6 +79,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                     ]
                 }
             },
+            'ServiceName': 'Regulome-ui',
             'Tags': [
                 {
                     'Key': 'backend_url',
@@ -87,7 +91,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                 }
             ],
             'TaskDefinition': {
-                'Ref': 'TestFrontendFargateTaskDef5DCA46EA',
+                'Ref': 'TestFrontendFargateTaskDef5DCA46EA'
             }
         }
     )
@@ -97,6 +101,28 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
             'ContainerDefinitions': [
                 {
                     'Essential': True,
+                    'LogConfiguration': {
+                        'LogDriver': 'awslogs',
+                        'Options': {
+                            'awslogs-group': {
+                                'Ref': 'TestFrontendFargateTaskDefnginxfeLogGroupEB332E29'
+                            },
+                            'awslogs-stream-prefix': 'nginxfe',
+                            'awslogs-region': {
+                                'Ref': 'AWS::Region'
+                            },
+                            'mode': 'non-blocking'
+                        }
+                    },
+                    'Name': 'nginxfe',
+                    'PortMappings': [
+                        {
+                            'ContainerPort': 80,
+                            'Protocol': 'tcp'
+                        }
+                    ]
+                },
+                {
                     'Environment': [
                         {
                             'Name': 'NODE_ENV',
@@ -107,11 +133,12 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                             'Value': 'https://gds-some-test-backend.regulomedb.org'
                         }
                     ],
+                    'Essential': True,
                     'LogConfiguration': {
                         'LogDriver': 'awslogs',
                         'Options': {
                             'awslogs-group': {
-                                'Ref': 'TestFrontendFargateTaskDefnextjsLogGroup59CC3BA2'
+                                'Ref': 'TestFrontendFargateTaskDefApplicationContainerLogGroupB905B11F'
                             },
                             'awslogs-stream-prefix': 'nextjs',
                             'awslogs-region': {
@@ -120,13 +147,7 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                             'mode': 'non-blocking'
                         }
                     },
-                    'Name': 'nextjs',
-                    'PortMappings': [
-                        {
-                            'ContainerPort': 3000,
-                            'Protocol': 'tcp'
-                        }
-                    ]
+                    'Name': 'nextjs'
                 }
             ],
             'Cpu': '2048',
@@ -251,8 +272,8 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                     'GroupId'
                 ]
             },
-            'FromPort': 3000,
-            'ToPort': 3000
+            'FromPort': 80,
+            'ToPort': 80
         }
     )
     template.has_resource_properties(
@@ -349,7 +370,20 @@ def test_constructs_frontend_initialize_frontend_construct(stack, instance_type,
                         'Effect': 'Allow',
                         'Resource': {
                             'Fn::GetAtt': [
-                                'TestFrontendFargateTaskDefnextjsLogGroup59CC3BA2',
+                                'TestFrontendFargateTaskDefnginxfeLogGroupEB332E29',
+                                'Arn'
+                            ]
+                        }
+                    },
+                    {
+                        'Action': [
+                            'logs:CreateLogStream',
+                            'logs:PutLogEvents'
+                        ],
+                        'Effect': 'Allow',
+                        'Resource': {
+                            'Fn::GetAtt': [
+                                'TestFrontendFargateTaskDefApplicationContainerLogGroupB905B11F',
                                 'Arn'
                             ]
                         }

@@ -1,4 +1,5 @@
 import pytest
+import json
 
 from aws_cdk.assertions import Template
 
@@ -295,6 +296,13 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
     template.has_resource_properties(
         'AWS::CodePipeline::Pipeline',
         {
+            'ArtifactStore': {
+                'Location': {
+                    'Ref': 'TestDemoDeploymentPipelineArtifactsBucket08F7C193'
+                },
+                'Type': 'S3'
+            },
+            'RestartExecutionOnUpdate': True,
             'RoleArn': {
                 'Fn::GetAtt': [
                     'TestDemoDeploymentPipelineRole9CDEC6AA',
@@ -318,9 +326,9 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                             },
                             'Name': 'ABC_xyz',
                             'OutputArtifacts': [
-                                {
-                                    'Name': 'ABC_xyz_Source'
-                                }
+                                    {
+                                        'Name': 'ABC_xyz_Source'
+                                    }
                             ],
                             'RoleArn': {
                                 'Fn::GetAtt': [
@@ -346,6 +354,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                                 'ProjectName': {
                                     'Ref': 'TestDemoDeploymentPipelineBuildSynthStepCdkBuildProject6B563FFC'
                                 },
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"09e3872abd4833eb32a6b4b2e1958cbb36dab7e6022067b918f95ad58940f3a3\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -354,9 +363,9 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                             ],
                             'Name': 'SynthStep',
                             'OutputArtifacts': [
-                                {
-                                    'Name': 'SynthStep_Output'
-                                }
+                                    {
+                                        'Name': 'SynthStep_Output'
+                                    }
                             ],
                             'RoleArn': {
                                 'Fn::GetAtt': [
@@ -382,6 +391,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                                 'ProjectName': {
                                     'Ref': 'TestDemoDeploymentPipelineCodePipelineUpdatePipelineSelfMutation212B9375'
                                 },
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"605d0c1620dff32c92d57c00cd8f6dad9bd16abe72817311ea354b050934a0f3\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -390,10 +400,10 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                             ],
                             'Name': 'SelfMutate',
                             'RoleArn': {
-                                'Fn::GetAtt': [
-                                    'TestDemoDeploymentPipelineCodePipelineCodeBuildActionRoleD3A8E8C4',
-                                    'Arn'
-                                ]
+                                    'Fn::GetAtt': [
+                                        'TestDemoDeploymentPipelineCodePipelineCodeBuildActionRoleD3A8E8C4',
+                                        'Arn'
+                                    ]
                             },
                             'RunOrder': 1
                         }
@@ -421,10 +431,36 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                             ],
                             'Name': 'DockerAsset1',
                             'RoleArn': {
-                                'Fn::GetAtt': [
-                                    'TestDemoDeploymentPipelineCodePipelineCodeBuildActionRoleD3A8E8C4',
-                                    'Arn'
-                                ]
+                                    'Fn::GetAtt': [
+                                        'TestDemoDeploymentPipelineCodePipelineCodeBuildActionRoleD3A8E8C4',
+                                        'Arn'
+                                    ]
+                            },
+                            'RunOrder': 1
+                        },
+                        {
+                            'ActionTypeId': {
+                                'Category': 'Build',
+                                'Owner': 'AWS',
+                                'Provider': 'CodeBuild',
+                                'Version': '1'
+                            },
+                            'Configuration': {
+                                'ProjectName': {
+                                    'Ref': 'TestDemoDeploymentPipelineCodePipelineAssetsDockerAsset226FE0B63'
+                                }
+                            },
+                            'InputArtifacts': [
+                                {
+                                    'Name': 'SynthStep_Output'
+                                }
+                            ],
+                            'Name': 'DockerAsset2',
+                            'RoleArn': {
+                                    'Fn::GetAtt': [
+                                        'TestDemoDeploymentPipelineCodePipelineCodeBuildActionRoleD3A8E8C4',
+                                        'Arn'
+                                    ]
                             },
                             'RunOrder': 1
                         }
@@ -447,10 +483,10 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                                     'Fn::Join': [
                                         '',
                                         [
-                                            'arn:',
-                                            {
-                                                'Ref': 'AWS::Partition'
-                                            },
+                                                'arn:',
+                                                {
+                                                    'Ref': 'AWS::Partition'
+                                                },
                                             ':iam::281708499374:role/cdk-hnb659fds-cfn-exec-role-281708499374-us-west-2'
                                         ]
                                     ]
@@ -467,16 +503,16 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                             ],
                             'Name': 'Prepare',
                             'RoleArn': {
-                                'Fn::Join': [
-                                    '',
-                                    [
-                                        'arn:',
-                                        {
-                                            'Ref': 'AWS::Partition'
-                                        },
-                                        ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                    'Fn::Join': [
+                                        '',
+                                        [
+                                            'arn:',
+                                            {
+                                                'Ref': 'AWS::Partition'
+                                            },
+                                            ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                        ]
                                     ]
-                                ]
                             },
                             'RunOrder': 1
                         },
@@ -494,30 +530,23 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                             },
                             'Name': 'Deploy',
                             'RoleArn': {
-                                'Fn::Join': [
-                                    '',
-                                    [
-                                        'arn:',
-                                        {
-                                            'Ref': 'AWS::Partition'
-                                        },
-                                        ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                    'Fn::Join': [
+                                        '',
+                                        [
+                                            'arn:',
+                                            {
+                                                'Ref': 'AWS::Partition'
+                                            },
+                                            ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                        ]
                                     ]
-                                ]
                             },
                             'RunOrder': 2
                         }
                     ],
                     'Name': 'regulome-ui-some-branch-DemoDeployStage'
                 }
-            ],
-            'ArtifactStore': {
-                'Location': {
-                    'Ref': 'TestDemoDeploymentPipelineArtifactsBucket08F7C193'
-                },
-                'Type': 'S3'
-            },
-            'RestartExecutionOnUpdate': True
+            ]
         }
     )
 
@@ -560,6 +589,13 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
     template.has_resource_properties(
         'AWS::CodePipeline::Pipeline',
         {
+            'ArtifactStore': {
+                'Location': {
+                    'Ref': 'DevDeploymentPipelineArtifactsBucket0684E092'
+                },
+                'Type': 'S3'
+            },
+            'RestartExecutionOnUpdate': True,
             'RoleArn': {
                 'Fn::GetAtt': [
                     'DevDeploymentPipelineRole49B33515',
@@ -583,9 +619,9 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                             },
                             'Name': 'ABC_xyz',
                             'OutputArtifacts': [
-                                {
-                                    'Name': 'ABC_xyz_Source'
-                                }
+                                    {
+                                        'Name': 'ABC_xyz_Source'
+                                    }
                             ],
                             'RoleArn': {
                                 'Fn::GetAtt': [
@@ -620,9 +656,9 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                             ],
                             'Name': 'SynthStep',
                             'OutputArtifacts': [
-                                {
-                                    'Name': 'SynthStep_Output'
-                                }
+                                    {
+                                        'Name': 'SynthStep_Output'
+                                    }
                             ],
                             'RoleArn': {
                                 'Fn::GetAtt': [
@@ -657,10 +693,10 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                             ],
                             'Name': 'SelfMutate',
                             'RoleArn': {
-                                'Fn::GetAtt': [
-                                    'DevDeploymentPipelineCodePipelineCodeBuildActionRole393D1655',
-                                    'Arn'
-                                ]
+                                    'Fn::GetAtt': [
+                                        'DevDeploymentPipelineCodePipelineCodeBuildActionRole393D1655',
+                                        'Arn'
+                                    ]
                             },
                             'RunOrder': 1
                         }
@@ -688,10 +724,36 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                             ],
                             'Name': 'DockerAsset1',
                             'RoleArn': {
-                                'Fn::GetAtt': [
-                                    'DevDeploymentPipelineCodePipelineCodeBuildActionRole393D1655',
-                                    'Arn'
-                                ]
+                                    'Fn::GetAtt': [
+                                        'DevDeploymentPipelineCodePipelineCodeBuildActionRole393D1655',
+                                        'Arn'
+                                    ]
+                            },
+                            'RunOrder': 1
+                        },
+                        {
+                            'ActionTypeId': {
+                                'Category': 'Build',
+                                'Owner': 'AWS',
+                                'Provider': 'CodeBuild',
+                                'Version': '1'
+                            },
+                            'Configuration': {
+                                'ProjectName': {
+                                    'Ref': 'DevDeploymentPipelineCodePipelineAssetsDockerAsset2845D1B67'
+                                }
+                            },
+                            'InputArtifacts': [
+                                {
+                                    'Name': 'SynthStep_Output'
+                                }
+                            ],
+                            'Name': 'DockerAsset2',
+                            'RoleArn': {
+                                    'Fn::GetAtt': [
+                                        'DevDeploymentPipelineCodePipelineCodeBuildActionRole393D1655',
+                                        'Arn'
+                                    ]
                             },
                             'RunOrder': 1
                         }
@@ -714,10 +776,10 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                                     'Fn::Join': [
                                         '',
                                         [
-                                            'arn:',
-                                            {
-                                                'Ref': 'AWS::Partition'
-                                            },
+                                                'arn:',
+                                                {
+                                                    'Ref': 'AWS::Partition'
+                                                },
                                             ':iam::281708499374:role/cdk-hnb659fds-cfn-exec-role-281708499374-us-west-2'
                                         ]
                                     ]
@@ -734,16 +796,16 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                             ],
                             'Name': 'Prepare',
                             'RoleArn': {
-                                'Fn::Join': [
-                                    '',
-                                    [
-                                        'arn:',
-                                        {
-                                            'Ref': 'AWS::Partition'
-                                        },
-                                        ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                    'Fn::Join': [
+                                        '',
+                                        [
+                                            'arn:',
+                                            {
+                                                'Ref': 'AWS::Partition'
+                                            },
+                                            ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                        ]
                                     ]
-                                ]
                             },
                             'RunOrder': 1
                         },
@@ -761,30 +823,23 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                             },
                             'Name': 'Deploy',
                             'RoleArn': {
-                                'Fn::Join': [
-                                    '',
-                                    [
-                                        'arn:',
-                                        {
-                                            'Ref': 'AWS::Partition'
-                                        },
-                                        ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                    'Fn::Join': [
+                                        '',
+                                        [
+                                            'arn:',
+                                            {
+                                                'Ref': 'AWS::Partition'
+                                            },
+                                            ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                        ]
                                     ]
-                                ]
                             },
                             'RunOrder': 2
                         }
                     ],
                     'Name': 'regulome-ui-some-branch-DevelopmentDeployStage'
                 }
-            ],
-            'ArtifactStore': {
-                'Location': {
-                    'Ref': 'DevDeploymentPipelineArtifactsBucket0684E092'
-                },
-                'Type': 'S3'
-            },
-            'RestartExecutionOnUpdate': True
+            ]
         }
     )
 
@@ -827,6 +882,13 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
     template.has_resource_properties(
         'AWS::CodePipeline::Pipeline',
         {
+            'ArtifactStore': {
+                'Location': {
+                    'Ref': 'TestProductionDeploymentPipelineArtifactsBucket245D0F9F'
+                },
+                'Type': 'S3'
+            },
+            'RestartExecutionOnUpdate': True,
             'RoleArn': {
                 'Fn::GetAtt': [
                     'TestProductionDeploymentPipelineRole9747ED35',
@@ -850,9 +912,9 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                             },
                             'Name': 'ABC_xyz',
                             'OutputArtifacts': [
-                                {
-                                    'Name': 'ABC_xyz_Source'
-                                }
+                                    {
+                                        'Name': 'ABC_xyz_Source'
+                                    }
                             ],
                             'RoleArn': {
                                 'Fn::GetAtt': [
@@ -887,9 +949,9 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                             ],
                             'Name': 'SynthStep',
                             'OutputArtifacts': [
-                                {
-                                    'Name': 'SynthStep_Output'
-                                }
+                                    {
+                                        'Name': 'SynthStep_Output'
+                                    }
                             ],
                             'RoleArn': {
                                 'Fn::GetAtt': [
@@ -924,10 +986,10 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                             ],
                             'Name': 'SelfMutate',
                             'RoleArn': {
-                                'Fn::GetAtt': [
-                                    'TestProductionDeploymentPipelineCodePipelineCodeBuildActionRole650FEAB8',
-                                    'Arn'
-                                ]
+                                    'Fn::GetAtt': [
+                                        'TestProductionDeploymentPipelineCodePipelineCodeBuildActionRole650FEAB8',
+                                        'Arn'
+                                    ]
                             },
                             'RunOrder': 1
                         }
@@ -955,10 +1017,36 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                             ],
                             'Name': 'DockerAsset1',
                             'RoleArn': {
-                                'Fn::GetAtt': [
-                                    'TestProductionDeploymentPipelineCodePipelineCodeBuildActionRole650FEAB8',
-                                    'Arn'
-                                ]
+                                    'Fn::GetAtt': [
+                                        'TestProductionDeploymentPipelineCodePipelineCodeBuildActionRole650FEAB8',
+                                        'Arn'
+                                    ]
+                            },
+                            'RunOrder': 1
+                        },
+                        {
+                            'ActionTypeId': {
+                                'Category': 'Build',
+                                'Owner': 'AWS',
+                                'Provider': 'CodeBuild',
+                                'Version': '1'
+                            },
+                            'Configuration': {
+                                'ProjectName': {
+                                    'Ref': 'TestProductionDeploymentPipelineCodePipelineAssetsDockerAsset25EFC821F'
+                                }
+                            },
+                            'InputArtifacts': [
+                                {
+                                    'Name': 'SynthStep_Output'
+                                }
+                            ],
+                            'Name': 'DockerAsset2',
+                            'RoleArn': {
+                                    'Fn::GetAtt': [
+                                        'TestProductionDeploymentPipelineCodePipelineCodeBuildActionRole650FEAB8',
+                                        'Arn'
+                                    ]
                             },
                             'RunOrder': 1
                         }
@@ -981,10 +1069,10 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                     'Fn::Join': [
                                         '',
                                         [
-                                            'arn:',
-                                            {
-                                                'Ref': 'AWS::Partition'
-                                            },
+                                                'arn:',
+                                                {
+                                                    'Ref': 'AWS::Partition'
+                                                },
                                             ':iam::281708499374:role/cdk-hnb659fds-cfn-exec-role-281708499374-us-west-2'
                                         ]
                                     ]
@@ -1001,16 +1089,16 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                             ],
                             'Name': 'Prepare',
                             'RoleArn': {
-                                'Fn::Join': [
-                                    '',
-                                    [
-                                        'arn:',
-                                        {
-                                            'Ref': 'AWS::Partition'
-                                        },
-                                        ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                    'Fn::Join': [
+                                        '',
+                                        [
+                                            'arn:',
+                                            {
+                                                'Ref': 'AWS::Partition'
+                                            },
+                                            ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                        ]
                                     ]
-                                ]
                             },
                             'RunOrder': 1
                         },
@@ -1028,29 +1116,22 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                             },
                             'Name': 'Deploy',
                             'RoleArn': {
-                                'Fn::Join': [
-                                    '',
-                                    [
-                                        'arn:',
-                                        {
-                                            'Ref': 'AWS::Partition'
-                                        },
-                                        ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                    'Fn::Join': [
+                                        '',
+                                        [
+                                            'arn:',
+                                            {
+                                                'Ref': 'AWS::Partition'
+                                            },
+                                            ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                        ]
                                     ]
-                                ]
                             },
                             'RunOrder': 2
                         }
                     ],
                     'Name': 'regulome-ui-some-branch-ProductionDeployStage'
-                },
-            ],
-            'ArtifactStore': {
-                'Location': {
-                    'Ref': 'TestProductionDeploymentPipelineArtifactsBucket245D0F9F'
-                },
-                'Type': 'S3'
-            },
-            'RestartExecutionOnUpdate': True
+                }
+            ]
         }
     )
