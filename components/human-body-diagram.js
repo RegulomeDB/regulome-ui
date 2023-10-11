@@ -49,6 +49,9 @@ function HumanBodyDiagram({
   handleClickOrgan,
   organList,
   enabledBodyMapFilters,
+  highlightedOrgans,
+  highlightOrgans,
+  setHighlightedOrgans,
 }) {
   const opacity = 0.4;
   return (
@@ -70,97 +73,241 @@ function HumanBodyDiagram({
               )
           : null
       }
+      onMouseOver={
+        highlightOrgans
+          ? (e) => {
+              const organ = e.target.classList[0].replaceAll("-", " ");
+              if (enabledBodyMapFilters.includes(organ)) {
+                highlightOrgans(organ);
+              }
+            }
+          : null
+      }
+      onMouseOut={setHighlightedOrgans ? () => setHighlightedOrgans([]) : null}
     >
       <title>Homo sapiens clickable body map</title>
       <SkinOfBody
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Limb facets={facets} opacity={0.8} organFilters={organFilters} />
-      <Stomach facets={facets} opacity={opacity} organFilters={organFilters} />
       <ArterialBloodVessel
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Vein facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Nerve facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Pancreas facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Limb
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Stomach
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Vein
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Nerve
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Pancreas
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
       <MusculatureOfBody
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Lung facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Bronchus facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Lung
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Bronchus
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
       <SmallIntestine
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
       <LargeIntestine
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Liver facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Kidney facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Liver
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Kidney
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
       <AdrenalGland
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
       <UrinaryBladder
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
       <Esophagus
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Mouth facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Nose facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Mouth
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Nose
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
       <ThyroidGland
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Thymus facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Heart facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Testis facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Ureter facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Uterus facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Ovary facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Penis facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Thymus
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Heart
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Testis
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Ureter
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Uterus
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Ovary
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Penis
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
       <SpinalCord
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Brain facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Eye facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Breast facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Brain
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Eye
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Breast
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
       <MammaryGland
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Tongue facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Tongue
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
       <BoneElement
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
       <ProstateGland
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
       />
-      <Spleen facets={facets} opacity={opacity} organFilters={organFilters} />
-      <Vagina facets={facets} opacity={opacity} organFilters={organFilters} />
+      <Spleen
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <Vagina
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
     </svg>
   );
 }
@@ -171,6 +318,9 @@ HumanBodyDiagram.propTypes = {
   organFilters: PropTypes.array.isRequired,
   organList: PropTypes.array.isRequired,
   enabledBodyMapFilters: PropTypes.array.isRequired,
+  highlightedOrgans: PropTypes.array,
+  highlightOrgans: PropTypes.func,
+  setHighlightedOrgans: PropTypes.func,
 };
 
 export default HumanBodyDiagram;
