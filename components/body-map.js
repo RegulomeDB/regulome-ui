@@ -9,6 +9,7 @@ import Image from "next/image";
 import HumanBodyDiagram from "./human-body-diagram";
 import Modal from "./modal";
 import {
+  ASSOCIATED_ORGAN_MAP,
   COMPLETE_CELLS_LIST_GRCH38,
   COMPLETE_CELLS_LIST_HG19,
   COMPLETE_ORGAN_LIST_GRCH38,
@@ -30,6 +31,8 @@ export function HumanCells({
   organFilters,
   enabledBodyMapFilters,
   handleClickOrgan,
+  highlightedOrgans,
+  highlightOrgans,
 }) {
   return (
     <>
@@ -38,19 +41,21 @@ export function HumanCells({
           ? `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.png`
           : `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.svg`;
         const color = getFillColorTailwind(facets, cell);
-        const opacity = organFilters.includes(cell)
-          ? "opacity-60"
-          : "opacity-30";
+        const opacity =
+          organFilters.includes(cell) | highlightedOrgans.includes(cell)
+            ? "opacity-60"
+            : "opacity-30";
         const isDisabled = !enabledBodyMapFilters.includes(cell);
         return (
           <button
             type="button"
             id={cell}
             disabled={isDisabled}
-            onClick={
-              handleClickOrgan &&
-              (() => handleClickOrgan(cell, cellList, enabledBodyMapFilters))
+            onClick={() =>
+              handleClickOrgan(cell, cellList, enabledBodyMapFilters)
             }
+            onMouseEnter={() => highlightOrgans(cell)}
+            onMouseLeave={() => highlightOrgans()}
             key={`${cell}-bodymap-cellslist`}
           >
             <div className="relative">
@@ -72,8 +77,10 @@ HumanCells.propTypes = {
   facets: PropTypes.object.isRequired,
   cellList: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
-  handleClickOrgan: PropTypes.func,
+  handleClickOrgan: PropTypes.func.isRequired,
   enabledBodyMapFilters: PropTypes.array,
+  highlightedOrgans: PropTypes.array.isRequired,
+  highlightOrgans: PropTypes.func.isRequired,
 };
 
 /**
@@ -96,6 +103,18 @@ export function BodyMap({
   isThumbnailExpanded,
   setIsThumbnailExpanded,
 }) {
+  const [highlightedOrgans, setHighlightedOrgans] = useState([]);
+  function highlightOrgans(organ) {
+    if (organ) {
+      let organs = [organ];
+      if (organ in ASSOCIATED_ORGAN_MAP) {
+        organs = organs.concat(ASSOCIATED_ORGAN_MAP[organ]);
+      }
+      setHighlightedOrgans(organs);
+    } else {
+      setHighlightedOrgans([]);
+    }
+  }
   return (
     <div>
       <Modal
@@ -118,23 +137,27 @@ export function BodyMap({
               organFilters={organFilters}
               enabledBodyMapFilters={enabledBodyMapFilters}
               handleClickOrgan={handleClickOrgan}
+              highlightedOrgans={highlightedOrgans}
+              highlightOrgans={highlightOrgans}
             />
             <div>
               <ul className="list-disc grid grid-cols-2 gap-2">
                 {organList.map((organ) => {
                   const isSelected = organFilters.includes(organ);
                   const isDisabled = !enabledBodyMapFilters.includes(organ);
+                  const isHighlighted = highlightedOrgans.includes(organ);
+                  const borderStyle = isSelected
+                    ? "border-solid border-2 border-brand"
+                    : "";
+                  const textColor = isDisabled ? "text-slate-400" : "";
+                  const highlight = isHighlighted ? "bg-green-200" : "";
                   return (
                     <li key={`${organ}-bodymap-organlist`}>
                       <button
                         id={organ}
                         role="button"
                         disabled={isDisabled}
-                        className={`hover:bg-slate-200 ${
-                          isDisabled && "text-slate-400"
-                        } ${
-                          isSelected && "border-solid border-2 border-brand"
-                        }`}
+                        className={`${textColor} ${highlight} ${borderStyle}`}
                         tabIndex="0"
                         onClick={(e) =>
                           handleClickOrgan(
@@ -143,6 +166,8 @@ export function BodyMap({
                             enabledBodyMapFilters
                           )
                         }
+                        onMouseEnter={(e) => highlightOrgans(e.target.id)}
+                        onMouseLeave={() => highlightOrgans()}
                       >
                         {organ}
                       </button>
@@ -158,6 +183,8 @@ export function BodyMap({
                 organFilters={organFilters}
                 handleClickOrgan={handleClickOrgan}
                 enabledBodyMapFilters={enabledBodyMapFilters}
+                highlightedOrgans={highlightedOrgans}
+                highlightOrgans={highlightOrgans}
               />
             </div>
             <div>
@@ -165,6 +192,14 @@ export function BodyMap({
                 {cellList.map((cell) => {
                   const isSelected = organFilters.includes(cell);
                   const isDisabled = !enabledBodyMapFilters.includes(cell);
+                  const isHighlighted = highlightedOrgans.includes(cell);
+
+                  const borderStyle = isSelected
+                    ? "border-solid border-2 border-brand"
+                    : "";
+                  const textColor = isDisabled ? "text-slate-400" : "";
+                  const highlight = isHighlighted ? "bg-green-200" : "";
+
                   return (
                     <li key={`${cell}-bodymap-cellslist`}>
                       <button
@@ -179,11 +214,9 @@ export function BodyMap({
                             enabledBodyMapFilters
                           )
                         }
-                        className={`hover:bg-slate-200 ${
-                          isDisabled && "text-slate-400"
-                        } ${
-                          isSelected && "border-solid border-2 border-brand"
-                        }`}
+                        onMouseEnter={(e) => highlightOrgans(e.target.id)}
+                        onMouseLeave={() => highlightOrgans()}
+                        className={`${textColor} ${highlight} ${borderStyle}`}
                       >
                         {cell}
                       </button>
