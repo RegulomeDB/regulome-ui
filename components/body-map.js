@@ -33,7 +33,6 @@ export function HumanCells({
   handleClickOrgan,
   highlightedOrgans,
   highlightOrgans,
-  setHighlightedOrgans,
 }) {
   return (
     <>
@@ -56,7 +55,7 @@ export function HumanCells({
               handleClickOrgan(cell, cellList, enabledBodyMapFilters)
             }
             onMouseEnter={() => highlightOrgans(cell)}
-            onMouseLeave={() => setHighlightedOrgans([])}
+            onMouseLeave={() => highlightOrgans()}
             key={`${cell}-bodymap-cellslist`}
           >
             <div className="relative">
@@ -82,7 +81,6 @@ HumanCells.propTypes = {
   enabledBodyMapFilters: PropTypes.array,
   highlightedOrgans: PropTypes.array.isRequired,
   highlightOrgans: PropTypes.func.isRequired,
-  setHighlightedOrgans: PropTypes.func.isRequired,
 };
 
 /**
@@ -107,6 +105,9 @@ export function BodyMap({
 }) {
   const [highlightedOrgans, setHighlightedOrgans] = useState([]);
   function highlightOrgans(organ) {
+    if (!organ) {
+      setHighlightedOrgans([]);
+    }
     let organs = [organ];
     if (organ in ASSOCIATED_ORGAN_MAP) {
       organs = organs.concat(ASSOCIATED_ORGAN_MAP[organ]);
@@ -137,7 +138,6 @@ export function BodyMap({
               handleClickOrgan={handleClickOrgan}
               highlightedOrgans={highlightedOrgans}
               highlightOrgans={highlightOrgans}
-              setHighlightedOrgans={setHighlightedOrgans}
             />
             <div>
               <ul className="list-disc grid grid-cols-2 gap-2">
@@ -145,15 +145,18 @@ export function BodyMap({
                   const isSelected = organFilters.includes(organ);
                   const isDisabled = !enabledBodyMapFilters.includes(organ);
                   const isHighlighted = highlightedOrgans.includes(organ);
+                  const borderStyle = isSelected
+                    ? "border-solid border-2 border-brand"
+                    : "";
+                  const textColor = isDisabled ? "text-slate-400" : "";
+                  const highlight = isHighlighted ? "bg-green-200" : "";
                   return (
                     <li key={`${organ}-bodymap-organlist`}>
                       <button
                         id={organ}
                         role="button"
                         disabled={isDisabled}
-                        className={`${isDisabled && "text-slate-400"} ${
-                          isSelected && "border-solid border-2 border-brand"
-                        } ${isHighlighted && "bg-green-200"}`}
+                        className={`${textColor} ${highlight} ${borderStyle}`}
                         tabIndex="0"
                         onClick={(e) =>
                           handleClickOrgan(
@@ -163,7 +166,7 @@ export function BodyMap({
                           )
                         }
                         onMouseEnter={(e) => highlightOrgans(e.target.id)}
-                        onMouseLeave={() => setHighlightedOrgans([])}
+                        onMouseLeave={() => highlightOrgans()}
                       >
                         {organ}
                       </button>
@@ -181,7 +184,6 @@ export function BodyMap({
                 enabledBodyMapFilters={enabledBodyMapFilters}
                 highlightedOrgans={highlightedOrgans}
                 highlightOrgans={highlightOrgans}
-                setHighlightedOrgans={setHighlightedOrgans}
               />
             </div>
             <div>
@@ -190,6 +192,12 @@ export function BodyMap({
                   const isSelected = organFilters.includes(cell);
                   const isDisabled = !enabledBodyMapFilters.includes(cell);
                   const isHighlighted = highlightedOrgans.includes(cell);
+
+                  const borderStyle = isSelected
+                    ? "border-solid border-2 border-brand"
+                    : "";
+                  const textColor = isDisabled ? "text-slate-400" : "";
+                  const highlight = isHighlighted ? "bg-green-200" : "";
 
                   return (
                     <li key={`${cell}-bodymap-cellslist`}>
@@ -206,10 +214,8 @@ export function BodyMap({
                           )
                         }
                         onMouseEnter={(e) => highlightOrgans(e.target.id)}
-                        onMouseLeave={() => setHighlightedOrgans([])}
-                        className={`${isDisabled && "text-slate-400"} ${
-                          isSelected && "border-solid border-2 border-brand"
-                        } ${isHighlighted && "bg-green-200"}`}
+                        onMouseLeave={() => highlightOrgans()}
+                        className={`${textColor} ${highlight} ${borderStyle}`}
                       >
                         {cell}
                       </button>

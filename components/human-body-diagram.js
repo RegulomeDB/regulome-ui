@@ -13,7 +13,6 @@ function HumanBodyDiagram({
   enabledBodyMapFilters,
   highlightedOrgans,
   highlightOrgans,
-  setHighlightedOrgans,
 }) {
   const opacity = 0.4;
   return (
@@ -45,7 +44,7 @@ function HumanBodyDiagram({
             }
           : null
       }
-      onMouseOut={setHighlightedOrgans ? () => setHighlightedOrgans([]) : null}
+      onMouseOut={highlightOrgans ? () => highlightOrgans() : null}
     >
       <title>Homo sapiens clickable body map</title>
       <HumanBodyParts.SkinOfBody
@@ -282,7 +281,6 @@ HumanBodyDiagram.propTypes = {
   enabledBodyMapFilters: PropTypes.array.isRequired,
   highlightedOrgans: PropTypes.array,
   highlightOrgans: PropTypes.func,
-  setHighlightedOrgans: PropTypes.func,
 };
 
 export default HumanBodyDiagram;
