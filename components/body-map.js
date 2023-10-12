@@ -105,14 +105,15 @@ export function BodyMap({
 }) {
   const [highlightedOrgans, setHighlightedOrgans] = useState([]);
   function highlightOrgans(organ) {
-    if (!organ) {
+    if (organ) {
+      let organs = [organ];
+      if (organ in ASSOCIATED_ORGAN_MAP) {
+        organs = organs.concat(ASSOCIATED_ORGAN_MAP[organ]);
+      }
+      setHighlightedOrgans(organs);
+    } else {
       setHighlightedOrgans([]);
     }
-    let organs = [organ];
-    if (organ in ASSOCIATED_ORGAN_MAP) {
-      organs = organs.concat(ASSOCIATED_ORGAN_MAP[organ]);
-    }
-    setHighlightedOrgans(organs);
   }
   return (
     <div>
