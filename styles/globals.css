@@ -30,6 +30,16 @@
   .form-element-height-lg {
     min-height: 2.5rem;
   }
+  .hpgv_track-sequence {
+    --nucleobase-a: #489655;
+    --nucleobase-t: #c13b42;
+    --nucleobase-g: #efb549;
+    --nucleobase-c: #335c95;
+    --gc-banding-low: #efb549;
+    --gc-banding-high: #c13b42;
+    --text-color: rgba(255, 255, 255, 0.7);
+    --text-additive-blending: 0; /* set to 0.0 for dark text colors */
+  }
 }
 
 :root {
