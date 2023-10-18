@@ -1,13 +1,8 @@
 import PropTypes from "prop-types";
 import { BrowserFeat } from "./browserfeat";
 import { Tooltip, Button } from "@nextui-org/react";
-import dynamic from "next/dynamic";
-
-const GV = dynamic(() => import("genome-visualizer"), {
-  ssr: false,
-});
-
-console.log(typeof GV);
+import { useEffect, useState } from "react";
+import { ArrowUturnLeftIcon } from "@heroicons/react/20/solid";
 
 const colorCCREs = {
   "Promoter-like": "#ff0000",
@@ -333,63 +328,83 @@ function filesToTracks(files, assembly) {
 }
 
 export default function GenomeBrowser({ files, assembly, coordinates }) {
-  const highlightLocationStart = +coordinates.split(":")[1].split("-")[0];
-  const highlightLocationEnd = +coordinates.split(":")[1].split("-")[1];
-  const x0 = highlightLocationStart - 5000;
-  const x1 = highlightLocationEnd + 5000;
   const disableBrowserForIE = BrowserFeat.getBrowserCaps("uaTrident")
     ? true
     : false;
-  const chr = coordinates.split(":")[0];
-  let chartdisplay = null;
 
-  const pinnedFiles =
-    assembly === "GRCh38" ? PINNED_FILES_GRCH38 : PINNED_FILES_HG19;
+  function ResetButton() {
+    return (
+      <button className="reset-browser-button">
+        <ArrowUturnLeftIcon className="h-5" />
+        <span className="reset-title">Reset to query variant label</span>
+      </button>
+    );
+  }
 
-  const filesUpdated = [...pinnedFiles, ...files];
-  const tracks = filesToTracks(filesUpdated, assembly);
-  const highlightString = `${chr}:${highlightLocationStart}-${highlightLocationEnd}`;
-  const visualizer = new GV.GenomeVisualizer({
-    clampToTracks: true,
-    reorderTracks: true,
-    removableTracks: false,
-    highlightLocation: highlightString,
-    originalChr: chr,
-    panels: [
-      {
-        location: { contig: chr, x0, x1 },
-      },
-    ],
-    tracks,
-  });
-  visualizer.render(
-    {
-      width: chartdisplay.clientWidth,
-      height: visualizer.getContentHeight(),
-    },
-    chartdisplay
-  );
+  const [func, setFunc] = useState(ResetButton);
+
+  useEffect(() => {
+    async function load() {
+      const highlightLocationStart = +coordinates.split(":")[1].split("-")[0];
+      const highlightLocationEnd = +coordinates.split(":")[1].split("-")[1];
+      const x0 = highlightLocationStart - 5000;
+      const x1 = highlightLocationEnd + 5000;
+
+      const chr = coordinates.split(":")[0];
+
+      const pinnedFiles =
+        assembly === "GRCh38" ? PINNED_FILES_GRCH38 : PINNED_FILES_HG19;
+
+      const filesUpdated = [...pinnedFiles, ...files];
+      const tracks = filesToTracks(filesUpdated, assembly).slice(0, 10);
+      const highlightString = `${chr}:${highlightLocationStart}-${highlightLocationEnd}`;
+      const GenomeVisualizer = await import("genome-visualizer").then(
+        (mod) => mod.GenomeVisualizer
+      );
+      const visualizer = new GenomeVisualizer({
+        clampToTracks: true,
+        reorderTracks: true,
+        removableTracks: false,
+        highlightLocation: highlightString,
+        originalChr: chr,
+        panels: [
+          {
+            location: { contig: chr, x0, x1 },
+          },
+        ],
+        tracks,
+      });
+      visualizer.render(
+        {
+          width: document.getElementById("browser").clientWidth,
+          height: visualizer.getContentHeight(),
+        },
+        document.getElementById("browser")
+      );
+      function ResetButton() {
+        return (
+          <button
+            className="reset-browser-button"
+            onClick={() => visualizer.setLocation({ contig: chr, x0, x1 })}
+          >
+            <ArrowUturnLeftIcon className="h-5 px-2" />
+            <span className="reset-title">Reset to query variant</span>
+          </button>
+        );
+      }
+      setFunc(ResetButton);
+    }
+
+    load();
+  }, [files, assembly, coordinates]);
 
   return (
     <div>
       {!disableBrowserForIE ? (
         <div>
-          <div className="regulome-legend">
-            <GenomeLegend />
-          </div>
-          <button
-            className="reset-browser-button"
-            onClick={() => visualizer.setLocation({ contig: chr, x0, x1 })}
-          >
-            <i className="icon icon-undo" />
-            <span className="reset-title">Reset to query variant</span>
-          </button>
-          <div
-            ref={(div) => {
-              chartdisplay = div;
-            }}
-            className="valis-browser"
-          />
+          <GenomeLegend />
+          <>{func}</>
+          <div id="browser" className="valis-browser" />
         </div>
       ) : (
         <div className="browser-error valis-browser">

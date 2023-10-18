@@ -2,6 +2,10 @@ FROM node:18.16.1-bookworm-slim
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+RUN apt-get update
+
+RUN apt-get install -y python3 build-essential
+
 WORKDIR /docker
 
 COPY ./docker/nextjs/entrypoint.sh .
