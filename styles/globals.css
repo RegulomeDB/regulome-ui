@@ -30,7 +30,7 @@
   .form-element-height-lg {
     min-height: 2.5rem;
   }
-  .hpgv_track-sequence {
+  .valis-browser .hpgv_track-sequence {
     --nucleobase-a: #489655;
     --nucleobase-t: #c13b42;
     --nucleobase-g: #efb549;
@@ -40,6 +40,109 @@
     --text-color: rgba(255, 255, 255, 0.7);
     --text-additive-blending: 0; /* set to 0.0 for dark text colors */
   }
+
+  /* styles for bigBed files annotation files */
+  .valis-browser .hpgv_track-annotation {
+    --transcript-arrow: rgba(0, 0, 0, 1);
+    --transcript: #bdc5c0;
+    --coding: #575f5a;
+    --non-coding: #f9ce70;
+    --untranslated: #c14953;
+
+    --coding-max-score: #575f5a;
+    --non-coding-max-score: #575f5a;
+
+    /* if we want to hide all of the annotations
+    color: rgba(0, 0, 0, 0); */
+  }
+
+  /* styles for signal track */
+  .valis-browser .hpgv_track-signal {
+    --signal-color: #2a6496;
+  }
+
+  .valis-browser .valis-genome-visualizer.react-object-container div {
+    background-color: white !important;
+    color: #333;
+    font-family: Khula, sans-serif;
+  }
+
+  .valis-browser .hpgv_track-reorder-button {
+    height: 8px;
+    opacity: 0.8;
+    pointer-events: all;
+    cursor: pointer;
+  }
+
+  .valis-browser .hpgv_track-reorder-button svg {
+    display: none;
+  }
+
+  .valis-browser .hpgv_track-reorder-button.move-up {
+    background: linear-gradient(#a2a2a2, 30%, #f2f2f2);
+  }
+
+  .valis-browser .hpgv_track-reorder-button.move-up:hover {
+    background: linear-gradient(#f1c428, #fff0c1);
+  }
+
+  .valis-browser .hpgv_track-reorder-button.move-down {
+    background: linear-gradient(#f2f2f2, 70%, #a2a2a2);
+  }
+
+  .valis-browser .hpgv_track-reorder-button.move-down:hover {
+    background: linear-gradient(#fff0c1, #f1c428);
+  }
+
+  .valis-browser .hpgv_track-reorder-container {
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+}
+
+.reset-browser-button {
+  position: absolute;
+  z-index: 9;
+  line-height: 1;
+  left: 20px;
+  text-align: left;
+  background-color: #f2f2f2;
+  border: 1px solid #bfbfbf;
+  padding: 7px 20px;
+  height: 50px;
+  width: 170px;
+  font-size: 14px;
+  border-radius: 4px;
+  display: flex;
+  margin-top: 5px;
+  margin: 0 auto;
+}
+
+.valis-browser.browser-error {
+  margin: 30px auto;
+  background: #f2f2f2;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 1.3rem;
+  border: 1px solid #ddd;
+  min-height: 450px;
+}
+
+.valis-browser .hpgv_ui-block {
+  color: #364565;
+  background-color: #f2f2f2;
+  font-size: 16px;
+  box-shadow: none;
+  font-family: "Khula", sans-serif;
+  border: 1px solid #bfbfbf;
+}
+
+.valis-browser .hpgv_ui-block.hpgv_track-header {
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 7px 5px;
+  box-shadow: 0 0 12px inset rgba(0, 0, 0, 0.07);
 }
 
 :root {
