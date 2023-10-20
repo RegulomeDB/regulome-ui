@@ -23,6 +23,8 @@ export default function SearchPageHeader({ queryString }) {
       setButtonInFocus("motifs");
     } else if (path.endsWith(`#!chromatin`)) {
       setButtonInFocus("chromatin");
+    } else if (path.endsWith(`#!browser`)) {
+      setButtonInFocus("browser");
     } else {
       setButtonInFocus("score");
     }
@@ -71,6 +73,13 @@ export default function SearchPageHeader({ queryString }) {
             buttonInFocus={buttonInFocus}
             buttonType="chromatin"
             buttonText="Chromatin state"
+            suffix
+          />
+          <HeaderButton
+            queryString={queryString}
+            buttonInFocus={buttonInFocus}
+            buttonType="browser"
+            buttonText="Genome Browser"
             suffix
           />
         </div>

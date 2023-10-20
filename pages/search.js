@@ -32,6 +32,7 @@ import FetchRequest from "../lib/fetch-request";
 import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
 import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
+import { GenomeBrowserView } from "../components/genome-browser-view";
 
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
@@ -241,6 +242,11 @@ export default function Search({ data, motifDocList, queryString }) {
           assembly={data.assembly}
         ></Motifs>
         <ChromatinView data={chromatinData} assembly={data.assembly} />
+        <GenomeBrowserView
+          files={filesForGenomeBrowser}
+          assembly={data.assembly}
+          coordinates={coordinates}
+        />
       </>
     );
   }
