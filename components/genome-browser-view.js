@@ -35,7 +35,7 @@ export function GenomeBrowserView({ files, assembly, coordinates }) {
     Math.ceil(filteredFiles.length / NUMBER_OF_FILES_FOR_DISPLAY)
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [displayedFiles, setDisplayedFiles] = useState(
+  const [displayedFiles, setDisplayedFiles] = useState(() =>
     filteredFiles.slice(0, 20)
   );
 
