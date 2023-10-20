@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { sanitizedString } from "../lib/general";
+import _ from "lodash";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -8,7 +8,8 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
 import { Button } from "./form-elements";
-import _ from "lodash";
+import { DataItemLabel } from "./data-area";
+import { sanitizedString } from "../lib/general";
 
 // Define facets parameters
 const facetParameters = [
@@ -126,7 +127,7 @@ export class GenomeBrowserFacets extends React.Component {
         {this.state.selectedFacets.length > 0 ? (
           <React.Fragment>
             <div className="flex flex-wrap space-x-1 mb-4">
-              <span>Selected filters:</span>
+              <DataItemLabel>Selected filters:</DataItemLabel>
               {this.state.selectedFacets.map((f) => {
                 const fsplit = f.split("AND");
                 return (

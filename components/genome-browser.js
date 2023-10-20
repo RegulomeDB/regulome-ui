@@ -412,7 +412,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
   return (
     <div>
       {!disableBrowserForIE ? (
-        <div>
+        <div className="tall-browser-container">
           <GenomeLegend />
           <>{func}</>
           <div id="browser" className="valis-browser" />

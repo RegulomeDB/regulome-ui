@@ -1,7 +1,13 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { DataAreaTitle, DataPanel } from "./data-area";
+import {
+  DataArea,
+  DataAreaTitle,
+  DataItemLabel,
+  DataItemValue,
+  DataPanel,
+} from "./data-area";
 import GenomeBrowser from "./genome-browser";
 import {
   GenomeBrowserFacets,
@@ -10,12 +16,11 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
 // number of files to display on genome browser
-const displaySize = 20;
+const NUMBER_OF_FILES_FOR_DISPLAY = 20;
 
 /**
- * This is the view for display chromatin state data for a variant.
- * It contains three facets group: Organ slim facets, biosample facets and chromatin state facets
- * and a cortable table to display the chromatin state datasets
+ * This is the view for display data genome browser for a variant.
+ * It contains facets for filter the files, genome browser to display the files and pagination if needed.
  */
 export function GenomeBrowserView({ files, assembly, coordinates }) {
   const router = useRouter();
@@ -27,10 +32,10 @@ export function GenomeBrowserView({ files, assembly, coordinates }) {
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [totalPage, setTotalPage] = useState(
-    Math.ceil(filteredFiles.length / displaySize)
+    Math.ceil(filteredFiles.length / NUMBER_OF_FILES_FOR_DISPLAY)
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [includedFiles, setIncludedFiles] = useState(
+  const [displayedFiles, setDisplayedFiles] = useState(
     filteredFiles.slice(0, 20)
   );
 
@@ -39,27 +44,27 @@ export function GenomeBrowserView({ files, assembly, coordinates }) {
     setFilteredFiles(filteredFiles);
     setSelectedFilters(selectedFilters);
     // if there are more filtered files than we want to display on one page, we will paginate
-    const browserTotalPages = Math.ceil(filteredFiles.length / displaySize);
+    const browserTotalPages = Math.ceil(
+      filteredFiles.length / NUMBER_OF_FILES_FOR_DISPLAY
+    );
     setTotalPage(browserTotalPages);
     setCurrentPage(1);
-    const includedFiles = filteredFiles.slice(0, displaySize);
-    setIncludedFiles(includedFiles);
+    const includedFiles = filteredFiles.slice(0, NUMBER_OF_FILES_FOR_DISPLAY);
+    setDisplayedFiles(includedFiles);
   }
 
   function handlePagination(pageDirection) {
     if (pageDirection === "plus") {
-      const pageIdx = currentPage;
-      const startIdx = pageIdx * displaySize;
-      const endIdx = (pageIdx + 1) * displaySize;
-      const includedFiles = filteredFiles.slice(startIdx, endIdx);
-      setIncludedFiles(includedFiles);
+      const startIdx = currentPage * NUMBER_OF_FILES_FOR_DISPLAY;
+      const endIdx = (currentPage + 1) * NUMBER_OF_FILES_FOR_DISPLAY;
+      const displayedFiles = filteredFiles.slice(startIdx, endIdx);
+      setDisplayedFiles(displayedFiles);
       setCurrentPage(currentPage + 1);
     } else {
-      const pageIdx = currentPage - 2;
-      const startIdx = pageIdx * displaySize;
-      const endIdx = (pageIdx + 1) * displaySize;
-      const includedFiles = filteredFiles.slice(startIdx, endIdx);
-      setIncludedFiles(includedFiles);
+      const startIdx = (currentPage - 2) * NUMBER_OF_FILES_FOR_DISPLAY;
+      const endIdx = (currentPage - 1) * NUMBER_OF_FILES_FOR_DISPLAY;
+      const displayedFiles = filteredFiles.slice(startIdx, endIdx);
+      setDisplayedFiles(displayedFiles);
       setCurrentPage(currentPage - 1);
     }
   }
@@ -71,6 +76,10 @@ export function GenomeBrowserView({ files, assembly, coordinates }) {
           <>
             <DataAreaTitle>Genome Browser</DataAreaTitle>
             <DataPanel>
+              <DataArea>
+                <DataItemLabel>Number of tracks:</DataItemLabel>
+                <DataItemValue>{filteredFiles.length}</DataItemValue>
+              </DataArea>
               <GenomeBrowserFacets
                 files={files}
                 handleFacetList={handleFacetList}
@@ -80,11 +89,10 @@ export function GenomeBrowserView({ files, assembly, coordinates }) {
               <GenomeBrowser
                 key={files.length}
                 fixedHeight={false}
-                files={includedFiles}
-                expanded
+                files={displayedFiles}
                 assembly={assembly}
                 coordinates={coordinates}
-                selectedFilters={[]}
+                selectedFilters={selectedFilters}
               />
               {totalPage > 1 && (
                 <div className="text-center mt-6">
