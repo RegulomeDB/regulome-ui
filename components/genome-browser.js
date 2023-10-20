@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import { BrowserFeat } from "./browserfeat";
 import { Tooltip, Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { ArrowUturnLeftIcon } from "@heroicons/react/20/solid";
+import { BrowserFeat } from "./browserfeat";
 
 const colorCCREs = {
   "Promoter-like": "#ff0000",
@@ -77,7 +77,7 @@ const PINNED_FILES_HG19 = [
 ];
 
 /**
- * Display a legend
+ * Display the legend for genome browser
  */
 export function GenomeLegend() {
   return (

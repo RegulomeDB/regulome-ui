@@ -87,12 +87,9 @@ export function GenomeBrowserView({ files, assembly, coordinates }) {
                 selectedFilters={selectedFilters}
               />
               <GenomeBrowser
-                key={files.length}
-                fixedHeight={false}
                 files={displayedFiles}
                 assembly={assembly}
                 coordinates={coordinates}
-                selectedFilters={selectedFilters}
               />
               {totalPage > 1 && (
                 <div className="text-center mt-6">
