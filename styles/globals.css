@@ -99,50 +99,50 @@
     left: 0;
     pointer-events: none;
   }
-}
 
-.reset-browser-button {
-  position: absolute;
-  z-index: 9;
-  line-height: 1;
-  left: 20px;
-  text-align: left;
-  background-color: #f2f2f2;
-  border: 1px solid #bfbfbf;
-  padding: 7px 20px;
-  height: 50px;
-  width: 170px;
-  font-size: 14px;
-  border-radius: 4px;
-  display: flex;
-  margin-top: 5px;
-  margin: 0 auto;
-}
+  .reset-browser-button {
+    position: absolute;
+    z-index: 9;
+    line-height: 1;
+    left: 20px;
+    text-align: left;
+    background-color: #f2f2f2;
+    border: 1px solid #bfbfbf;
+    padding: 7px 20px;
+    height: 50px;
+    width: 170px;
+    font-size: 14px;
+    border-radius: 4px;
+    display: flex;
+    margin-top: 5px;
+    margin: 0 auto;
+  }
 
-.valis-browser.browser-error {
-  margin: 30px auto;
-  background: #f2f2f2;
-  border-radius: 5px;
-  padding: 20px;
-  font-size: 1.3rem;
-  border: 1px solid #ddd;
-  min-height: 450px;
-}
+  .valis-browser.browser-error {
+    margin: 30px auto;
+    background: #f2f2f2;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 1.3rem;
+    border: 1px solid #ddd;
+    min-height: 450px;
+  }
 
-.valis-browser .hpgv_ui-block {
-  color: #364565;
-  background-color: #f2f2f2;
-  font-size: 16px;
-  box-shadow: none;
-  font-family: "Khula", sans-serif;
-  border: 1px solid #bfbfbf;
-}
+  .valis-browser .hpgv_ui-block {
+    color: #364565;
+    background-color: #f2f2f2;
+    font-size: 16px;
+    box-shadow: none;
+    font-family: "Khula", sans-serif;
+    border: 1px solid #bfbfbf;
+  }
 
-.valis-browser .hpgv_ui-block.hpgv_track-header {
-  font-size: 14px;
-  line-height: 1.2;
-  padding: 7px 5px;
-  box-shadow: 0 0 12px inset rgba(0, 0, 0, 0.07);
+  .valis-browser .hpgv_ui-block.hpgv_track-header {
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 7px 5px;
+    box-shadow: 0 0 12px inset rgba(0, 0, 0, 0.07);
+  }
 }
 
 :root {

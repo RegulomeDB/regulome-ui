@@ -356,7 +356,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
         assembly === "GRCh38" ? PINNED_FILES_GRCH38 : PINNED_FILES_HG19;
 
       const filesUpdated = [...pinnedFiles, ...files];
-      const tracks = filesToTracks(filesUpdated, assembly).slice(0, 10);
+      const tracks = filesToTracks(filesUpdated, assembly);
       const highlightString = `${chr}:${highlightLocationStart}-${highlightLocationEnd}`;
       const GenomeVisualizer = await import("genome-visualizer").then(
         (mod) => mod.GenomeVisualizer
@@ -381,6 +381,17 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
         },
         document.getElementById("browser")
       );
+      function drawTracksResized() {
+        visualizer.render(
+          {
+            width: document.getElementById("browser").clientWidth,
+            height: visualizer.getContentHeight(),
+          },
+          document.getElementById("browser")
+        );
+      }
+      visualizer.addEventListener("track-resize", drawTracksResized);
+      window.addEventListener("resize", drawTracksResized);
       function ResetButton() {
         return (
           <button
