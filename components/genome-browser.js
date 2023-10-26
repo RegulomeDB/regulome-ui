@@ -15,12 +15,10 @@ const colorCCREs = {
 };
 
 const colorGenome = {
-  "Nucleobase A": "#0c7489",
-  "Nucleobase T": "#f9ce70",
-  "Nucleobase G": "#0fa3b1",
-  "Nucleobase C": "#c14953",
-  "GC-low": "#0c7489",
-  "GC-rich": "#f9ce70",
+  "Nucleobase A": "#489655",
+  "Nucleobase T": "#c13b42",
+  "Nucleobase G": "#efb549",
+  "Nucleobase C": "#335c95",
 };
 
 const colorGenes = {
