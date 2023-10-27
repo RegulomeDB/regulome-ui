@@ -3,6 +3,7 @@ import Head from "next/head";
 import Script from "next/script";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
+import Router from "next/router";
 // lib
 import { BRAND_COLOR, SITE_TITLE } from "../lib/constants";
 import DarkModeManager from "../lib/dark-mode-manager";
@@ -14,13 +15,32 @@ import ScrollToTop from "../components/scroll-to-top";
 import ViewportOverlay from "../components/viewport-overlay";
 // CSS
 import "../styles/globals.css";
-
 function Site({ Component, pageProps }) {
   // Flag to indicate if <Link> components should cause page reload
   const [isLinkReloadEnabled, setIsLinkReloadEnabled] = useState(false);
-  const isLoading = false;
   // Keep track of current dark mode settings
   const [isDarkMode, setIsDarkMode] = useState(false);
+  // show spinner if isLoading is true
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    // only change isLoading state for summary and search endpoint
+    function start(url) {
+      if (url.startsWith("/summary") || url.startsWith("/search")) {
+        setIsLoading(true);
+      }
+    }
+    function end(url) {
+      if (url.startsWith("/summary") || url.startsWith("/search")) {
+        setIsLoading(false);
+      }
+    }
+    function handleLoading() {
+      Router.events.on("routeChangeStart", (url) => start(url));
+      Router.events.on("routeChangeComplete", (url) => end(url));
+      Router.events.on("routeChangeError", (url) => end(url));
+    }
+    handleLoading();
+  }, []);
 
   useEffect(() => {
     // Install the dark-mode event listener to react to dark-mode changes.
