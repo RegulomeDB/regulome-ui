@@ -23,15 +23,21 @@ function Site({ Component, pageProps }) {
   // show spinner if isLoading is true
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    // only change isLoading state for summary and search endpoint
+    function start(url) {
+      if (url.startsWith("/summary") || url.startsWith("/search")) {
+        setIsLoading(true);
+      }
+    }
+    function end(url) {
+      if (url.startsWith("/summary") || url.startsWith("/search")) {
+        setIsLoading(false);
+      }
+    }
     function handleLoading() {
-      Router.events.on("routeChangeStart", (url) => {
-        // only show spinner for summary and search endpoint
-        if (url.startsWith("/summary") || url.startsWith("/search")) {
-          setIsLoading(true);
-        }
-      });
-      Router.events.on("routeChangeComplete", () => setIsLoading(false));
-      Router.events.on("routeChangeError", () => setIsLoading(false));
+      Router.events.on("routeChangeStart", (url) => start(url));
+      Router.events.on("routeChangeComplete", (url) => end(url));
+      Router.events.on("routeChangeError", (url) => end(url));
     }
     handleLoading();
   }, []);
