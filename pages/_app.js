@@ -14,13 +14,26 @@ import ScrollToTop from "../components/scroll-to-top";
 import ViewportOverlay from "../components/viewport-overlay";
 // CSS
 import "../styles/globals.css";
+import Router from "next/router";
 
 function Site({ Component, pageProps }) {
   // Flag to indicate if <Link> components should cause page reload
   const [isLinkReloadEnabled, setIsLinkReloadEnabled] = useState(false);
-  const isLoading = false;
   // Keep track of current dark mode settings
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    function handleLoading() {
+      Router.events.on("routeChangeStart", (url) => {
+        if (url.startsWith("/summary") || url.startsWith("/search")) {
+          setIsLoading(true);
+        }
+      });
+      Router.events.on("routeChangeComplete", () => setIsLoading(false));
+      Router.events.on("routeChangeError", () => setIsLoading(false));
+    }
+    handleLoading();
+  }, []);
 
   useEffect(() => {
     // Install the dark-mode event listener to react to dark-mode changes.
