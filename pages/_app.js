@@ -3,6 +3,7 @@ import Head from "next/head";
 import Script from "next/script";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
+import Router from "next/router";
 // lib
 import { BRAND_COLOR, SITE_TITLE } from "../lib/constants";
 import DarkModeManager from "../lib/dark-mode-manager";
@@ -14,17 +15,17 @@ import ScrollToTop from "../components/scroll-to-top";
 import ViewportOverlay from "../components/viewport-overlay";
 // CSS
 import "../styles/globals.css";
-import Router from "next/router";
-
 function Site({ Component, pageProps }) {
   // Flag to indicate if <Link> components should cause page reload
   const [isLinkReloadEnabled, setIsLinkReloadEnabled] = useState(false);
   // Keep track of current dark mode settings
   const [isDarkMode, setIsDarkMode] = useState(false);
+  // show spinner if isLoading is true
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     function handleLoading() {
       Router.events.on("routeChangeStart", (url) => {
+        // only show spinner for summary and search endpoint
         if (url.startsWith("/summary") || url.startsWith("/search")) {
           setIsLoading(true);
         }
