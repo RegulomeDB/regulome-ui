@@ -509,7 +509,7 @@ function NavigationCollapsed({ navigationClick, toggleNavCollapsed }) {
         <NavigationIcon isNarrowNav>
           <Image
             src="/favicon.ico"
-            alt="clickable image"
+            alt="RegulomeDB logo that goes to the home page when clicked"
             width="50"
             height="50"
             priority
