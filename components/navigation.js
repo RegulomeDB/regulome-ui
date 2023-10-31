@@ -434,7 +434,7 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           isNavCollapsed={false}
         />
       )}
-      <NavigationList className="p-4">
+      <NavigationList className="px-7">
         <NavigationGroupItem
           id="data"
           title="Data"
@@ -507,7 +507,13 @@ function NavigationCollapsed({ navigationClick, toggleNavCollapsed }) {
         isNarrowNav
       >
         <NavigationIcon isNarrowNav>
-          <Icon.Brand />
+          <Image
+            src="/favicon.ico"
+            alt="RegulomeDB logo that goes to the home page when clicked"
+            width="50"
+            height="50"
+            priority
+          />
         </NavigationIcon>
       </NavigationHrefItem>
       <NavigationHrefItem
@@ -537,7 +543,7 @@ NavigationCollapsed.propTypes = {
 function NavigationLogo({ toggleNavCollapsed, isNavCollapsed }) {
   return (
     <div className="flex">
-      <Link href="/" className="block w-32 py-2 md:h-24 md:w-auto md:px-8">
+      <Link href="/" className="block w-32 py-7 md:h-24 md:w-auto md:px-8">
         <div>
           <Image
             src="/RegulomeLogoFinal.gif"
