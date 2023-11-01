@@ -471,8 +471,11 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
         </NavigationHrefItem>
         <NavigationHrefItem
           id="contact"
-          href="/contact"
           navigationClick={navigationClick}
+          href="mailto:regulomedb@mailman.stanford.edu"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Email the RegulomeDB help desk"
         >
           <NavigationIcon>
             <IdentificationIcon />
