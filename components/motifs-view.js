@@ -112,7 +112,7 @@ export function MotifElement({
         {footprintsLength > 0 && (
           <div className="grid grid-cols-3 gap-4">
             <DataItemLabel>{footprintsLabel}</DataItemLabel>
-            <div className="overflow-y-auto rounded-md  h-40 bg-gradient-to-t from-gray-100 to-white  text-data-label border-solid border-2	">
+            <div className="overflow-y-auto rounded-md  h-40  text-data-label border-solid border-2	">
               {footprintKeysSorted.map((d) => (
                 <div className="ml-2" key={d}>
                   <a

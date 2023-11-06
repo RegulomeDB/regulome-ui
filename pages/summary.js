@@ -15,7 +15,7 @@ export default function Summary({ data, queryString }) {
   const total = data.total || 0;
   const variants = [];
   const assembly = data.assembly;
-  if (total > 1) {
+  if (total >= 1) {
     for (let i = 0; i < data.variants.length; i++) {
       const variant = {};
       variant.chrom_location = `${data.variants[i].chrom}:${data.variants[i].start}-${data.variants[i].end}`;
@@ -34,7 +34,7 @@ export default function Summary({ data, queryString }) {
       <PagePreamble />
       <DataPanel>
         <DataAreaTitle>This search has found {total} variant(s).</DataAreaTitle>
-        {total > 1 && (
+        {total >= 1 && (
           <>
             <div className="flex justify-end gap-1 mb-1">
               <ButtonLink

@@ -24,7 +24,7 @@ export default function ChromatinBiosampleFacets({
         <div>Filter by biosample </div>
       </div>
       <div className="text-data-label text-sm italic">Grouped by organs</div>
-      <div className="overflow-y-auto h-80 bg-gradient-to-t from-gray-100 to-white border-2 border-black">
+      <div className="overflow-y-auto h-80 border-2 border-black">
         {facets.map((facet) => {
           const key = facet.biosample.replace(/[^\w\s]/gi, "").toLowerCase();
           const isSelected = biosampleFilters.includes(facet.biosample);
@@ -33,9 +33,8 @@ export default function ChromatinBiosampleFacets({
               <div className="grid grid-cols-4 ">
                 <div className="col-span-3">
                   <button
-                    className={` flex text-sm hover:bg-slate-100 gap-1 ${
-                      isSelected && "border-solid border-2 border-brand"
-                    }`}
+                    className={` flex text-sm hover:bg-highlight gap-1
+                    ${isSelected && "border-solid border-2 border-brand"}`}
                     onClick={() => handleClickBiosample(facet.biosample)}
                   >
                     <div>{facet.biosample}</div>
