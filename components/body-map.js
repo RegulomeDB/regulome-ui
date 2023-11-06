@@ -149,9 +149,6 @@ export function BodyMap({
                   const borderStyle = isSelected
                     ? "border-solid border-2 border-brand"
                     : "";
-                  const textColor = isDisabled
-                    ? "text-button-selected-disabled"
-                    : "";
                   const highlight = isHighlighted ? "bg-highlight" : "";
                   return (
                     <li key={`${organ}-bodymap-organlist`}>
@@ -159,7 +156,7 @@ export function BodyMap({
                         id={organ}
                         role="button"
                         disabled={isDisabled}
-                        className={`${textColor} ${highlight} ${borderStyle}`}
+                        className={`disabled:text-button-selected-disabled ${highlight} ${borderStyle}`}
                         tabIndex="0"
                         onClick={(e) =>
                           handleClickOrgan(
@@ -199,9 +196,6 @@ export function BodyMap({
                   const borderStyle = isSelected
                     ? "border-solid border-2 border-brand"
                     : "";
-                  const textColor = isDisabled
-                    ? "text-button-selected-disabled"
-                    : "";
                   const highlight = isHighlighted ? "bg-highlight" : "";
 
                   return (
@@ -220,7 +214,7 @@ export function BodyMap({
                         }
                         onMouseEnter={(e) => highlightOrgans(e.target.id)}
                         onMouseLeave={() => highlightOrgans()}
-                        className={`${textColor} ${highlight} ${borderStyle}`}
+                        className={`disabled:text-button-selected-disabled ${highlight} ${borderStyle}`}
                       >
                         {cell}
                       </button>
