@@ -150,7 +150,7 @@ export function BodyMap({
                     ? "border-solid border-2 border-brand"
                     : "";
                   const textColor = isDisabled ? "text-slate-400" : "";
-                  const highlight = isHighlighted ? "bg-green-200" : "";
+                  const highlight = isHighlighted ? "bg-highlight" : "";
                   return (
                     <li key={`${organ}-bodymap-organlist`}>
                       <button
@@ -198,7 +198,7 @@ export function BodyMap({
                     ? "border-solid border-2 border-brand"
                     : "";
                   const textColor = isDisabled ? "text-slate-400" : "";
-                  const highlight = isHighlighted ? "bg-green-200" : "";
+                  const highlight = isHighlighted ? "bg-highlight" : "";
 
                   return (
                     <li key={`${cell}-bodymap-cellslist`}>

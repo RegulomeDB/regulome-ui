@@ -31,7 +31,7 @@ export default function ChromatinStateFacets({
           return (
             <div key={key} className="flex items-center justify-between">
               <button
-                className={`flex-grow hover:bg-slate-100 ${
+                className={`flex-grow hover:bg-highlight ${
                   isSelected && "border-solid border-2 border-brand"
                 }`}
                 onClick={() => handleClickState(d)}

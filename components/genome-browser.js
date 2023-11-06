@@ -334,7 +334,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
     return (
       <button className="reset-browser-button">
         <ArrowUturnLeftIcon className="h-5" />
-        <span className="reset-title">Reset to query variant label</span>
+        <span>Reset to query variant label</span>
       </button>
     );
   }
@@ -397,7 +397,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
             onClick={() => visualizer.setLocation({ contig: chr, x0, x1 })}
           >
             <ArrowUturnLeftIcon className="h-5 px-2" />
-            <span className="reset-title">Reset to query variant</span>
+            <span>Reset to query variant</span>
           </button>
         );
       }
