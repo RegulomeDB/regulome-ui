@@ -74,7 +74,7 @@ function YAxis({ baseMaxHeight }) {
         width={4}
         x={Y_AXIS_WIDTH + 1}
         y={0}
-        fill="#000000"
+        fill="currentColor"
       />
       {ticks.map((i) => (
         <g
@@ -88,6 +88,7 @@ function YAxis({ baseMaxHeight }) {
             textAnchor="end"
             y="4"
             fontSize={FONT_SIZE}
+            fill="currentColor"
           >
             {i}
           </text>
@@ -96,7 +97,7 @@ function YAxis({ baseMaxHeight }) {
             width={Y_TICK_LENGTH}
             height={Y_TICK_HEIGHT}
             y="-2"
-            fill="#000000"
+            fill="currentColor"
           />
         </g>
       ))}
@@ -106,6 +107,7 @@ function YAxis({ baseMaxHeight }) {
           x={-baseMaxHeight / 2}
           textAnchor="middle"
           fontSize={FONT_SIZE}
+          fill="currentColor"
         >
           bits
         </text>
@@ -129,15 +131,21 @@ function XAxis({ n, baseMaxHeight }) {
       fontSize={FONT_SIZE}
       transform={`translate(${BASE_START_X},${xLableStartY})`}
     >
-      <text x="0" y="35">
+      <text x="0" y="35" fill="currentColor">
         5&apos;
       </text>
-      <text x={BASE_WIDTH * n} y="35">
+      <text x={BASE_WIDTH * n} y="35" fill="currentColor">
         3&apos;
       </text>
       <g transform="rotate(-90)">
         {numbers.map((n) => (
-          <text x="0" y={BASE_WIDTH * n + 30} textAnchor="end" key={n}>
+          <text
+            x="0"
+            y={BASE_WIDTH * n + 30}
+            textAnchor="end"
+            key={n}
+            fill="currentColor"
+          >
             {n + 1}
           </text>
         ))}
@@ -199,7 +207,7 @@ function SnpBox({ snpCoordinate, baseMaxHeight }) {
       height={baseMaxHeight}
       width={BASE_WIDTH}
       x={x}
-      stroke="#000000"
+      stroke="currentColor"
       fillOpacity="0.1"
       strokeWidth="5"
     />

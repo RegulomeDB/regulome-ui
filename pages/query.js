@@ -9,7 +9,7 @@ import RegulomeVersionTag from "../components/regulome-version-tag";
 import validateRegions from "../lib/validate-regions";
 
 const inputClassName =
-  "bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-brand";
+  "border-form-element bg-form-element text-form-element appearance-none border-2 rounded w-full py-2 px-4 leading-tight";
 const buttonClassName =
   "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
 

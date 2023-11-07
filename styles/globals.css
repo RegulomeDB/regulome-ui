@@ -272,11 +272,11 @@
   --color-panel-border: #4e5b75;
 
   --color-button-selected-background: #384977;
-  --color-button-primary-border: #8facff;
-  --color-button-secondary-border: #8facff;
-  --color-button-selected-border: #8facff;
+  --color-button-primary-border: #36582e;
+  --color-button-secondary-border: #36582e;
+  --color-button-selected-border: #36582e;
   --color-button-warning-border: #c93638;
-  --color-button-secondary-label: #8facff;
+  --color-button-secondary-label: #36582e;
 
   --color-button-primary-background-disabled: #3e4864;
   --color-button-warning-background-disabled: #6b2f30;
@@ -307,7 +307,7 @@
   --color-data-header-background: #192339;
 
   --color-form-element-background: #000205;
-  --color-form-element-border: #8facff;
+  --color-form-element-border: #36582e;
   --color-form-element-label: #ffffff;
   --color-form-element-border-disabled: #5e71a8;
   --color-form-element-label-disabled: #606060;
@@ -379,5 +379,9 @@ a {
 }
 
 .dark #graph .edge > polygon {
+  fill: #fff !important;
+}
+
+.dark #graph .node > rect {
   fill: #fff !important;
 }
