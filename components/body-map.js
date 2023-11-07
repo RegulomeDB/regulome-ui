@@ -267,7 +267,7 @@ export function BodyMapThumbnail({
       <div className="text-data-label text-sm italic">
         Colored by most active state
       </div>
-      <div className="border-2 border-black">
+      <div className="border-2 border-panel">
         <ArrowsPointingOutIcon className="h-6" />
         <HumanBodyDiagram
           organList={organList}

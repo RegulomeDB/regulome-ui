@@ -24,7 +24,7 @@ export default function ChromatinBiosampleFacets({
         <div>Filter by biosample </div>
       </div>
       <div className="text-data-label text-sm italic">Grouped by organs</div>
-      <div className="overflow-y-auto h-80 border-2 border-black">
+      <div className="overflow-y-auto h-80 border-2 border-panel">
         {facets.map((facet) => {
           const key = facet.biosample.replace(/[^\w\s]/gi, "").toLowerCase();
           const isSelected = biosampleFilters.includes(facet.biosample);

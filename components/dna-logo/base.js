@@ -7,7 +7,10 @@ function A() {
         fill="red"
         d="M 0 100 L 33 0 L 66 0 L 100 100 L 75 100 L 66 75 L 33 75 L 25 100 L 0 100"
       />
-      <path fill="#ffffff" d="M 41 55 L 50 25 L 58 55 L 41 55" />
+      <path
+        className="fill-white dark:fill-black"
+        d="M 41 55 L 50 25 L 58 55 L 41 55"
+      />
     </g>
   );
 }

@@ -24,7 +24,7 @@ export default function ChromatinStateFacets({
       <div className="text-data-label text-sm italic">
         Ordered by transcription activity
       </div>
-      <div className="grid-rows-1 border-2 border-black">
+      <div className="grid-rows-1 border-2 border-panel">
         {facets.map((d) => {
           const key = d.replace(/[^\w\s]/gi, "").toLowerCase();
           const isSelected = stateFilters.includes(d);
