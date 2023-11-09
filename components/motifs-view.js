@@ -75,7 +75,7 @@ export function MotifElement({
   const heightScale = 0.8;
 
   return (
-    <div className="grid grid-cols-2 gap-1">
+    <div className="grid lg:grid-cols-2 grid-cols-1 gap-1">
       <div className="grid grid-rows-1 gap-1 ">
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
           {targetList.length > 0 && (
@@ -202,19 +202,22 @@ export default function Motifs({
           <>
             <DataAreaTitle>Motifs</DataAreaTitle>
             <DataPanel>
-              <div className="grid grid-cols-2 gap-4 bg-panel sticky top-0">
-                <DataItemValue>
-                  {assembly} Reference {windowStartPos + 1}-{windowEndPos}
-                </DataItemValue>
-
-                <DnaLogo
-                  ref={ref}
-                  pwm={fakePWM}
-                  snpCoordinate={relativeSnpCoordinate}
-                  hideY
-                  strand="+"
-                  heightScale={heightScale}
-                />
+              <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 bg-panel sticky top-0">
+                <div className="grid grid-cols-1">
+                  <DataItemValue>
+                    {assembly} Reference {windowStartPos + 1}-{windowEndPos}
+                  </DataItemValue>
+                </div>
+                <div className="grid grid-cols-1">
+                  <DnaLogo
+                    ref={ref}
+                    pwm={fakePWM}
+                    snpCoordinate={relativeSnpCoordinate}
+                    hideY
+                    strand="+"
+                    heightScale={heightScale}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-rows-1 gap-4">
