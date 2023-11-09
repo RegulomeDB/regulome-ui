@@ -75,9 +75,9 @@ export function MotifElement({
   const heightScale = 0.8;
 
   return (
-    <div className="grid lg:grid-cols-2 grid-cols-1 gap-1">
+    <div className="grid sm:grid-cols-2 grid-cols-1 gap-1">
       <div className="grid grid-rows-1 gap-1 ">
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
+        <div className="grid sm:grid-cols-3 grid-cols-1 gap-4">
           {targetList.length > 0 && (
             <div className="flex gap-2">
               <DataItemLabel>{targetListLabel}</DataItemLabel>
@@ -202,7 +202,7 @@ export default function Motifs({
           <>
             <DataAreaTitle>Motifs</DataAreaTitle>
             <DataPanel>
-              <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 bg-panel sticky top-0">
+              <div className="grid sm:grid-cols-2 grid-cols-1 gap-4 bg-panel sticky top-0">
                 <div className="grid grid-cols-1">
                   <DataItemValue>
                     {assembly} Reference {windowStartPos + 1}-{windowEndPos}
