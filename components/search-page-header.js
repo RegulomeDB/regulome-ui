@@ -32,57 +32,55 @@ export default function SearchPageHeader({ queryString }) {
 
   return (
     <>
-      <div className="mb-1 flex justify-between">
-        <div className="flex justify-end gap-1">
-          <HeaderButton
-            queryString={queryString}
-            buttonInFocus={buttonInFocus}
-            buttonType="score"
-            buttonText="Score"
-          />
-          <HeaderButton
-            queryString={queryString}
-            buttonInFocus={buttonInFocus}
-            buttonType="chip"
-            buttonText="ChIP Data"
-            suffix
-          />
-          <HeaderButton
-            queryString={queryString}
-            buttonInFocus={buttonInFocus}
-            buttonType="accessibility"
-            buttonText="Accessibility Data"
-            suffix
-          />
-          <HeaderButton
-            queryString={queryString}
-            buttonInFocus={buttonInFocus}
-            buttonType="qtl"
-            buttonText="QTL Data"
-            suffix
-          />
-          <HeaderButton
-            queryString={queryString}
-            buttonInFocus={buttonInFocus}
-            buttonType="motifs"
-            buttonText="Motifs"
-            suffix
-          />
-          <HeaderButton
-            queryString={queryString}
-            buttonInFocus={buttonInFocus}
-            buttonType="chromatin"
-            buttonText="Chromatin state"
-            suffix
-          />
-          <HeaderButton
-            queryString={queryString}
-            buttonInFocus={buttonInFocus}
-            buttonType="browser"
-            buttonText="Genome Browser"
-            suffix
-          />
-        </div>
+      <div className="mb-1 flex flex-wrap gap-1">
+        <HeaderButton
+          queryString={queryString}
+          buttonInFocus={buttonInFocus}
+          buttonType="score"
+          buttonText="Score"
+        />
+        <HeaderButton
+          queryString={queryString}
+          buttonInFocus={buttonInFocus}
+          buttonType="chip"
+          buttonText="ChIP Data"
+          suffix
+        />
+        <HeaderButton
+          queryString={queryString}
+          buttonInFocus={buttonInFocus}
+          buttonType="accessibility"
+          buttonText="Accessibility Data"
+          suffix
+        />
+        <HeaderButton
+          queryString={queryString}
+          buttonInFocus={buttonInFocus}
+          buttonType="qtl"
+          buttonText="QTL Data"
+          suffix
+        />
+        <HeaderButton
+          queryString={queryString}
+          buttonInFocus={buttonInFocus}
+          buttonType="motifs"
+          buttonText="Motifs"
+          suffix
+        />
+        <HeaderButton
+          queryString={queryString}
+          buttonInFocus={buttonInFocus}
+          buttonType="chromatin"
+          buttonText="Chromatin state"
+          suffix
+        />
+        <HeaderButton
+          queryString={queryString}
+          buttonInFocus={buttonInFocus}
+          buttonType="browser"
+          buttonText="Genome Browser"
+          suffix
+        />
       </div>
     </>
   );

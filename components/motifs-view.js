@@ -75,66 +75,68 @@ export function MotifElement({
   const heightScale = 0.8;
 
   return (
-    <div className="grid grid-cols-2 gap-1">
-      <div className="grid grid-rows-1 gap-1 ">
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
-          {targetList.length > 0 && (
-            <div className="flex gap-2">
-              <DataItemLabel>{targetListLabel}</DataItemLabel>
-              <DataItemValue>{targetList}</DataItemValue>
-            </div>
-          )}
-          {motif.strand && (
-            <div className="flex gap-2">
-              <DataItemLabel>Strand</DataItemLabel>
-              {motif.strand === "+" ? (
-                <PlusCircleIcon className="h-6 " />
-              ) : (
-                <MinusCircleIcon className="h-6" />
-              )}
-            </div>
-          )}
-          {pwmsLength > 0 && (
-            <div className="flex gap-2">
-              <DataItemLabel>{pwmsLabel}</DataItemLabel>
-              <DataItemValue>
-                {Object.keys(pwmList).map((d, dIndex) => (
-                  <a key={d} href={pwmList[d]}>
-                    {d}
-                    {dIndex === Object.keys(pwmList).length - 1 ? "" : ", "}
-                  </a>
+    <div className="@container">
+      <div className="grid @lg:grid-cols-2 grid-cols-1 gap-1">
+        <div className="grid grid-rows-1 gap-1">
+          <div className="grid @lg:grid-cols-3 grid-cols-1 gap-4">
+            {targetList.length > 0 && (
+              <div className="flex gap-2">
+                <DataItemLabel>{targetListLabel}</DataItemLabel>
+                <DataItemValue>{targetList}</DataItemValue>
+              </div>
+            )}
+            {motif.strand && (
+              <div className="flex gap-2">
+                <DataItemLabel>Strand</DataItemLabel>
+                {motif.strand === "+" ? (
+                  <PlusCircleIcon className="h-6" />
+                ) : (
+                  <MinusCircleIcon className="h-6" />
+                )}
+              </div>
+            )}
+            {pwmsLength > 0 && (
+              <div className="flex gap-2">
+                <DataItemLabel>{pwmsLabel}</DataItemLabel>
+                <DataItemValue>
+                  {Object.keys(pwmList).map((d, dIndex) => (
+                    <a key={d} href={pwmList[d]}>
+                      {d}
+                      {dIndex === Object.keys(pwmList).length - 1 ? "" : ", "}
+                    </a>
+                  ))}
+                </DataItemValue>
+              </div>
+            )}
+          </div>
+
+          {footprintsLength > 0 && (
+            <div className="grid grid-cols-3 gap-4">
+              <DataItemLabel>{footprintsLabel}</DataItemLabel>
+              <div className="overflow-y-auto rounded-md  h-40  text-data-label border-solid border-2	">
+                {footprintKeysSorted.map((d) => (
+                  <div className="ml-2" key={d}>
+                    <a
+                      href={`https://www.encodeproject.org/search/?${footprintList[
+                        d
+                      ].join("&")}`}
+                    >
+                      {d}
+                    </a>
+                  </div>
                 ))}
-              </DataItemValue>
+              </div>
             </div>
           )}
         </div>
-
-        {footprintsLength > 0 && (
-          <div className="grid grid-cols-3 gap-4">
-            <DataItemLabel>{footprintsLabel}</DataItemLabel>
-            <div className="overflow-y-auto rounded-md  h-40  text-data-label border-solid border-2	">
-              {footprintKeysSorted.map((d) => (
-                <div className="ml-2" key={d}>
-                  <a
-                    href={`https://www.encodeproject.org/search/?${footprintList[
-                      d
-                    ].join("&")}`}
-                  >
-                    {d}
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="pt-8 ">
-        <DnaLogo
-          pwm={newPWM}
-          strand={motif.strand}
-          snpCoordinate={relativeSnpCoordinate}
-          heightScale={heightScale}
-        />
+        <div className="pt-8 ">
+          <DnaLogo
+            pwm={newPWM}
+            strand={motif.strand}
+            snpCoordinate={relativeSnpCoordinate}
+            heightScale={heightScale}
+          />
+        </div>
       </div>
     </div>
   );
@@ -202,19 +204,22 @@ export default function Motifs({
           <>
             <DataAreaTitle>Motifs</DataAreaTitle>
             <DataPanel>
-              <div className="grid grid-cols-2 gap-4 bg-panel sticky top-0">
-                <DataItemValue>
-                  {assembly} Reference {windowStartPos + 1}-{windowEndPos}
-                </DataItemValue>
-
-                <DnaLogo
-                  ref={ref}
-                  pwm={fakePWM}
-                  snpCoordinate={relativeSnpCoordinate}
-                  hideY
-                  strand="+"
-                  heightScale={heightScale}
-                />
+              <div className="grid @lg:grid-cols-2 grid-cols-1 gap-4 bg-panel sticky top-0">
+                <div className="grid grid-cols-1">
+                  <DataItemValue>
+                    {assembly} Reference {windowStartPos + 1}-{windowEndPos}
+                  </DataItemValue>
+                </div>
+                <div className="grid grid-cols-1">
+                  <DnaLogo
+                    ref={ref}
+                    pwm={fakePWM}
+                    snpCoordinate={relativeSnpCoordinate}
+                    hideY
+                    strand="+"
+                    heightScale={heightScale}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-rows-1 gap-4">
