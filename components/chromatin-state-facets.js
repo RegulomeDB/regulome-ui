@@ -29,7 +29,10 @@ export default function ChromatinStateFacets({
           const key = d.replace(/[^\w\s]/gi, "").toLowerCase();
           const isSelected = stateFilters.includes(d);
           return (
-            <div key={key} className="flex items-center justify-between">
+            <div
+              key={key}
+              className="flex items-center justify-between space-x-1"
+            >
               <button
                 className={`flex-grow hover:bg-highlight ${
                   isSelected && "border-solid border-2 border-brand"

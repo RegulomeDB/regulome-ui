@@ -77,7 +77,7 @@ export function MotifElement({
   return (
     <div className="@container">
       <div className="grid @lg:grid-cols-2 grid-cols-1 gap-1">
-        <div className="grid grid-rows-1 gap-1 ">
+        <div className="grid grid-rows-1 gap-1">
           <div className="grid @lg:grid-cols-3 grid-cols-1 gap-4">
             {targetList.length > 0 && (
               <div className="flex gap-2">
@@ -89,7 +89,7 @@ export function MotifElement({
               <div className="flex gap-2">
                 <DataItemLabel>Strand</DataItemLabel>
                 {motif.strand === "+" ? (
-                  <PlusCircleIcon className="h-6 " />
+                  <PlusCircleIcon className="h-6" />
                 ) : (
                   <MinusCircleIcon className="h-6" />
                 )}

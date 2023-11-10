@@ -37,7 +37,7 @@ export default function ChromatinBiosampleFacets({
                     ${isSelected && "border-solid border-2 border-brand"}`}
                     onClick={() => handleClickBiosample(facet.biosample)}
                   >
-                    <div className="space-x-2 text-left ">
+                    <div className="space-x-2 text-left">
                       <span>{facet.biosample}</span>
                       <span className="text-data-label">{facet.organ}</span>
                     </div>
