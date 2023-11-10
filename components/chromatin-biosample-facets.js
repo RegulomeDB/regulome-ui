@@ -24,24 +24,26 @@ export default function ChromatinBiosampleFacets({
         <div>Filter by biosample </div>
       </div>
       <div className="text-data-label text-sm italic">Grouped by organs</div>
-      <div className="overflow-y-auto h-80 border-2 border-panel">
+      <div className="overflow-y-auto h-80 border-2 border-panel p-1">
         {facets.map((facet) => {
           const key = facet.biosample.replace(/[^\w\s]/gi, "").toLowerCase();
           const isSelected = biosampleFilters.includes(facet.biosample);
           return (
             <div key={key}>
-              <div className="grid grid-cols-4 ">
+              <div className="grid grid-cols-4">
                 <div className="col-span-3">
                   <button
-                    className={` flex text-sm hover:bg-highlight gap-1
+                    className={` text-sm hover:bg-highlight
                     ${isSelected && "border-solid border-2 border-brand"}`}
                     onClick={() => handleClickBiosample(facet.biosample)}
                   >
-                    <div>{facet.biosample}</div>
-                    <div className="text-data-label">{facet.organ}</div>
+                    <div className="space-x-2 text-left ">
+                      <span>{facet.biosample}</span>
+                      <span className="text-data-label">{facet.organ}</span>
+                    </div>
                   </button>
                 </div>
-                <div className="col-span-1">
+                <div className="col-span-1 pl-2">
                   <BiosampleStateBar states={facet.states} />
                 </div>
               </div>

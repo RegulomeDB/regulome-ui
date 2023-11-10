@@ -149,48 +149,50 @@ export function ChromatinView({ data, assembly }) {
           <>
             <DataAreaTitle>Chromatin State</DataAreaTitle>
             <DataPanel>
-              <div className="grid grid-cols-5 gap-1 h-100 mb-2">
-                <div>
-                  <BodyMapThumbnailAndModal
-                    data={filteredDataForBodyMap}
-                    assembly={assembly}
-                    organFilters={organFilters}
-                    handleClickOrgan={handleClickOrgan}
-                  />
-                  {organFilters.length > 0 && (
-                    <Selections
-                      filters={organFilters}
-                      clearFilterFunc={handleClickOrgan}
+              <div className="@container">
+                <div className="grid @5xl:grid-cols-5 @5xl:grid-rows-1 @md:grid-cols-2  grid-cols-1 grid-rows-2 gap-1 mb-2 @md:justify-items-center">
+                  <div className="@5xl:col-span-1 @5xl:row-start-1 w-56">
+                    <BodyMapThumbnailAndModal
+                      data={filteredDataForBodyMap}
+                      assembly={assembly}
+                      organFilters={organFilters}
+                      handleClickOrgan={handleClickOrgan}
                     />
-                  )}
-                </div>
-                <div className="col-span-3">
-                  <ChromatinBiosampleFacets
-                    data={filteredDataForBiosample}
-                    assembly={assembly}
-                    biosampleFilters={biosampleFilters}
-                    handleClickBiosample={handleClickBiosample}
-                  />
-                  {biosampleFilters.length > 0 && (
-                    <Selections
-                      filters={biosampleFilters}
-                      clearFilterFunc={handleClickBiosample}
+                    {organFilters.length > 0 && (
+                      <Selections
+                        filters={organFilters}
+                        clearFilterFunc={handleClickOrgan}
+                      />
+                    )}
+                  </div>
+                  <div className="@5xl:col-span-3 @5xl:row-start-1 @md:row-start-2 @md:col-span-2 ">
+                    <ChromatinBiosampleFacets
+                      data={filteredDataForBiosample}
+                      assembly={assembly}
+                      biosampleFilters={biosampleFilters}
+                      handleClickBiosample={handleClickBiosample}
                     />
-                  )}
-                </div>
-                <div>
-                  <ChromatinStateFacets
-                    data={filteredDataForState}
-                    assembly={assembly}
-                    stateFilters={stateFilters}
-                    handleClickState={handleClickState}
-                  />
-                  {stateFilters.length > 0 && (
-                    <Selections
-                      filters={stateFilters}
-                      clearFilterFunc={handleClickState}
+                    {biosampleFilters.length > 0 && (
+                      <Selections
+                        filters={biosampleFilters}
+                        clearFilterFunc={handleClickBiosample}
+                      />
+                    )}
+                  </div>
+                  <div className="@5xl:col-span-1 @5xl:row-start-1 @md:rol-start-1 w-56">
+                    <ChromatinStateFacets
+                      data={filteredDataForState}
+                      assembly={assembly}
+                      stateFilters={stateFilters}
+                      handleClickState={handleClickState}
                     />
-                  )}
+                    {stateFilters.length > 0 && (
+                      <Selections
+                        filters={stateFilters}
+                        clearFilterFunc={handleClickState}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
               <Button onClick={clearAllFilters}>Clear all filters </Button>

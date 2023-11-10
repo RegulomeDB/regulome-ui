@@ -267,14 +267,17 @@ export function BodyMapThumbnail({
       <div className="text-data-label text-sm italic">
         Colored by most active state
       </div>
-      <div className="border-2 border-panel">
-        <ArrowsPointingOutIcon className="h-6" />
-        <HumanBodyDiagram
-          organList={organList}
-          facets={facets}
-          organFilters={organFilters}
-          enabledBodyMapFilters={enabledBodyMapFilters}
-        />
+      <div className="grid border-2 border-panel h-80 p-1">
+        <div className="relative">
+          <HumanBodyDiagram
+            organList={organList}
+            facets={facets}
+            organFilters={organFilters}
+            enabledBodyMapFilters={enabledBodyMapFilters}
+          />
+          <ArrowsPointingOutIcon className="absolute inset-0 h-6" />
+        </div>
+
         <ul className="flex">
           {cellList.map((cell) => {
             const src = ["lymph node", "lymphatic vessel"].includes(cell)
