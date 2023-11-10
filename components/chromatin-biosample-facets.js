@@ -33,8 +33,8 @@ export default function ChromatinBiosampleFacets({
               <div className="grid grid-cols-4">
                 <div className="col-span-3">
                   <button
-                    className={` text-sm hover:bg-highlight
-                    ${isSelected && "border-solid border-2 border-brand"}`}
+                    className={`text-sm hover:bg-highlight
+                    ${isSelected ? "border-solid border-2 border-brand" : ""}`}
                     onClick={() => handleClickBiosample(facet.biosample)}
                   >
                     <div className="space-x-2 text-left">
