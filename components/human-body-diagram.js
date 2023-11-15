@@ -28,7 +28,8 @@ function HumanBodyDiagram({
         handleClickOrgan
           ? (e) =>
               handleClickOrgan(
-                e.target.classList[0].replaceAll("-", " "),
+                e.target.id.replaceAll("-", " ") ||
+                  e.target.parentElement.id.replaceAll("-", " "),
                 organList,
                 enabledBodyMapFilters
               )
@@ -37,7 +38,9 @@ function HumanBodyDiagram({
       onMouseOver={
         highlightOrgans
           ? (e) => {
-              const organ = e.target.classList[0].replaceAll("-", " ");
+              const organ =
+                e.target.id.replaceAll("-", " ") ||
+                e.target.parentElement.id.replaceAll("-", " ");
               if (enabledBodyMapFilters.includes(organ)) {
                 highlightOrgans(organ);
               }
@@ -137,12 +140,7 @@ function HumanBodyDiagram({
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
       />
-      <HumanBodyParts.UrinaryBladder
-        facets={facets}
-        opacity={opacity}
-        organFilters={organFilters}
-        highlightedOrgans={highlightedOrgans}
-      />
+
       <HumanBodyParts.Esophagus
         facets={facets}
         opacity={opacity}
@@ -192,6 +190,12 @@ function HumanBodyDiagram({
         highlightedOrgans={highlightedOrgans}
       />
       <HumanBodyParts.Uterus
+        facets={facets}
+        opacity={opacity}
+        organFilters={organFilters}
+        highlightedOrgans={highlightedOrgans}
+      />
+      <HumanBodyParts.UrinaryBladder
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
