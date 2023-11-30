@@ -131,16 +131,18 @@ export function BodyMap({
             <div>Hide body diagram</div>
           </button>
           <div className="grid grid-cols-2 gap-4">
-            <HumanBodyDiagram
-              organList={organList}
-              facets={facets}
-              organFilters={organFilters}
-              enabledBodyMapFilters={enabledBodyMapFilters}
-              handleClickOrgan={handleClickOrgan}
-              highlightedOrgans={highlightedOrgans}
-              highlightOrgans={highlightOrgans}
-            />
-            <div>
+            <div className="grid grid-cols-1">
+              <HumanBodyDiagram
+                organList={organList}
+                facets={facets}
+                organFilters={organFilters}
+                enabledBodyMapFilters={enabledBodyMapFilters}
+                handleClickOrgan={handleClickOrgan}
+                highlightedOrgans={highlightedOrgans}
+                highlightOrgans={highlightOrgans}
+              />
+            </div>
+            <div className="grid grid-cols-1">
               <ul className="list-disc grid grid-cols-2 gap-2">
                 {organList.map((organ) => {
                   const isSelected = organFilters.includes(organ);
