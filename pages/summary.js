@@ -33,7 +33,15 @@ export default function Summary({ data, queryString }) {
       <RegulomeVersionTag />
       <PagePreamble />
       <DataPanel>
-        <DataAreaTitle>This search has found {total} variant(s).</DataAreaTitle>
+        <DataAreaTitle>
+          This search has found <b>{total}</b> variant(s).{" "}
+          {total > variants.length ? (
+            <span>
+              {" "}
+              Only <b>{variants.length}</b> are shown.
+            </span>
+          ) : null}
+        </DataAreaTitle>
         {total >= 1 && (
           <>
             <div className="flex justify-end gap-1 mb-1">
