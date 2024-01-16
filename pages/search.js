@@ -33,11 +33,13 @@ import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
 import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
 import { GenomeBrowserView } from "../components/genome-browser-view";
+import fetchVariantLD from "../lib/fetch_variant_ld";
+import VariantLDTable from "../components/variant-ld-table";
 
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
 
-export default function Search({ data, motifDocList, queryString }) {
+export default function Search({ data, motifDocList, variantLD, queryString }) {
   const [showMoreFreqs, setShowMoreFreqs] = useState(false);
   const [showScoreView, setShowScoreView] = useState(true);
   const router = useRouter();
@@ -182,6 +184,14 @@ export default function Search({ data, motifDocList, queryString }) {
                 ></ScoreDataItem>
               </ScoreDataArea>
             </DataPanel>
+            {variantLD.length > 0 && (
+              <>
+                <DataAreaTitle>Variant LD Table</DataAreaTitle>
+                <DataPanel>
+                  <VariantLDTable data={variantLD} />
+                </DataPanel>
+              </>
+            )}
             {Object.keys(hitSnps).length > 0 && (
               <>
                 <DataAreaTitle>
@@ -264,6 +274,7 @@ Search.propTypes = {
   data: PropTypes.object.isRequired,
   queryString: PropTypes.string.isRequired,
   motifDocList: PropTypes.array.isRequired,
+  variantLD: PropTypes.array.isRequired,
 };
 
 export async function getServerSideProps({ query }) {
@@ -272,8 +283,14 @@ export async function getServerSideProps({ query }) {
   const data = await request.getObject(`/search?${queryString}`);
   if (FetchRequest.isResponseSuccess(data)) {
     let motifDocList = [];
+    let variantLD = [];
     if (data.query_coordinates.length === 1) {
       motifDocList = await fetchMotifDoc(request, data["@graph"]);
+      variantLD = await fetchVariantLD(
+        request,
+        data.query_coordinates[0],
+        data.assembly
+      );
     }
 
     const breadcrumbs = [
@@ -286,6 +303,7 @@ export async function getServerSideProps({ query }) {
       props: {
         data,
         motifDocList,
+        variantLD,
         breadcrumbs,
         pageContext: {
           title:
