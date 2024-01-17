@@ -17,6 +17,7 @@ const variantLDColumns = [
   {
     id: "rsid",
     title: "rsID",
+    display: ({ source }) => `${source.rsid.join(", ")}`,
   },
   {
     id: "ref",
@@ -35,8 +36,12 @@ const variantLDColumns = [
     title: "r2",
   },
   {
-    id: "query_spdi",
-    title: "Query SPDI",
+    id: "rank",
+    title: "Rank",
+  },
+  {
+    id: "score",
+    title: "Score",
   },
 ];
 

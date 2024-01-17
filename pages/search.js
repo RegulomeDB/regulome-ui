@@ -184,14 +184,6 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
                 ></ScoreDataItem>
               </ScoreDataArea>
             </DataPanel>
-            {variantLD.length > 0 && (
-              <>
-                <DataAreaTitle>Variant LD Table</DataAreaTitle>
-                <DataPanel>
-                  <VariantLDTable data={variantLD} />
-                </DataPanel>
-              </>
-            )}
             {Object.keys(hitSnps).length > 0 && (
               <>
                 <DataAreaTitle>
@@ -240,6 +232,15 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
 
             {data.nearby_snps?.length > 0 ? <SnpsDiagram data={data} /> : null}
             <div id="container"></div>
+
+            {variantLD.length > 0 && (
+              <>
+                <DataAreaTitle>Variant LD Table</DataAreaTitle>
+                <DataPanel>
+                  <VariantLDTable data={variantLD} />
+                </DataPanel>
+              </>
+            )}
           </>
         )}
         <ChipDataView chipData={chipData}></ChipDataView>
@@ -286,11 +287,15 @@ export async function getServerSideProps({ query }) {
     let variantLD = [];
     if (data.query_coordinates.length === 1) {
       motifDocList = await fetchMotifDoc(request, data["@graph"]);
-      variantLD = await fetchVariantLD(
-        request,
-        data.query_coordinates[0],
-        data.assembly
-      );
+      if (query.ld) {
+        variantLD = await fetchVariantLD(
+          request,
+          data.query_coordinates[0],
+          data.assembly,
+          query.r2,
+          query.ancestry
+        );
+      }
     }
 
     const breadcrumbs = [

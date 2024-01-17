@@ -23,7 +23,10 @@ export default function Query() {
   const [isOpen, setIsOpen] = useState(false);
   const [maf, setMaf] = useState("1.1");
   const [assembly, setAssembly] = useState("GRCh38");
+  const [ancestry, setAncestry] = useState("");
+  const [r2, setR2] = useState("0.8");
   const [textInput, setTextInput] = useState("");
+  const [includeVariantsInLD, setIncludeVariantsInLD] = useState(true);
 
   // Handles the submit event on form submit.
   async function handleSubmit(event) {
@@ -56,6 +59,13 @@ export default function Query() {
                 genome: assembly,
                 maf,
               };
+        if (includeVariantsInLD) {
+          query.r2 = r2;
+          query.ld = true;
+          if (ancestry) {
+            query.ancestry = ancestry;
+          }
+        }
         Router.push({
           pathname: "/summary",
           query,
@@ -133,6 +143,59 @@ export default function Query() {
                 placeholder="Enter rsID(s) OR region(s), one per line. For example: rs75982468, chr12:69360231-69360232."
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
+              ></textarea>
+            </div>
+          </div>
+          <div className="flex items-center mb-6">
+            <div className="w-1/3">
+              <DataItemLabel htmlFor="include">
+                Include variants in LD
+              </DataItemLabel>
+            </div>
+            <div className="w-2/3">
+              <input
+                className="mr-1"
+                type="checkbox"
+                checked={includeVariantsInLD}
+                onChange={(e) => setIncludeVariantsInLD(e.target.checked)}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center mb-6">
+            <div className="w-1/3">
+              <DataItemLabel htmlFor="ancestry">Ancestry</DataItemLabel>
+            </div>
+            <div className="w-2/3">
+              <select
+                className={inputClassName}
+                name="ancestry"
+                value={ancestry}
+                onChange={(e) => setAncestry(e.target.value)}
+              >
+                <option value="">Select one...</option>
+
+                <option value="EAS">EAS</option>
+                <option value="EUR">EUR</option>
+                <option value="AFR">AFR</option>
+                <option value="SAS">SAS</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex items-center mb-6">
+            <div className="w-1/3">
+              <DataItemLabel htmlFor="r2">R2</DataItemLabel>
+            </div>
+            <div className="w-2/3">
+              <textarea
+                className={inputClassName}
+                id="r2"
+                name="r2"
+                rows="1"
+                cols="5"
+                placeholder="Enter a value between 0.80  and 0.99, default to 0.8"
+                onChange={(e) => setR2(e.target.value)}
               ></textarea>
             </div>
           </div>
