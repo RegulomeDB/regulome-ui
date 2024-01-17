@@ -193,7 +193,6 @@ export default function Query() {
                 id="r2"
                 name="r2"
                 rows="1"
-                cols="5"
                 placeholder="Enter a value between 0.80  and 0.99, default to 0.8"
                 onChange={(e) => setR2(e.target.value)}
               ></textarea>
