@@ -5,6 +5,10 @@ import Link from "next/link";
 import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
+const initialSort = {
+  columnId: "rank",
+};
+
 const variantLDColumns = [
   {
     id: "location",
@@ -50,7 +54,11 @@ const variantLDColumns = [
  */ export default function VariantLDTable({ data }) {
   return (
     <DataGridContainer>
-      <SortableGrid data={data} columns={variantLDColumns} />
+      <SortableGrid
+        data={data}
+        columns={variantLDColumns}
+        initialSort={initialSort}
+      />
     </DataGridContainer>
   );
 }
