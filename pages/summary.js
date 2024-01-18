@@ -82,7 +82,7 @@ export async function getServerSideProps({ query }) {
     if (data["@type"][0] === "search") {
       return {
         redirect: {
-          destination: `${data["@id"]}`,
+          destination: `/search?${queryString}`,
           permanent: true,
         },
       };
