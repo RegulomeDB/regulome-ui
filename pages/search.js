@@ -288,13 +288,16 @@ export async function getServerSideProps({ query }) {
     if (data.query_coordinates.length === 1) {
       motifDocList = await fetchMotifDoc(request, data["@graph"]);
       if (query.ld) {
-        variantLD = await fetchVariantLD(
+        const response = await fetchVariantLD(
           request,
           data.query_coordinates[0],
           data.assembly,
           query.r2,
           query.ancestry
         );
+        if (Array.isArray(response)) {
+          variantLD = response;
+        }
       }
     }
 
