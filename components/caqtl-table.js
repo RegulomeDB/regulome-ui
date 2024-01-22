@@ -4,6 +4,11 @@ import PropTypes from "prop-types";
 import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
+const initialSort = {
+  columnId: "tissue_specific_score",
+  direction: "desc",
+};
+
 const caqtlDataColumns = [
   {
     id: "method",
@@ -70,7 +75,11 @@ const caqtlDataColumns = [
  */ export default function CaQTLDataTable({ data }) {
   return (
     <DataGridContainer>
-      <SortableGrid data={data} columns={caqtlDataColumns} />
+      <SortableGrid
+        data={data}
+        columns={caqtlDataColumns}
+        initialSort={initialSort}
+      />
     </DataGridContainer>
   );
 }

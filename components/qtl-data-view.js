@@ -104,28 +104,32 @@ export function QTLDataView({ data, assembly }) {
       <>
         {data.length > 0 ? (
           <>
+            <DataAreaTitle>QTL</DataAreaTitle>
             <DataPanel>
-              <div className="@5xl:col-span-1 @5xl:row-start-1 w-56">
-                <BodyMapThumbnailAndModal
-                  data={data}
-                  assembly={assembly}
-                  organFilters={organFilters}
-                  handleClickOrgan={handleClickOrgan}
-                  getOrganFacets={getOrganFacets}
-                  getFillColorTailwind={getFillColorTailwind}
-                  getFillColorHex={getFillColorHex}
-                />
-                {organFilters.length > 0 && (
-                  <Selections
-                    filters={organFilters}
-                    clearFilterFunc={handleClickOrgan}
-                  />
-                )}
+              <div className="@container">
+                <div className="grid @5xl:grid-cols-5  @5xl:grid-rows-1 grid-cols-1 grid-rows-2 gap-1 mb-2 justify-items-center">
+                  <div className="@5xl:col-span-1 w-56">
+                    <BodyMapThumbnailAndModal
+                      data={data}
+                      assembly={assembly}
+                      organFilters={organFilters}
+                      handleClickOrgan={handleClickOrgan}
+                      getOrganFacets={getOrganFacets}
+                      getFillColorTailwind={getFillColorTailwind}
+                      getFillColorHex={getFillColorHex}
+                    />
+                    {organFilters.length > 0 && (
+                      <Selections
+                        filters={organFilters}
+                        clearFilterFunc={handleClickOrgan}
+                      />
+                    )}
+                  </div>
+                  <div className="@5xl:col-span-4  w-11/12	">
+                    <QTLChart qtlData={filteredData} />
+                  </div>
+                </div>
               </div>
-            </DataPanel>
-            <DataAreaTitle>QTL Data</DataAreaTitle>
-            <DataPanel>
-              <QTLChart qtlData={filteredData} />
             </DataPanel>
             {caQTLData.length > 0 && (
               <>
