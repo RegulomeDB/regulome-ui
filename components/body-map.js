@@ -14,8 +14,6 @@ import {
   COMPLETE_CELLS_LIST_HG19,
   COMPLETE_ORGAN_LIST_GRCH38,
   COMPLETE_ORGAN_LIST_HG19,
-  getFillColorTailwind,
-  getOrganFacets,
 } from "../lib/chromatin-data";
 
 /**
@@ -33,6 +31,7 @@ export function HumanCells({
   handleClickOrgan,
   highlightedOrgans,
   highlightOrgans,
+  getFillColorTailwind,
 }) {
   return (
     <>
@@ -81,6 +80,7 @@ HumanCells.propTypes = {
   enabledBodyMapFilters: PropTypes.array,
   highlightedOrgans: PropTypes.array.isRequired,
   highlightOrgans: PropTypes.func.isRequired,
+  getFillColorTailwind: PropTypes.func.isRequired,
 };
 
 /**
@@ -102,6 +102,8 @@ export function BodyMap({
   handleClickOrgan,
   isThumbnailExpanded,
   setIsThumbnailExpanded,
+  getFillColorTailwind,
+  getFillColorHex,
 }) {
   const [highlightedOrgans, setHighlightedOrgans] = useState([]);
   function highlightOrgans(organ) {
@@ -140,6 +142,7 @@ export function BodyMap({
                 handleClickOrgan={handleClickOrgan}
                 highlightedOrgans={highlightedOrgans}
                 highlightOrgans={highlightOrgans}
+                getFillColorHex={getFillColorHex}
               />
             </div>
             <div className="grid grid-cols-1">
@@ -186,6 +189,7 @@ export function BodyMap({
                 enabledBodyMapFilters={enabledBodyMapFilters}
                 highlightedOrgans={highlightedOrgans}
                 highlightOrgans={highlightOrgans}
+                getFillColorTailwind={getFillColorTailwind}
               />
             </div>
             <div>
@@ -241,8 +245,9 @@ BodyMap.propTypes = {
   enabledBodyMapFilters: PropTypes.array,
   isThumbnailExpanded: PropTypes.bool.isRequired,
   setIsThumbnailExpanded: PropTypes.func.isRequired,
+  getFillColorTailwind: PropTypes.func.isRequired,
+  getFillColorHex: PropTypes.func.isRequired,
 };
-
 /**
  * It is a clickable thumbnail comprised of body map svg and inset images, with expand icon and instructions
  * Click the thumbnail will display the actual body map.
@@ -255,6 +260,8 @@ export function BodyMapThumbnail({
   enabledBodyMapFilters,
   isThumbnailExpanded,
   setIsThumbnailExpanded,
+  getFillColorTailwind,
+  getFillColorHex,
 }) {
   return (
     <div
@@ -276,6 +283,7 @@ export function BodyMapThumbnail({
             facets={facets}
             organFilters={organFilters}
             enabledBodyMapFilters={enabledBodyMapFilters}
+            getFillColorHex={getFillColorHex}
           />
           <ArrowsPointingOutIcon className="absolute inset-0 h-6" />
         </div>
@@ -325,6 +333,8 @@ BodyMapThumbnail.propTypes = {
   enabledBodyMapFilters: PropTypes.array.isRequired,
   isThumbnailExpanded: PropTypes.bool.isRequired,
   setIsThumbnailExpanded: PropTypes.func.isRequired,
+  getFillColorTailwind: PropTypes.func.isRequired,
+  getFillColorHex: PropTypes.func.isRequired,
 };
 
 /**
@@ -335,6 +345,9 @@ export function BodyMapThumbnailAndModal({
   assembly,
   organFilters,
   handleClickOrgan,
+  getOrganFacets,
+  getFillColorTailwind,
+  getFillColorHex,
 }) {
   const [isThumbnailExpanded, setIsThumbnailExpanded] = useState(false);
   const facets = getOrganFacets(data, assembly);
@@ -354,6 +367,8 @@ export function BodyMapThumbnailAndModal({
         enabledBodyMapFilters={enabledBodyMapFilters}
         setIsThumbnailExpanded={setIsThumbnailExpanded}
         isThumbnailExpanded={isThumbnailExpanded}
+        getFillColorTailwind={getFillColorTailwind}
+        getFillColorHex={getFillColorHex}
       />
 
       <BodyMap
@@ -365,6 +380,8 @@ export function BodyMapThumbnailAndModal({
         handleClickOrgan={handleClickOrgan}
         setIsThumbnailExpanded={setIsThumbnailExpanded}
         isThumbnailExpanded={isThumbnailExpanded}
+        getFillColorTailwind={getFillColorTailwind}
+        getFillColorHex={getFillColorHex}
       />
     </div>
   );
@@ -375,4 +392,7 @@ BodyMapThumbnailAndModal.propTypes = {
   assembly: PropTypes.string.isRequired,
   organFilters: PropTypes.array.isRequired,
   handleClickOrgan: PropTypes.func.isRequired,
+  getOrganFacets: PropTypes.func.isRequired,
+  getFillColorTailwind: PropTypes.func.isRequired,
+  getFillColorHex: PropTypes.func.isRequired,
 };

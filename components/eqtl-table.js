@@ -22,6 +22,26 @@ const eqtlDataColumns = [
       source.biosample_ontology ? source.biosample_ontology.term_name : "",
   },
   {
+    id: "biosample_ontology.classification",
+    title: "Classification",
+    display: ({ source }) =>
+      source.biosample_ontology?.classification
+        ? source.biosample_ontology.classification
+        : "",
+  },
+  {
+    id: "biosample_ontology.organ_slims",
+    title: "Organ",
+    display: ({ source }) =>
+      source.biosample_ontology?.organ_slims
+        ? source.biosample_ontology.organ_slims.join(", ")
+        : "",
+  },
+  {
+    id: "tissue_specific_score",
+    title: "Tissue specific score",
+  },
+  {
     id: "value",
     title: "Target genes",
     display: ({ source }) => source.value || "N/A",

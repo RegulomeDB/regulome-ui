@@ -5,14 +5,17 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import ChromatinTable from "./chromatin-table";
-import { BodyMapThumbnailAndModal } from "./body-map";
 import ChromatinStateFacets from "./chromatin-state-facets";
 import {
   ASSOCIATED_ORGAN_MAP,
+  getFillColorHex,
+  getFillColorTailwind,
   getFilteredChromatinData,
+  getOrganFacets,
 } from "../lib/chromatin-data";
 import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
 import { Button } from "./form-elements";
+import { BodyMapThumbnailAndModal } from "./body-map";
 
 /**
  *  Display selected filters and allow user to de-select them.
@@ -157,6 +160,9 @@ export function ChromatinView({ data, assembly }) {
                       assembly={assembly}
                       organFilters={organFilters}
                       handleClickOrgan={handleClickOrgan}
+                      getOrganFacets={getOrganFacets}
+                      getFillColorTailwind={getFillColorTailwind}
+                      getFillColorHex={getFillColorHex}
                     />
                     {organFilters.length > 0 && (
                       <Selections
