@@ -57,6 +57,7 @@ export default function ChipDataBarChart({ chipData }) {
         label: "Number of ChIP-seq datasets",
         data: groupCounts,
         backgroundColor: "#276A8E",
+        maxBarThickness: 50,
       },
     ],
   };

@@ -57,6 +57,7 @@ export default function AccessibilityChart({ accessibilityData }) {
         label: "Number of accessibility datasets",
         data: groupCounts,
         backgroundColor: "#276A8E",
+        maxBarThickness: 50,
       },
     ],
   };
