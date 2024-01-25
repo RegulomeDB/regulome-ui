@@ -4,6 +4,11 @@ import PropTypes from "prop-types";
 import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
+const initialSort = {
+  columnId: "tissue_specific_score",
+  direction: "desc",
+};
+
 const caqtlDataColumns = [
   {
     id: "method",
@@ -20,6 +25,26 @@ const caqtlDataColumns = [
     title: "Biosample",
     display: ({ source }) =>
       source.biosample_ontology ? source.biosample_ontology.term_name : "",
+  },
+  {
+    id: "biosample_ontology.classification",
+    title: "Classification",
+    display: ({ source }) =>
+      source.biosample_ontology?.classification
+        ? source.biosample_ontology.classification
+        : "",
+  },
+  {
+    id: "biosample_ontology.organ_slims",
+    title: "Organ",
+    display: ({ source }) =>
+      source.biosample_ontology?.organ_slims
+        ? source.biosample_ontology.organ_slims.join(", ")
+        : "",
+  },
+  {
+    id: "tissue_specific_score",
+    title: "Tissue specific score",
   },
   {
     id: "ancestry",
@@ -50,7 +75,11 @@ const caqtlDataColumns = [
  */ export default function CaQTLDataTable({ data }) {
   return (
     <DataGridContainer>
-      <SortableGrid data={data} columns={caqtlDataColumns} />
+      <SortableGrid
+        data={data}
+        columns={caqtlDataColumns}
+        initialSort={initialSort}
+      />
     </DataGridContainer>
   );
 }

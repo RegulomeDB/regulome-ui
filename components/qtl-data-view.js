@@ -1,28 +1,111 @@
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { XCircleIcon } from "@heroicons/react/20/solid";
+import {
+  getFillColorHex,
+  getFillColorTailwind,
+  getFilteredQtlData,
+  getOrganFacets,
+  getOrganFilter,
+} from "../lib/qtl-data";
+import { BodyMapThumbnailAndModal } from "./body-map";
 import CaQTLDataTable from "./caqtl-table";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import EQTLDataTable from "./eqtl-table";
 
+// To dynamically load component QTLChart on the client side,
+// use the ssr option to disable server-rendering since QTLChart relies on browser APIs like window.
+const QTLChart = dynamic(() => import("./qtl-chart"), {
+  ssr: false,
+});
+
+/**
+ *  Display selected filters and allow user to de-select them.
+ */
+function Selections({ filters, clearFilterFunc }) {
+  return (
+    <div>
+      <span>Selected filters:</span>
+      {filters.map((filter) => {
+        return (
+          <button
+            key={`${filter}-selected-filter`}
+            onClick={() => clearFilterFunc(filter)}
+            className="flex text-data-label text-sm"
+          >
+            <XCircleIcon className="h-5" />
+            {filter}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+Selections.propTypes = {
+  filters: PropTypes.array.isRequired,
+  clearFilterFunc: PropTypes.func.isRequired,
+};
+
 /**
  * This is the view for display QTL data for a variant.
  */
-export function QTLDataView({ data }) {
+export function QTLDataView({ data, assembly }) {
   const [showQtlData, setShowQtlData] = useState(false);
   const router = useRouter();
   useEffect(() => {
     const isQTL = router.asPath.endsWith(`#!qtl`);
     setShowQtlData(isQTL);
   }, [router]);
-  const eQTLData = data.filter((d) => d.method === "eQTLs");
-  const caQTLData = data.filter((d) => d.method === "caQTLs");
+  const [organFilters, setOrganFilters] = useState([]);
+  const filteredData = getFilteredQtlData(data, organFilters);
+  const eQTLData = filteredData.filter((d) => d.method === "eQTLs");
+  const caQTLData = filteredData.filter((d) => d.method === "caQTLs");
+
+  function handleClickOrgan(organ, organList, enabledOrganList) {
+    const filters = getOrganFilter(
+      organFilters,
+      organ,
+      organList,
+      enabledOrganList
+    );
+    setOrganFilters(filters);
+  }
 
   return (
     showQtlData && (
       <>
         {data.length > 0 ? (
           <>
+            <DataAreaTitle>QTL</DataAreaTitle>
+            <DataPanel>
+              <div className="@container">
+                <div className="grid @5xl:grid-cols-5  @5xl:grid-rows-1 grid-cols-1 grid-rows-2 gap-1 mb-2 justify-items-center">
+                  <div className="@5xl:col-span-1 w-56">
+                    <BodyMapThumbnailAndModal
+                      data={data}
+                      assembly={assembly}
+                      organFilters={organFilters}
+                      handleClickOrgan={handleClickOrgan}
+                      getOrganFacets={getOrganFacets}
+                      getFillColorTailwind={getFillColorTailwind}
+                      getFillColorHex={getFillColorHex}
+                    />
+                    {organFilters.length > 0 && (
+                      <Selections
+                        filters={organFilters}
+                        clearFilterFunc={handleClickOrgan}
+                      />
+                    )}
+                  </div>
+                  <div className="@5xl:col-span-4  w-11/12	">
+                    <QTLChart qtlData={filteredData} />
+                  </div>
+                </div>
+              </div>
+            </DataPanel>
             {caQTLData.length > 0 && (
               <>
                 <DataAreaTitle>caQTL Data</DataAreaTitle>
@@ -54,4 +137,5 @@ export function QTLDataView({ data }) {
 
 QTLDataView.propTypes = {
   data: PropTypes.array.isRequired,
+  assembly: PropTypes.string.isRequired,
 };

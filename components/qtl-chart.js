@@ -23,7 +23,7 @@ ChartJS.register(
   zoomPlugin
 );
 
-export default function AccessibilityChart({ accessibilityData }) {
+export default function QTLChart({ qtlData }) {
   /**
    * Group datasets by dataset.biosample_ontology.term_name and get a count for each group.
    * the counts looks like this:
@@ -34,7 +34,7 @@ export default function AccessibilityChart({ accessibilityData }) {
    * }
    *
    **/
-  const counts = accessibilityData.reduce((groupCountByBiosample, dataset) => {
+  const counts = qtlData.reduce((groupCountByBiosample, dataset) => {
     const biosample = dataset.biosample_ontology.term_name;
     if (biosample in groupCountByBiosample) {
       groupCountByBiosample[biosample] += 1;
@@ -54,7 +54,7 @@ export default function AccessibilityChart({ accessibilityData }) {
     labels: biosamples,
     datasets: [
       {
-        label: "Number of accessibility datasets",
+        label: "Number of QTL datasets",
         data: groupCounts,
         backgroundColor: "#276A8E",
         maxBarThickness: 50,
@@ -106,6 +106,6 @@ export default function AccessibilityChart({ accessibilityData }) {
   return <Bar options={options} data={data} />;
 }
 
-AccessibilityChart.propTypes = {
-  accessibilityData: PropTypes.array.isRequired,
+QTLChart.propTypes = {
+  qtlData: PropTypes.array.isRequired,
 };
