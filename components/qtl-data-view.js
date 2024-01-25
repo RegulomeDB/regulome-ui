@@ -4,20 +4,20 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import CaQTLDataTable from "./caqtl-table";
-import { DataAreaTitle, DataPanel } from "./data-area";
-import EQTLDataTable from "./eqtl-table";
 import { ASSOCIATED_ORGAN_MAP } from "../lib/chromatin-data";
-import { BodyMapThumbnailAndModal } from "./body-map";
 import {
   getFillColorHex,
   getFillColorTailwind,
   getFilteredQtlData,
   getOrganFacets,
 } from "../lib/qtl-data";
+import { BodyMapThumbnailAndModal } from "./body-map";
+import CaQTLDataTable from "./caqtl-table";
+import { DataAreaTitle, DataPanel } from "./data-area";
+import EQTLDataTable from "./eqtl-table";
 
-// To dynamically load component ChipDataBarChart on the client side,
-// use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
+// To dynamically load component QTLChart on the client side,
+// use the ssr option to disable server-rendering since QTLChart relies on browser APIs like window.
 const QTLChart = dynamic(() => import("./qtl-chart"), {
   ssr: false,
 });

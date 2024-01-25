@@ -35,7 +35,10 @@ import { getQueryStringFromServerQuery } from "../lib/query-utils";
 import { GenomeBrowserView } from "../components/genome-browser-view";
 import fetchVariantLD from "../lib/fetch_variant_ld";
 import VariantLDTable from "../components/variant-ld-table";
-import { getDataWithTissueScore } from "../lib/tissue-specific-score";
+import {
+  getDataWithTissueScore,
+  getNormalizedTissueSpecificScore,
+} from "../lib/tissue-specific-score";
 
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
@@ -53,7 +56,10 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
   if (Object.keys(data.notifications).length === 0) {
     const hitSnps = getSnpsInfo(data);
     const coordinates = data.query_coordinates[0];
-    const allData = getDataWithTissueScore(data);
+    const normalizedTissueSpecificScore = getNormalizedTissueSpecificScore(
+      data.regulome_score.tissue_specific_scores
+    );
+    const allData = getDataWithTissueScore(data, normalizedTissueSpecificScore);
     const QTLData = allData.filter(
       (d) => d.method && d.method.indexOf("QTL") !== -1
     );

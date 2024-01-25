@@ -3,9 +3,6 @@ import { XCircleIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { DataAreaTitle, DataPanel } from "./data-area";
-import ChromatinTable from "./chromatin-table";
-import ChromatinStateFacets from "./chromatin-state-facets";
 import {
   ASSOCIATED_ORGAN_MAP,
   getFillColorHex,
@@ -13,9 +10,12 @@ import {
   getFilteredChromatinData,
   getOrganFacets,
 } from "../lib/chromatin-data";
-import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
-import { Button } from "./form-elements";
 import { BodyMapThumbnailAndModal } from "./body-map";
+import ChromatinTable from "./chromatin-table";
+import ChromatinStateFacets from "./chromatin-state-facets";
+import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
+import { DataAreaTitle, DataPanel } from "./data-area";
+import { Button } from "./form-elements";
 
 /**
  *  Display selected filters and allow user to de-select them.
