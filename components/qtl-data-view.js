@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
