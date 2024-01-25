@@ -4,12 +4,12 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import { ASSOCIATED_ORGAN_MAP } from "../lib/chromatin-data";
 import {
   getFillColorHex,
   getFillColorTailwind,
   getFilteredQtlData,
   getOrganFacets,
+  getOrganFilter,
 } from "../lib/qtl-data";
 import { BodyMapThumbnailAndModal } from "./body-map";
 import CaQTLDataTable from "./caqtl-table";
@@ -66,37 +66,13 @@ export function QTLDataView({ data, assembly }) {
   const caQTLData = filteredData.filter((d) => d.method === "caQTLs");
 
   function handleClickOrgan(organ, organList, enabledOrganList) {
-    let filters = [...organFilters];
-    if (organList && enabledOrganList) {
-      if (organList.includes(organ) && enabledOrganList.includes(organ)) {
-        if (filters.includes(organ)) {
-          if (organ in ASSOCIATED_ORGAN_MAP) {
-            ASSOCIATED_ORGAN_MAP[organ].forEach((associatedOrgan) => {
-              if (enabledOrganList.includes(associatedOrgan)) {
-                filters = _.without(filters, associatedOrgan);
-              }
-            });
-          }
-          filters = _.without(filters, organ);
-        } else {
-          filters.push(organ);
-          if (organ in ASSOCIATED_ORGAN_MAP) {
-            ASSOCIATED_ORGAN_MAP[organ].forEach((associatedOrgan) => {
-              if (
-                enabledOrganList.includes(associatedOrgan) &&
-                !filters.includes(associatedOrgan)
-              ) {
-                filters.push(associatedOrgan);
-              }
-            });
-          }
-        }
-        setOrganFilters(filters);
-      }
-    } else {
-      filters = _.without(filters, organ);
-      setOrganFilters(filters);
-    }
+    const filters = getOrganFilter(
+      organFilters,
+      organ,
+      organList,
+      enabledOrganList
+    );
+    setOrganFilters(filters);
   }
 
   return (
