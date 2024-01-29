@@ -1,11 +1,11 @@
 // node_modules
 import PropTypes from "prop-types";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-
+import { useState } from "react";
 // components
 import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
-import { useState } from "react";
+// lib
 import { sanitizedString } from "../lib/general";
 
 const initialSort = {

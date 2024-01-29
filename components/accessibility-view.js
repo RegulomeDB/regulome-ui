@@ -3,9 +3,9 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import { DataAreaTitle, DataPanel } from "./data-area";
 import AccessibilityDataTable from "./accessibility-table";
 import { BodyMapThumbnailAndModal } from "./body-map";
+import { DataAreaTitle, DataPanel } from "./data-area";
 import {
   getFillColorHex,
   getFillColorTailwind,
@@ -14,7 +14,7 @@ import {
   getOrganFilter,
 } from "../lib/tissue-specific-score";
 
-// To dynamically load component ChipDataBarChart on the client side,
+// To dynamically load component AccessibilityChart on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
 const AccessibilityChart = dynamic(() => import("./accessibility-chart"), {
   ssr: false,
