@@ -86,7 +86,7 @@ export default function AccessibilityDataTable({ data }) {
               sanitizedString(textInput)
             ) ||
             sanitizedString(
-              dataset.biosample_ontology?.organ_slims.join(", ")
+              dataset.biosample_ontology.organ_slims.join(", ")
             ).includes(sanitizedString(textInput))
         );
   return (
