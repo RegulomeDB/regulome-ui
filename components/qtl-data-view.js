@@ -3,17 +3,17 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import {
-  getFillColorHex,
-  getFillColorTailwind,
-  getFilteredQtlData,
-  getOrganFacets,
-  getOrganFilter,
-} from "../lib/qtl-data";
 import { BodyMapThumbnailAndModal } from "./body-map";
 import CaQTLDataTable from "./caqtl-table";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import EQTLDataTable from "./eqtl-table";
+import {
+  getFillColorHex,
+  getFillColorTailwind,
+  getFilteredData,
+  getOrganFacets,
+  getOrganFilter,
+} from "../lib/tissue-specific-score";
 
 // To dynamically load component QTLChart on the client side,
 // use the ssr option to disable server-rendering since QTLChart relies on browser APIs like window.
@@ -52,7 +52,7 @@ Selections.propTypes = {
 /**
  * This is the view for display QTL data for a variant.
  */
-export function QTLDataView({ data, assembly }) {
+export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
   const [showQtlData, setShowQtlData] = useState(false);
   const router = useRouter();
   useEffect(() => {
@@ -60,7 +60,7 @@ export function QTLDataView({ data, assembly }) {
     setShowQtlData(isQTL);
   }, [router]);
   const [organFilters, setOrganFilters] = useState([]);
-  const filteredData = getFilteredQtlData(data, organFilters);
+  const filteredData = getFilteredData(data, organFilters);
   const eQTLData = filteredData.filter((d) => d.method === "eQTLs");
   const caQTLData = filteredData.filter((d) => d.method === "caQTLs");
 
@@ -92,6 +92,9 @@ export function QTLDataView({ data, assembly }) {
                       getOrganFacets={getOrganFacets}
                       getFillColorTailwind={getFillColorTailwind}
                       getFillColorHex={getFillColorHex}
+                      normalizedTissueSpecificScore={
+                        normalizedTissueSpecificScore
+                      }
                     />
                     {organFilters.length > 0 && (
                       <Selections
@@ -137,5 +140,6 @@ export function QTLDataView({ data, assembly }) {
 
 QTLDataView.propTypes = {
   data: PropTypes.array.isRequired,
+  normalizedTissueSpecificScore: PropTypes.object.isRequired,
   assembly: PropTypes.string.isRequired,
 };

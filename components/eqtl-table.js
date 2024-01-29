@@ -1,8 +1,12 @@
 // node_modules
 import PropTypes from "prop-types";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
 // components
 import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
+// lib
+import { sanitizedString } from "../lib/general";
 
 const initialSort = {
   columnId: "tissue_specific_score",
@@ -48,7 +52,7 @@ const eqtlDataColumns = [
   },
   {
     id: "value",
-    title: "Target genes",
+    title: "Target gene",
     display: ({ source }) => source.value || "N/A",
   },
 
@@ -73,14 +77,34 @@ const eqtlDataColumns = [
 /**
  * Display a sortable table of the given data.
  */ export default function EQTLDataTable({ data }) {
+  const [textInput, setTextInput] = useState("");
+  data =
+    textInput === ""
+      ? data
+      : data.filter((dataset) =>
+          sanitizedString(dataset.value).includes(sanitizedString(textInput))
+        );
   return (
-    <DataGridContainer>
-      <SortableGrid
-        data={data}
-        columns={eqtlDataColumns}
-        initialSort={initialSort}
-      />
-    </DataGridContainer>
+    <div className="grid gap-y-2">
+      <label className="relative text-gray-400 focus-within:text-gray-600 block">
+        <MagnifyingGlassIcon className="absolute top-1/3 left-1 w-6 h-4" />
+        <input
+          className="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-7 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-brand"
+          type="search"
+          aria-label="Search for a target gene name"
+          placeholder="Search for a target gene name"
+          value={textInput}
+          onChange={(e) => setTextInput(e.target.value)}
+        />
+      </label>
+      <DataGridContainer>
+        <SortableGrid
+          data={data}
+          columns={eqtlDataColumns}
+          initialSort={initialSort}
+        />
+      </DataGridContainer>
+    </div>
   );
 }
 

@@ -7,6 +7,11 @@ import SortableGrid from "./sortable-grid";
 import { useState } from "react";
 import { sanitizedString } from "../lib/general";
 
+const initialSort = {
+  columnId: "tissue_specific_score",
+  direction: "desc",
+};
+
 const accessibilityDataColumns = [
   {
     id: "method",
@@ -25,12 +30,24 @@ const accessibilityDataColumns = [
       source.biosample_ontology ? source.biosample_ontology.term_name : "",
   },
   {
+    id: "biosample_ontology.classification",
+    title: "Classification",
+    display: ({ source }) =>
+      source.biosample_ontology?.classification
+        ? source.biosample_ontology.classification
+        : "",
+  },
+  {
     id: "biosample_ontology.organ_slims",
     title: "Organ",
     display: ({ source }) =>
       source.biosample_ontology?.organ_slims?.length > 0
         ? source.biosample_ontology.organ_slims.join(", ")
         : "",
+  },
+  {
+    id: "tissue_specific_score",
+    title: "Tissue specific score",
   },
   {
     id: "dataset",
@@ -50,7 +67,7 @@ const accessibilityDataColumns = [
   },
   {
     id: "value",
-    title: "Value",
+    title: "Average accessibility",
   },
 ];
 
@@ -63,10 +80,14 @@ export default function AccessibilityDataTable({ data }) {
   data =
     textInput === ""
       ? data
-      : data.filter((dataset) =>
-          sanitizedString(dataset.biosample_ontology.term_name).includes(
-            sanitizedString(textInput)
-          )
+      : data.filter(
+          (dataset) =>
+            sanitizedString(dataset.biosample_ontology.term_name).includes(
+              sanitizedString(textInput)
+            ) ||
+            sanitizedString(
+              dataset.biosample_ontology.organ_slims.join(", ")
+            ).includes(sanitizedString(textInput))
         );
   return (
     <div className="grid gap-y-2">
@@ -76,13 +97,17 @@ export default function AccessibilityDataTable({ data }) {
           className="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-7 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-brand"
           type="search"
           aria-label="search to filter biosample results"
-          placeholder="Search for a biosample name"
+          placeholder="Search for a biosample name or an organ name"
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
         />
       </label>
       <DataGridContainer>
-        <SortableGrid data={data} columns={accessibilityDataColumns} />
+        <SortableGrid
+          data={data}
+          columns={accessibilityDataColumns}
+          initialSort={initialSort}
+        />
       </DataGridContainer>
     </div>
   );

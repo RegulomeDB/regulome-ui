@@ -250,8 +250,16 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
           </>
         )}
         <ChipDataView chipData={chipData}></ChipDataView>
-        <AccessibilityDataView data={dnaseData}></AccessibilityDataView>
-        <QTLDataView data={QTLData} assembly={data.assembly}></QTLDataView>
+        <AccessibilityDataView
+          data={dnaseData}
+          normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+          assembly={data.assembly}
+        ></AccessibilityDataView>
+        <QTLDataView
+          data={QTLData}
+          normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+          assembly={data.assembly}
+        ></QTLDataView>
         <Motifs
           motifsList={motifDocList}
           sequence={data.sequence}
