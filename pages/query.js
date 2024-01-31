@@ -6,7 +6,14 @@ import { DataPanel, DataItemLabel } from "../components/data-area";
 import Modal from "../components/modal";
 import PagePreamble from "../components/page-preamble";
 import RegulomeVersionTag from "../components/regulome-version-tag";
-import validateRegions from "../lib/validate-regions";
+import { validateRegions, validateRegion } from "../lib/validate-regions";
+import {
+  TabGroup,
+  TabList,
+  TabPane,
+  TabPanes,
+  TabTitle,
+} from "../components/tabs";
 
 const inputClassName =
   "border-form-element bg-form-element text-form-element appearance-none border-2 rounded w-full py-2 px-4 leading-tight";
@@ -18,6 +25,11 @@ const exampleSnps =
 const exampleCoordinates =
   "chr12:69360231-69360232\nchr10:5852536-5852537\nchr10:11699181-11699182\nchr1:39026790-39026791\nchr1:109726205-109726206";
 
+const exampleSnp = "rs10117931";
+const exampleCoordinate = "chr9:4575119-4575120";
+const exampleSpdi = "NC_000009.12:4575119:G:A";
+const exampleHgvs = "NC_000009.12:g.4575120G>A";
+
 export default function Query() {
   const [fileInput, setFileInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -25,26 +37,62 @@ export default function Query() {
   const [assembly, setAssembly] = useState("GRCh38");
   const [ancestry, setAncestry] = useState("");
   const [r2, setR2] = useState("0.8");
-  const [textInput, setTextInput] = useState("");
+  const [textInputForMultiple, setTextInputForMultiple] = useState("");
+  const [textInputForSingle, setTextInputForSingle] = useState("");
   const [includeVariantsInLD, setIncludeVariantsInLD] = useState(true);
+  const [ldFieldsHidden, setLdFieldsHidden] = useState(false);
 
-  // Handles the submit event on form submit.
-  async function handleSubmit(event) {
+  // Handles the submit event on single variant form submit.
+  async function handleSingleSubmit(event) {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
 
-    if (textInput && fileInput) {
+    if (!textInputForSingle) {
+      setIsOpen(true);
+    } else {
+      const region = textInputForSingle
+        ? textInputForSingle.trim().replace(/\s/g, " ")
+        : fileInput.trim().replace(/\s/g, " ");
+      const isValidInput = validateRegion(region, assembly);
+      if (!isValidInput) {
+        setIsOpen(true);
+      } else {
+        const query = {
+          regions: region,
+          genome: assembly,
+        };
+        if (includeVariantsInLD) {
+          query.r2 = r2;
+          query.ld = true;
+          if (ancestry) {
+            query.ancestry = ancestry;
+          }
+        }
+        Router.push({
+          pathname: "/search",
+          query,
+        });
+      }
+    }
+  }
+
+  // Handles the submit event on  variants form submit.
+  async function handleMultipleSubmit(event) {
+    // Stop the form from submitting and refreshing the page.
+    event.preventDefault();
+
+    if (textInputForMultiple && fileInput) {
       alert(
         "Only choose one method to set regions: through text input or file upload"
       );
-    } else if (!textInput && !fileInput) {
+    } else if (!textInputForMultiple && !fileInput) {
       setIsOpen(true);
     } else {
-      const regions = textInput
-        ? textInput.trim().replace(/\s/g, " ")
+      const regions = textInputForMultiple
+        ? textInputForMultiple.trim().replace(/\s/g, " ")
         : fileInput.trim().replace(/\s/g, " ");
       const regionList = regions.split(" ");
-      const isValidInput = validateRegions(regionList);
+      const isValidInput = validateRegions(regionList, assembly);
       if (!isValidInput) {
         setIsOpen(true);
       } else {
@@ -59,13 +107,6 @@ export default function Query() {
                 genome: assembly,
                 maf,
               };
-        if (includeVariantsInLD) {
-          query.r2 = r2;
-          query.ld = true;
-          if (ancestry) {
-            query.ancestry = ancestry;
-          }
-        }
         Router.push({
           pathname: "/summary",
           query,
@@ -86,163 +127,271 @@ export default function Query() {
       <PagePreamble />
       <RegulomeVersionTag />
       <DataPanel>
-        <form onSubmit={handleSubmit}>
-          <div className="flex items-center mb-6">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="maf">MAF Score</DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <select
-                className={inputClassName}
-                name="maf"
-                value={maf}
-                onChange={(e) => setMaf(e.target.value)}
-              >
-                <option value="1.1" defaultValue>
-                  NA
-                </option>
-                <option value="0.2">0.2</option>
-                <option value="0.4">0.4</option>
-                <option value="0.6">0.6</option>
-                <option value="0.8">0.8</option>
-                <option value="1.0">1.0</option>
-              </select>
-            </div>
-          </div>
+        <TabGroup>
+          <TabList>
+            <TabTitle>Single variant</TabTitle>
+            <TabTitle>Multiple variants</TabTitle>
+          </TabList>
+          <TabPanes>
+            <TabPane>
+              <form onSubmit={handleSingleSubmit}>
+                <div className="flex items-center mb-6">
+                  <div className="w-1/3">
+                    <DataItemLabel htmlFor="assembly">Assembly</DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <select
+                      className={inputClassName}
+                      name="assembly"
+                      value={assembly}
+                      onChange={(e) => setAssembly(e.target.value)}
+                    >
+                      <option value="GRCh38" defaultValue>
+                        GRCh38
+                      </option>
+                      <option value="hg19">hg19</option>
+                    </select>
+                  </div>
+                </div>
 
-          <div className="flex items-center mb-6">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="assembly">Assembly</DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <select
-                className={inputClassName}
-                name="assembly"
-                value={assembly}
-                onChange={(e) => setAssembly(e.target.value)}
-              >
-                <option value="GRCh38" defaultValue>
-                  GRCh38
-                </option>
-                <option value="hg19">hg19</option>
-              </select>
-            </div>
-          </div>
+                <div className="flex items-center mb-6">
+                  <div className="w-1/3">
+                    <DataItemLabel>Region</DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <textarea
+                      className={inputClassName}
+                      id="region"
+                      name="region"
+                      rows="8"
+                      cols="50"
+                      placeholder="Enter the rsID, SPDI, HGVS or a region, only one single variant is allowed."
+                      value={textInputForSingle}
+                      onChange={(e) => setTextInputForSingle(e.target.value)}
+                    ></textarea>
+                  </div>
+                </div>
+                <div className="flex items-center mb-6">
+                  <div className="w-1/3">
+                    <DataItemLabel htmlFor="include">
+                      Include variants in LD
+                    </DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <input
+                      className="mr-1"
+                      type="checkbox"
+                      checked={includeVariantsInLD}
+                      onChange={(e) => {
+                        setIncludeVariantsInLD(e.target.checked);
+                        setLdFieldsHidden(!e.target.checked);
+                      }}
+                    />
+                  </div>
+                </div>
 
-          <div className="flex items-center mb-6">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="regions">Region(s)</DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <textarea
-                className={inputClassName}
-                id="regions"
-                name="regions"
-                rows="8"
-                cols="50"
-                placeholder="Enter rsID(s) OR region(s), one per line. For example: rs75982468, chr12:69360231-69360232."
-                value={textInput}
-                onChange={(e) => setTextInput(e.target.value)}
-              ></textarea>
-            </div>
-          </div>
-          <div className="flex items-center mb-6">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="include">
-                Include variants in LD
-              </DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <input
-                className="mr-1"
-                type="checkbox"
-                checked={includeVariantsInLD}
-                onChange={(e) => setIncludeVariantsInLD(e.target.checked)}
-              />
-            </div>
-          </div>
+                <div
+                  className={`flex items-center mb-6 ${
+                    ldFieldsHidden ? "hidden" : ""
+                  }`}
+                >
+                  <div className="w-1/3">
+                    <DataItemLabel htmlFor="ancestry">
+                      LD Ancestry
+                    </DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <select
+                      className={inputClassName}
+                      name="ancestry"
+                      value={ancestry}
+                      onChange={(e) => setAncestry(e.target.value)}
+                    >
+                      <option value="">Select one...</option>
 
-          <div className="flex items-center mb-6">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="ancestry">Ancestry</DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <select
-                className={inputClassName}
-                name="ancestry"
-                value={ancestry}
-                onChange={(e) => setAncestry(e.target.value)}
-              >
-                <option value="">Select one...</option>
+                      <option value="EAS">EAS</option>
+                      <option value="EUR">EUR</option>
+                      <option value="AFR">AFR</option>
+                      <option value="SAS">SAS</option>
+                    </select>
+                  </div>
+                </div>
 
-                <option value="EAS">EAS</option>
-                <option value="EUR">EUR</option>
-                <option value="AFR">AFR</option>
-                <option value="SAS">SAS</option>
-              </select>
-            </div>
-          </div>
+                <div
+                  className={`flex items-center mb-6 ${
+                    ldFieldsHidden ? "hidden" : ""
+                  }`}
+                >
+                  <div className="w-1/3">
+                    <DataItemLabel htmlFor="r2">
+                      R<sup>2</sup>{" "}
+                    </DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <textarea
+                      className={inputClassName}
+                      id="r2"
+                      name="r2"
+                      rows="1"
+                      placeholder="Enter a value between 0.80  and 0.99, default to 0.8"
+                      onChange={(e) => setR2(e.target.value)}
+                    ></textarea>
+                  </div>
+                </div>
 
-          <div className="flex items-center mb-6">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="r2">R2</DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <textarea
-                className={inputClassName}
-                id="r2"
-                name="r2"
-                rows="1"
-                placeholder="Enter a value between 0.80  and 0.99, default to 0.8"
-                onChange={(e) => setR2(e.target.value)}
-              ></textarea>
-            </div>
-          </div>
+                <div className=" space-x-4 mb-6 flex">
+                  <div>Click for example entry: </div>
+                  <Button
+                    label="single dbSNP"
+                    type="secondary"
+                    onClick={() => setTextInputForSingle(exampleSnp)}
+                  >
+                    single dbSNP
+                  </Button>
+                  <Button
+                    label="coordinates range"
+                    type="secondary"
+                    onClick={() => setTextInputForSingle(exampleCoordinate)}
+                  >
+                    coordinates range
+                  </Button>
+                  <Button
+                    label="spdi"
+                    type="secondary"
+                    onClick={() => setTextInputForSingle(exampleSpdi)}
+                  >
+                    SPDI
+                  </Button>
+                  <Button
+                    label="hgvs"
+                    type="secondary"
+                    onClick={() => setTextInputForSingle(exampleHgvs)}
+                  >
+                    HGVS
+                  </Button>
+                </div>
 
-          <div className=" items-center mb-6 hidden">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="file">Upload your file</DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <input
-                id="file"
-                name="file"
-                type="file"
-                accept=".txt, .tsv, .csv"
-                value={fileInput}
-                onChange={readText}
-              />
-            </div>
-          </div>
+                <div className="flex items-center">
+                  <div className="w-1/3"></div>
+                  <div className="w-2/3">
+                    <button className={buttonClassName} type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </TabPane>
+            <TabPane>
+              <form onSubmit={handleMultipleSubmit}>
+                <div className="flex items-center mb-6">
+                  <div className="w-1/3">
+                    <DataItemLabel htmlFor="maf">MAF Score</DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <select
+                      className={inputClassName}
+                      name="maf"
+                      value={maf}
+                      onChange={(e) => setMaf(e.target.value)}
+                    >
+                      <option value="1.1" defaultValue>
+                        NA
+                      </option>
+                      <option value="0.2">0.2</option>
+                      <option value="0.4">0.4</option>
+                      <option value="0.6">0.6</option>
+                      <option value="0.8">0.8</option>
+                      <option value="1.0">1.0</option>
+                    </select>
+                  </div>
+                </div>
 
-          <div className=" space-x-4 mb-6 flex">
-            <div>Click for example entry: </div>
-            <Button
-              label="multiple dbSNPs"
-              type="secondary"
-              onClick={() => setTextInput(exampleSnps)}
-            >
-              multiple dbSNPs
-            </Button>
-            <div> or </div>
-            <Button
-              label="coordinates ranges"
-              type="secondary"
-              onClick={() => setTextInput(exampleCoordinates)}
-            >
-              coordinates ranges
-            </Button>
-          </div>
+                <div className="flex items-center mb-6">
+                  <div className="w-1/3">
+                    <DataItemLabel htmlFor="assembly">Assembly</DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <select
+                      className={inputClassName}
+                      name="assembly"
+                      value={assembly}
+                      onChange={(e) => setAssembly(e.target.value)}
+                    >
+                      <option value="GRCh38" defaultValue>
+                        GRCh38
+                      </option>
+                      <option value="hg19">hg19</option>
+                    </select>
+                  </div>
+                </div>
 
-          <div className="flex items-center">
-            <div className="w-1/3"></div>
-            <div className="w-2/3">
-              <button className={buttonClassName} type="submit">
-                Submit
-              </button>
-            </div>
-          </div>
-        </form>
+                <div className="flex items-center mb-6">
+                  <div className="w-1/3">
+                    <DataItemLabel>Regions</DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <textarea
+                      className={inputClassName}
+                      id="regions"
+                      name="regions"
+                      rows="8"
+                      cols="50"
+                      placeholder="Enter rsIDs or regions, one per line. For example: rs75982468, chr12:69360231-69360232."
+                      value={textInputForMultiple}
+                      onChange={(e) => setTextInputForMultiple(e.target.value)}
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div className=" items-center mb-6 hidden">
+                  <div className="w-1/3">
+                    <DataItemLabel htmlFor="file">
+                      Upload your file
+                    </DataItemLabel>
+                  </div>
+                  <div className="w-2/3">
+                    <input
+                      id="file"
+                      name="file"
+                      type="file"
+                      accept=".txt, .tsv, .csv"
+                      value={fileInput}
+                      onChange={readText}
+                    />
+                  </div>
+                </div>
+
+                <div className=" space-x-4 mb-6 flex">
+                  <div>Click for example entry: </div>
+                  <Button
+                    label="multiple dbSNPs"
+                    type="secondary"
+                    onClick={() => setTextInputForMultiple(exampleSnps)}
+                  >
+                    multiple dbSNPs
+                  </Button>
+                  <div> or </div>
+                  <Button
+                    label="coordinates ranges"
+                    type="secondary"
+                    onClick={() => setTextInputForMultiple(exampleCoordinates)}
+                  >
+                    coordinates ranges
+                  </Button>
+                </div>
+
+                <div className="flex items-center">
+                  <div className="w-1/3"></div>
+                  <div className="w-2/3">
+                    <button className={buttonClassName} type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </TabPane>
+          </TabPanes>
+        </TabGroup>
       </DataPanel>{" "}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <Modal.Header>Query Error</Modal.Header>

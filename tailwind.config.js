@@ -87,6 +87,11 @@ module.exports = {
         "facet-group-button": "var(--color-facet-group-button-border)",
         "facet-group-button-selected":
           "var(--color-facet-group-button-selected-border)",
+        "tab-group": "var(--color-tab-group-border)",
+        "tab-selected": "var(--color-tab-selected-border)",
+        "tab-unselected": "var(--color-tab-unselected-border)",
+        "tab-disabled": "var(--color-tab-disabled-border)",
+        "tab-hover": "var(--color-tab-hover-border)",
       },
       fontSize: {
         xxs: "0.7rem",
@@ -108,6 +113,10 @@ module.exports = {
         "button-facet-group-selected":
           "var(--color-button-facet-group-selected-text)",
         "facet-title": "var(--color-facet-title-text)",
+        "tab-title-selected": "var(--color-tab-title-selected-text)",
+        "tab-title-unselected": "var(--color-tab-title-unselected-text)",
+        "tab-title-disabled": "var(--color-tab-title-disabled-text)",
+        "tab-title-hover": "var(--color-tab-title-hover-text)",
       },
       boxShadow: {
         // Status badges
