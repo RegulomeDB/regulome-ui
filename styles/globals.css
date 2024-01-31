@@ -191,10 +191,20 @@
   --color-button-selected-label-disabled: #b1bad3;
 
   --color-button-audit-open-background: #d3dfff;
-  --color-button-audit-closed-background: transparet;
+  --color-button-audit-closed-background: transparent;
   --color-button-audit-border: #384977;
   --color-button-audit-level-detail: #f0f0f0;
   --color-audit-level-detail-background: #d0d0d0;
+
+  --color-tab-group-border: #d0d0d0;
+  --color-tab-selected-border: #3b82f6;
+  --color-tab-unselected-border: transparent;
+  --color-tab-disabled-border: transparent;
+  --color-tab-hover-border: #bfdbfe;
+  --color-tab-title-selected-text: #2563eb;
+  --color-tab-title-unselected-text: #1f2937;
+  --color-tab-title-disabled-text: #d1d5db;
+  --color-tab-title-hover-text: #1f2937;
 
   --color-facet-group-button-background: #f0e7ca;
   --color-facet-group-button-selected-background: #bfa678;
@@ -298,6 +308,16 @@
   --color-button-audit-level: #4e5b75;
   --color-audit-level-detail-background: #4e5b75;
   --color-button-audit-level-detail: #111827;
+
+  --color-tab-group-border: #4e5b75;
+  --color-tab-selected-border: #1d4ed8;
+  --color-tab-unselected-border: transparent;
+  --color-tab-disabled-border: transparent;
+  --color-tab-hover-border: #1e3a8a;
+  --color-tab-title-selected-text: #2563eb;
+  --color-tab-title-unselected-text: #cbd5e1;
+  --color-tab-title-disabled-text: #374151;
+  --color-tab-title-hover-text: #cbd5e1;
 
   --color-facet-title-background: #536167;
   --color-facet-title-text: #ffffff;
