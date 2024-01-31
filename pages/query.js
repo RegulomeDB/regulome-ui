@@ -92,7 +92,7 @@ export default function Query() {
         ? textInputForMultiple.trim().replace(/\s/g, " ")
         : fileInput.trim().replace(/\s/g, " ");
       const regionList = regions.split(" ");
-      const isValidInput = validateRegions(regionList);
+      const isValidInput = validateRegions(regionList, assembly);
       if (!isValidInput) {
         setIsOpen(true);
       } else {
