@@ -13,6 +13,7 @@ import {
   getOrganFacets,
   getOrganFilter,
 } from "../lib/tissue-specific-score";
+import { TissueScoreBar } from "./tissue-score-bar";
 
 // To dynamically load component AccessibilityChart on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
@@ -53,6 +54,7 @@ Selections.propTypes = {
  */
 export function AccessibilityDataView({
   data,
+  tissueSpecificScores,
   normalizedTissueSpecificScore,
   assembly,
 }) {
@@ -85,8 +87,8 @@ export function AccessibilityDataView({
             <DataAreaTitle>Accessibility Data</DataAreaTitle>
             <DataPanel>
               <div className="@container">
-                <div className="grid @5xl:grid-cols-5  @5xl:grid-rows-1 grid-cols-1 grid-rows-2 gap-1 mb-2 justify-items-center">
-                  <div className="@5xl:col-span-1 w-56">
+                <div className="grid @5xl:grid-cols-5 @5xl:grid-rows-1 @md:grid-cols-2  grid-cols-1 grid-rows-2 gap-1 mb-2 @md:justify-items-center">
+                  <div className="@5xl:col-span-1 @5xl:row-start-1 w-56">
                     <BodyMapThumbnailAndModal
                       data={data}
                       assembly={assembly}
@@ -95,6 +97,7 @@ export function AccessibilityDataView({
                       getOrganFacets={getOrganFacets}
                       getFillColorTailwind={getFillColorTailwind}
                       getFillColorHex={getFillColorHex}
+                      tissueSpecificScores={tissueSpecificScores}
                       normalizedTissueSpecificScore={
                         normalizedTissueSpecificScore
                       }
@@ -106,8 +109,24 @@ export function AccessibilityDataView({
                       />
                     )}
                   </div>
-                  <div className="@5xl:col-span-4  w-11/12	">
-                    <AccessibilityChart accessibilityData={filteredData} />
+                  <div className="@5xl:col-span-3 @5xl:row-start-1 @md:row-start-2 @md:col-span-2 w-full">
+                    <div>Number of accessibility datasets </div>
+                    <div className="text-data-label text-sm italic">
+                      Grouped by biosamples
+                    </div>
+                    <div className="h-80 border-2 border-panel p-1">
+                      <AccessibilityChart accessibilityData={filteredData} />
+                    </div>
+                  </div>
+                  <div className="@5xl:col-span-1 @5xl:row-start-1 @md:rol-start-1">
+                    <div>Tissue specific score gauge </div>
+                    <div className="whitespace-break-spaces	"> </div>
+                    <div className="h-80 border-2 border-panel p-1">
+                      <TissueScoreBar
+                        tissueSpecificScores={tissueSpecificScores}
+                        showLabel={true}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -132,6 +151,7 @@ export function AccessibilityDataView({
 
 AccessibilityDataView.propTypes = {
   data: PropTypes.array.isRequired,
+  tissueSpecificScores: PropTypes.object.isRequired,
   normalizedTissueSpecificScore: PropTypes.object.isRequired,
   assembly: PropTypes.string.isRequired,
 };

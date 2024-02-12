@@ -18,6 +18,7 @@
     "@nextui-org/tooltip": "^2.0.24",
     "@tailwindcss/container-queries": "^0.1.1",
     "ace-builds": "^1.5.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "chartjs-plugin-zoom": "^2.0.1",
     "dayjs": "^1.11.3",
     "empty-schema": "^0.1.5",

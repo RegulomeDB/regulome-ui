@@ -348,16 +348,21 @@ export function BodyMapThumbnailAndModal({
   getOrganFacets,
   getFillColorTailwind,
   getFillColorHex,
+  tissueSpecificScores,
   normalizedTissueSpecificScore,
 }) {
   const [isThumbnailExpanded, setIsThumbnailExpanded] = useState(false);
   let facets = {};
+  let enabledBodyMapFilters = [];
   if (normalizedTissueSpecificScore) {
-    facets = getOrganFacets(data, normalizedTissueSpecificScore);
+    facets = normalizedTissueSpecificScore;
+    enabledBodyMapFilters = Object.keys(
+      getOrganFacets(data, normalizedTissueSpecificScore)
+    );
   } else {
     facets = getOrganFacets(data, assembly);
+    enabledBodyMapFilters = Object.keys(facets);
   }
-  const enabledBodyMapFilters = Object.keys(facets);
   const organList =
     assembly === "hg19" ? COMPLETE_ORGAN_LIST_HG19 : COMPLETE_ORGAN_LIST_GRCH38;
   const cellList =
@@ -375,6 +380,7 @@ export function BodyMapThumbnailAndModal({
         isThumbnailExpanded={isThumbnailExpanded}
         getFillColorTailwind={getFillColorTailwind}
         getFillColorHex={getFillColorHex}
+        tissueSpecificScores={tissueSpecificScores}
       />
 
       <BodyMap
@@ -401,5 +407,6 @@ BodyMapThumbnailAndModal.propTypes = {
   getOrganFacets: PropTypes.func.isRequired,
   getFillColorTailwind: PropTypes.func.isRequired,
   getFillColorHex: PropTypes.func.isRequired,
+  tissueSpecificScores: PropTypes.array,
   normalizedTissueSpecificScore: PropTypes.object,
 };

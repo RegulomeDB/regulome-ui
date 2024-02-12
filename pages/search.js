@@ -56,6 +56,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
   if (Object.keys(data.notifications).length === 0) {
     const hitSnps = getSnpsInfo(data);
     const coordinates = data.query_coordinates[0];
+    const tissueSpecificScores = data.regulome_score.tissue_specific_scores;
     const normalizedTissueSpecificScore = getNormalizedTissueSpecificScore(
       data.regulome_score.tissue_specific_scores
     );
@@ -252,6 +253,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
         <ChipDataView chipData={chipData}></ChipDataView>
         <AccessibilityDataView
           data={dnaseData}
+          tissueSpecificScores={tissueSpecificScores}
           normalizedTissueSpecificScore={normalizedTissueSpecificScore}
           assembly={data.assembly}
         ></AccessibilityDataView>

@@ -82,6 +82,9 @@ export default function AccessibilityChart({ accessibilityData }) {
       },
     },
     plugins: {
+      datalabels: {
+        display: false,
+      },
       legend: {
         //put legend on top
         position: "top",
@@ -103,7 +106,7 @@ export default function AccessibilityChart({ accessibilityData }) {
       },
     },
   };
-  return <Bar options={options} data={data} />;
+  return <Bar options={options} data={data} width={"400"} />;
 }
 
 AccessibilityChart.propTypes = {
