@@ -101,6 +101,7 @@ export function AccessibilityDataView({
                       normalizedTissueSpecificScore={
                         normalizedTissueSpecificScore
                       }
+                      colorBy={"Colored by tissue specific score"}
                     />
                     {organFilters.length > 0 && (
                       <Selections

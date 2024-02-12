@@ -102,9 +102,6 @@ export function TissueScoreBar({ tissueSpecificScores, showLabel }) {
         formatter: (value, context) => {
           console.log(context);
           if (showLabel) {
-            if (value === 1.1) {
-              return null;
-            }
             return (value * 10 * unitValue + min).toFixed(3);
           }
           return null;

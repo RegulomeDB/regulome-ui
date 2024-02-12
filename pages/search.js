@@ -259,6 +259,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
         ></AccessibilityDataView>
         <QTLDataView
           data={QTLData}
+          tissueSpecificScores={tissueSpecificScores}
           normalizedTissueSpecificScore={normalizedTissueSpecificScore}
           assembly={data.assembly}
         ></QTLDataView>

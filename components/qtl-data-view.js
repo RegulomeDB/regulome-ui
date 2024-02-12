@@ -7,6 +7,7 @@ import { BodyMapThumbnailAndModal } from "./body-map";
 import CaQTLDataTable from "./caqtl-table";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import EQTLDataTable from "./eqtl-table";
+import { TissueScoreBar } from "./tissue-score-bar";
 import {
   getFillColorHex,
   getFillColorTailwind,
@@ -52,7 +53,12 @@ Selections.propTypes = {
 /**
  * This is the view for display QTL data for a variant.
  */
-export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
+export function QTLDataView({
+  data,
+  tissueSpecificScores,
+  normalizedTissueSpecificScore,
+  assembly,
+}) {
   const [showQtlData, setShowQtlData] = useState(false);
   const router = useRouter();
   useEffect(() => {
@@ -82,8 +88,8 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
             <DataAreaTitle>QTL</DataAreaTitle>
             <DataPanel>
               <div className="@container">
-                <div className="grid @5xl:grid-cols-5  @5xl:grid-rows-1 grid-cols-1 grid-rows-2 gap-1 mb-2 justify-items-center">
-                  <div className="@5xl:col-span-1 w-56">
+                <div className="grid @5xl:grid-cols-5 @5xl:grid-rows-1 grid-cols-1 grid-rows-2 gap-1 mb-2 justify-items-center">
+                  <div className="@5xl:col-span-1 @5xl:row-start-1 w-56">
                     <BodyMapThumbnailAndModal
                       data={data}
                       assembly={assembly}
@@ -95,6 +101,7 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
                       normalizedTissueSpecificScore={
                         normalizedTissueSpecificScore
                       }
+                      colorBy={"Colored by tissue specific score"}
                     />
                     {organFilters.length > 0 && (
                       <Selections
@@ -103,8 +110,24 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
                       />
                     )}
                   </div>
-                  <div className="@5xl:col-span-4  w-11/12	">
-                    <QTLChart qtlData={filteredData} />
+                  <div className="@5xl:col-span-3 @5xl:row-start-1 @md:row-start-2 @md:col-span-2 w-full">
+                    <div>Number of accessibility datasets </div>
+                    <div className="text-data-label text-sm italic">
+                      Grouped by biosamples
+                    </div>
+                    <div className="h-80 border-2 border-panel p-1">
+                      <QTLChart qtlData={filteredData} />
+                    </div>
+                  </div>
+                  <div className="@5xl:col-span-1 @5xl:row-start-1 @md:rol-start-1">
+                    <div>Tissue specific score gauge </div>
+                    <div className="whitespace-break-spaces	"> </div>
+                    <div className="h-80 border-2 border-panel p-1">
+                      <TissueScoreBar
+                        tissueSpecificScores={tissueSpecificScores}
+                        showLabel={true}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -140,6 +163,7 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
 
 QTLDataView.propTypes = {
   data: PropTypes.array.isRequired,
+  tissueSpecificScores: PropTypes.object.isRequired,
   normalizedTissueSpecificScore: PropTypes.object.isRequired,
   assembly: PropTypes.string.isRequired,
 };
