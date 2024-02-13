@@ -117,7 +117,9 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
                     </div>
                     <div className="@5xl:col-span-1 @5xl:row-start-1 @md:rol-start-1">
                       <div>Tissue specific score gauge </div>
-                      <div className="whitespace-break-spaces	"> </div>
+                      <div className="whitespace-break-spaces	text-data-label text-sm italic">
+                        {" "}
+                      </div>
                       <div className="h-80 border-2 border-panel p-1">
                         <TissueScoreBar
                           normalizedTissueSpecificScore={
