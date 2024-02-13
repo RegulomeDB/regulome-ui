@@ -163,6 +163,7 @@ export function ChromatinView({ data, assembly }) {
                       getOrganFacets={getOrganFacets}
                       getFillColorTailwind={getFillColorTailwind}
                       getFillColorHex={getFillColorHex}
+                      colorBy={"Colored by most active state"}
                     />
                     {organFilters.length > 0 && (
                       <Selections

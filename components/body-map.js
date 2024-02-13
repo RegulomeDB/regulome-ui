@@ -262,6 +262,7 @@ export function BodyMapThumbnail({
   setIsThumbnailExpanded,
   getFillColorTailwind,
   getFillColorHex,
+  colorBy,
 }) {
   return (
     <div
@@ -273,9 +274,7 @@ export function BodyMapThumbnail({
         <FunnelIcon className="h-5" />
         <div>Filter by body diagram</div>
       </div>
-      <div className="text-data-label text-sm italic">
-        Colored by most active state
-      </div>
+      <div className="text-data-label text-sm italic">{colorBy}</div>
       <div className="grid border-2 border-panel h-80 p-1">
         <div className="relative">
           <HumanBodyDiagram
@@ -335,6 +334,7 @@ BodyMapThumbnail.propTypes = {
   setIsThumbnailExpanded: PropTypes.func.isRequired,
   getFillColorTailwind: PropTypes.func.isRequired,
   getFillColorHex: PropTypes.func.isRequired,
+  colorBy: PropTypes.string.isRequired,
 };
 
 /**
@@ -349,15 +349,25 @@ export function BodyMapThumbnailAndModal({
   getFillColorTailwind,
   getFillColorHex,
   normalizedTissueSpecificScore,
+  colorBy,
 }) {
   const [isThumbnailExpanded, setIsThumbnailExpanded] = useState(false);
   let facets = {};
+  let enabledBodyMapFilters = [];
   if (normalizedTissueSpecificScore) {
-    facets = getOrganFacets(data, normalizedTissueSpecificScore);
+    facets = getOrganFacets(normalizedTissueSpecificScore);
+    const organsSet = new Set();
+    data.forEach((dataset) => {
+      const organs = dataset.biosample_ontology?.organ_slims
+        ? dataset.biosample_ontology.organ_slims
+        : [];
+      organs.forEach((organ) => organsSet.add(organ));
+    });
+    enabledBodyMapFilters = Array.from(organsSet);
   } else {
     facets = getOrganFacets(data, assembly);
+    enabledBodyMapFilters = Object.keys(facets);
   }
-  const enabledBodyMapFilters = Object.keys(facets);
   const organList =
     assembly === "hg19" ? COMPLETE_ORGAN_LIST_HG19 : COMPLETE_ORGAN_LIST_GRCH38;
   const cellList =
@@ -375,6 +385,7 @@ export function BodyMapThumbnailAndModal({
         isThumbnailExpanded={isThumbnailExpanded}
         getFillColorTailwind={getFillColorTailwind}
         getFillColorHex={getFillColorHex}
+        colorBy={colorBy}
       />
 
       <BodyMap
@@ -402,4 +413,5 @@ BodyMapThumbnailAndModal.propTypes = {
   getFillColorTailwind: PropTypes.func.isRequired,
   getFillColorHex: PropTypes.func.isRequired,
   normalizedTissueSpecificScore: PropTypes.object,
+  colorBy: PropTypes.string.isRequired,
 };

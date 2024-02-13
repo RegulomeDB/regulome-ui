@@ -103,7 +103,7 @@ export default function QTLChart({ qtlData }) {
       },
     },
   };
-  return <Bar options={options} data={data} />;
+  return <Bar options={options} data={data} width={"400"} />;
 }
 
 QTLChart.propTypes = {
