@@ -27,16 +27,15 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
   let min = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
   let max = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
   organs.forEach((organ) => {
-    if (normalizedTissueSpecificScore[organ][1] === 0) {
+    if (normalizedTissueSpecificScore[organ][1] === 1) {
       min = parseFloat(normalizedTissueSpecificScore[organ][0]);
-    } else if (normalizedTissueSpecificScore[organ][1] === 9) {
+    } else if (normalizedTissueSpecificScore[organ][1] === 10) {
       max = parseFloat(normalizedTissueSpecificScore[organ][0]);
     }
   });
   const unitValue = (max - min) / 10;
   const datasets = [];
   const colors = TissueScoreHexColor;
-  colors[11] = "transparent";
   for (let i = 0; i <= 10; i++) {
     datasets.push({
       data: [0.1 * i],
