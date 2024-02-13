@@ -24,30 +24,29 @@ ChartJS.register(
 
 export function TissueScoreBar({ normalizedTissueSpecificScore }) {
   const organs = Object.keys(normalizedTissueSpecificScore);
-  let min = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
-  let max = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
+  let MIN_SCORE = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
+  let MAX_SCORE = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
   organs.forEach((organ) => {
     if (normalizedTissueSpecificScore[organ][1] === 1) {
-      min = parseFloat(normalizedTissueSpecificScore[organ][0]);
+      MIN_SCORE = parseFloat(normalizedTissueSpecificScore[organ][0]);
     } else if (normalizedTissueSpecificScore[organ][1] === 10) {
-      max = parseFloat(normalizedTissueSpecificScore[organ][0]);
+      MAX_SCORE = parseFloat(normalizedTissueSpecificScore[organ][0]);
     }
   });
-  const unitValue = (max - min) / 10;
-  const datasets = [];
-  const colors = TissueScoreHexColor;
-  for (let i = 0; i <= 10; i++) {
-    datasets.push({
+  const unitValue = (MAX_SCORE - MIN_SCORE) / 10;
+  const datasets = TissueScoreHexColor.map((color, i) => {
+    return {
       data: [0.1 * i],
-      backgroundColor: colors[i],
+      backgroundColor: color,
       barPercentage: 0.2,
-      borderColor: colors[i],
+      borderColor: color,
       borderSkipped: false,
       borderRadius: [
         { topLeft: 0, topRight: 0, bottomLeft: 10, bottomRight: 10 },
       ],
-    });
-  }
+    };
+  });
+
   datasets[10].borderRadius = [
     { topLeft: 10, topRight: 10, bottomLeft: 10, bottomRight: 10 },
   ];
@@ -100,7 +99,7 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
         offset: 15,
         align: "right",
         formatter: (value) => {
-          return (value * 10 * unitValue + min).toFixed(3);
+          return (value * 10 * unitValue + MIN_SCORE).toFixed(3);
         },
       },
     },
