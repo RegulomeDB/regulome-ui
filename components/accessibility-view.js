@@ -54,7 +54,6 @@ Selections.propTypes = {
  */
 export function AccessibilityDataView({
   data,
-  tissueSpecificScores,
   normalizedTissueSpecificScore,
   assembly,
 }) {
@@ -97,7 +96,6 @@ export function AccessibilityDataView({
                       getOrganFacets={getOrganFacets}
                       getFillColorTailwind={getFillColorTailwind}
                       getFillColorHex={getFillColorHex}
-                      tissueSpecificScores={tissueSpecificScores}
                       normalizedTissueSpecificScore={
                         normalizedTissueSpecificScore
                       }
@@ -124,8 +122,9 @@ export function AccessibilityDataView({
                     <div className="whitespace-break-spaces	"> </div>
                     <div className="h-80 border-2 border-panel p-1">
                       <TissueScoreBar
-                        tissueSpecificScores={tissueSpecificScores}
-                        showLabel={true}
+                        normalizedTissueSpecificScore={
+                          normalizedTissueSpecificScore
+                        }
                       />
                     </div>
                   </div>
@@ -152,7 +151,6 @@ export function AccessibilityDataView({
 
 AccessibilityDataView.propTypes = {
   data: PropTypes.array.isRequired,
-  tissueSpecificScores: PropTypes.object.isRequired,
   normalizedTissueSpecificScore: PropTypes.object.isRequired,
   assembly: PropTypes.string.isRequired,
 };

@@ -10,10 +10,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import Datalabels from "chartjs-plugin-datalabels";
-import {
-  TissueScoreHexColor,
-  getScoreRange,
-} from "../lib/tissue-specific-score";
+import { TissueScoreHexColor } from "../lib/tissue-specific-score";
 
 ChartJS.register(
   CategoryScale,
@@ -25,11 +22,18 @@ ChartJS.register(
   Datalabels
 );
 
-export function TissueScoreBar({ tissueSpecificScores, showLabel }) {
-  const [min, max] = getScoreRange(tissueSpecificScores);
-
+export function TissueScoreBar({ normalizedTissueSpecificScore }) {
+  let min = 0;
+  let max = 0;
+  const organs = Object.keys(normalizedTissueSpecificScore);
+  organs.forEach((organ) => {
+    if (normalizedTissueSpecificScore[organ][1] === 0) {
+      min = parseFloat(normalizedTissueSpecificScore[organ][0]);
+    } else if (normalizedTissueSpecificScore[organ][1] === 9) {
+      max = parseFloat(normalizedTissueSpecificScore[organ][0]);
+    }
+  });
   const unitValue = (max - min) / 10;
-
   const datasets = [];
   const colors = TissueScoreHexColor;
   colors[11] = "transparent";
@@ -38,7 +42,6 @@ export function TissueScoreBar({ tissueSpecificScores, showLabel }) {
       data: [0.1 * i],
       backgroundColor: colors[i],
       barPercentage: 0.2,
-      // maxBarThickness: 30,
       borderColor: colors[i],
       borderSkipped: false,
       borderRadius: [
@@ -55,9 +58,7 @@ export function TissueScoreBar({ tissueSpecificScores, showLabel }) {
     datasets,
   };
 
-  // Check here for options setting detail: https://react-chartjs-2.js.org/components/bar
   const options = {
-    // Resizes the chart canvas when its container does
     animation: false,
     responsive: true,
     aspectRatio: 0.5,
@@ -77,7 +78,7 @@ export function TissueScoreBar({ tissueSpecificScores, showLabel }) {
         },
       },
       x: {
-        display: showLabel,
+        display: true,
         stacked: true,
         grid: {
           display: false,
@@ -99,12 +100,8 @@ export function TissueScoreBar({ tissueSpecificScores, showLabel }) {
         anchor: "end",
         offset: 15,
         align: "right",
-        formatter: (value, context) => {
-          console.log(context);
-          if (showLabel) {
-            return (value * 10 * unitValue + min).toFixed(3);
-          }
-          return null;
+        formatter: (value) => {
+          return (value * 10 * unitValue + min).toFixed(3);
         },
       },
     },
@@ -113,6 +110,5 @@ export function TissueScoreBar({ tissueSpecificScores, showLabel }) {
 }
 
 TissueScoreBar.propTypes = {
-  tissueSpecificScores: PropTypes.array.isRequired,
-  showLabel: PropTypes.bool.isRequired,
+  normalizedTissueSpecificScore: PropTypes.object.isRequired,
 };

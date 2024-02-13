@@ -125,7 +125,6 @@ export function QTLDataView({
                     <div className="h-80 border-2 border-panel p-1">
                       <TissueScoreBar
                         tissueSpecificScores={tissueSpecificScores}
-                        showLabel={true}
                       />
                     </div>
                   </div>

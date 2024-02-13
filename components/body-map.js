@@ -348,7 +348,6 @@ export function BodyMapThumbnailAndModal({
   getOrganFacets,
   getFillColorTailwind,
   getFillColorHex,
-  tissueSpecificScores,
   normalizedTissueSpecificScore,
   colorBy,
 }) {
@@ -356,10 +355,15 @@ export function BodyMapThumbnailAndModal({
   let facets = {};
   let enabledBodyMapFilters = [];
   if (normalizedTissueSpecificScore) {
-    facets = normalizedTissueSpecificScore;
-    enabledBodyMapFilters = Object.keys(
-      getOrganFacets(data, normalizedTissueSpecificScore)
-    );
+    facets = getOrganFacets(normalizedTissueSpecificScore);
+    const organsSet = new Set();
+    data.forEach((dataset) => {
+      const organs = dataset.biosample_ontology?.organ_slims
+        ? dataset.biosample_ontology.organ_slims
+        : [];
+      organs.forEach((organ) => organsSet.add(organ));
+    });
+    enabledBodyMapFilters = Array.from(organsSet);
   } else {
     facets = getOrganFacets(data, assembly);
     enabledBodyMapFilters = Object.keys(facets);
@@ -381,7 +385,6 @@ export function BodyMapThumbnailAndModal({
         isThumbnailExpanded={isThumbnailExpanded}
         getFillColorTailwind={getFillColorTailwind}
         getFillColorHex={getFillColorHex}
-        tissueSpecificScores={tissueSpecificScores}
         colorBy={colorBy}
       />
 
@@ -409,7 +412,6 @@ BodyMapThumbnailAndModal.propTypes = {
   getOrganFacets: PropTypes.func.isRequired,
   getFillColorTailwind: PropTypes.func.isRequired,
   getFillColorHex: PropTypes.func.isRequired,
-  tissueSpecificScores: PropTypes.array,
   normalizedTissueSpecificScore: PropTypes.object,
   colorBy: PropTypes.string.isRequired,
 };
