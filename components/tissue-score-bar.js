@@ -23,9 +23,9 @@ ChartJS.register(
 );
 
 export function TissueScoreBar({ normalizedTissueSpecificScore }) {
-  let min = 0;
-  let max = 0;
   const organs = Object.keys(normalizedTissueSpecificScore);
+  let min = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
+  let max = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
   organs.forEach((organ) => {
     if (normalizedTissueSpecificScore[organ][1] === 0) {
       min = parseFloat(normalizedTissueSpecificScore[organ][0]);
