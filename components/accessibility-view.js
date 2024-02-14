@@ -87,48 +87,48 @@ export function AccessibilityDataView({
             {assembly === "GRCh38" ? (
               <DataPanel>
                 <div className="@container">
-                  <div className="grid @5xl:grid-cols-5 @5xl:grid-rows-1 @md:grid-cols-2  grid-cols-1 grid-rows-2 gap-1 mb-2 @md:justify-items-center">
-                    <div className="@5xl:col-span-1 @5xl:row-start-1 w-56">
-                      <BodyMapThumbnailAndModal
-                        data={data}
-                        assembly={assembly}
-                        organFilters={organFilters}
-                        handleClickOrgan={handleClickOrgan}
-                        getOrganFacets={getOrganFacets}
-                        getFillColorTailwind={getFillColorTailwind}
-                        getFillColorHex={getFillColorHex}
-                        normalizedTissueSpecificScore={
-                          normalizedTissueSpecificScore
-                        }
-                        colorBy={"Colored by tissue specific score"}
-                      />
-                      {organFilters.length > 0 && (
-                        <Selections
-                          filters={organFilters}
-                          clearFilterFunc={handleClickOrgan}
-                        />
-                      )}
+                  <div className="grid @5xl:grid-cols-7  @5xl:grid-rows-1 grid-cols-1 grid-rows-2 gap-1 mb-2 justify-items-center">
+                    <div className="@5xl:col-span-2">
+                      <div className="relative">
+                        <div className="w-64">
+                          <BodyMapThumbnailAndModal
+                            data={data}
+                            assembly={assembly}
+                            organFilters={organFilters}
+                            handleClickOrgan={handleClickOrgan}
+                            getOrganFacets={getOrganFacets}
+                            getFillColorTailwind={getFillColorTailwind}
+                            getFillColorHex={getFillColorHex}
+                            normalizedTissueSpecificScore={
+                              normalizedTissueSpecificScore
+                            }
+                            colorBy={"Colored by tissue specific score"}
+                            width={"w-10/12"}
+                          />
+                          {organFilters.length > 0 && (
+                            <Selections
+                              filters={organFilters}
+                              clearFilterFunc={handleClickOrgan}
+                            />
+                          )}
+                        </div>
+                        <div className="absolute top-12 right-3 h-48">
+                          <TissueScoreBar
+                            normalizedTissueSpecificScore={
+                              normalizedTissueSpecificScore
+                            }
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="@5xl:col-span-3 @5xl:row-start-1 @md:row-start-2 @md:col-span-2 w-full">
+
+                    <div className="@5xl:col-span-5 w-full">
                       <div>Number of accessibility datasets </div>
                       <div className="text-data-label text-sm italic">
                         Grouped by biosamples
                       </div>
                       <div className="h-80 border-2 border-panel p-1">
                         <AccessibilityChart accessibilityData={filteredData} />
-                      </div>
-                    </div>
-                    <div className="@5xl:col-span-1 @5xl:row-start-1 @md:rol-start-1">
-                      <div>Tissue specific score gauge </div>
-                      <div className="whitespace-break-spaces	text-data-label text-sm italic">
-                        {" "}
-                      </div>
-                      <div className="h-80 border-2 border-panel p-1">
-                        <TissueScoreBar
-                          normalizedTissueSpecificScore={
-                            normalizedTissueSpecificScore
-                          }
-                        />
                       </div>
                     </div>
                   </div>
