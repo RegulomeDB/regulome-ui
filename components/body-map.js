@@ -263,6 +263,7 @@ export function BodyMapThumbnail({
   getFillColorTailwind,
   getFillColorHex,
   colorBy,
+  width,
 }) {
   return (
     <div
@@ -276,7 +277,7 @@ export function BodyMapThumbnail({
       </div>
       <div className="text-data-label text-sm italic">{colorBy}</div>
       <div className="grid border-2 border-panel h-80 p-1">
-        <div className="relative">
+        <div className={`relative ${width}`}>
           <HumanBodyDiagram
             organList={organList}
             facets={facets}
@@ -335,6 +336,7 @@ BodyMapThumbnail.propTypes = {
   getFillColorTailwind: PropTypes.func.isRequired,
   getFillColorHex: PropTypes.func.isRequired,
   colorBy: PropTypes.string.isRequired,
+  width: PropTypes.string,
 };
 
 /**
@@ -350,6 +352,7 @@ export function BodyMapThumbnailAndModal({
   getFillColorHex,
   normalizedTissueSpecificScore,
   colorBy,
+  width,
 }) {
   const [isThumbnailExpanded, setIsThumbnailExpanded] = useState(false);
   let facets = {};
@@ -386,6 +389,7 @@ export function BodyMapThumbnailAndModal({
         getFillColorTailwind={getFillColorTailwind}
         getFillColorHex={getFillColorHex}
         colorBy={colorBy}
+        width={width}
       />
 
       <BodyMap
@@ -414,4 +418,5 @@ BodyMapThumbnailAndModal.propTypes = {
   getFillColorHex: PropTypes.func.isRequired,
   normalizedTissueSpecificScore: PropTypes.object,
   colorBy: PropTypes.string.isRequired,
+  width: PropTypes.string,
 };

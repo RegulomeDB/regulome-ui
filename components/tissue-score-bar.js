@@ -36,9 +36,11 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
   const unitValue = (MAX_SCORE - MIN_SCORE) / 10;
   const datasets = TissueScoreHexColor.map((color, i) => {
     return {
-      data: [0.1 * i],
+      data: [i],
       backgroundColor: color,
       barPercentage: 0.2,
+      categoryPercentage: 1,
+      // barThickness: 20,
       borderColor: color,
       borderSkipped: false,
       borderRadius: [
@@ -96,15 +98,18 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
       datalabels: {
         display: true,
         anchor: "end",
-        offset: 15,
+        offset: 6,
         align: "right",
         formatter: (value) => {
-          return (value * 10 * unitValue + MIN_SCORE).toFixed(3);
+          if (value % 2 === 0) {
+            return (value * unitValue + MIN_SCORE).toFixed(2);
+          }
+          return null;
         },
       },
     },
   };
-  return <Bar options={options} data={data} redraw={true} />;
+  return <Bar options={options} data={data} />;
 }
 
 TissueScoreBar.propTypes = {
