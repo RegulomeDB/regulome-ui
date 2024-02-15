@@ -19,10 +19,21 @@ export default function Summary({ data, queryString }) {
     for (let i = 0; i < data.variants.length; i++) {
       const variant = {};
       variant.chrom_location = `${data.variants[i].chrom}:${data.variants[i].start}-${data.variants[i].end}`;
+      variant.ref = data.variants[i].ref;
+      variant.alt = data.variants[i].alt;
       variant.rsids = data.variants[i].rsids;
       variant.rank = data.variants[i].regulome_score.ranking;
       variant.score = data.variants[i].regulome_score.probability;
+      variant.tissue_specific_scores =
+        data.variants[i].regulome_score.tissue_specific_scores;
       variant.assembly = assembly;
+      const sortedScores = Object.fromEntries(
+        Object.entries(variant.tissue_specific_scores).sort(
+          ([, a], [, b]) => b - a
+        )
+      );
+      const organs = Object.keys(sortedScores);
+      variant.top_organs = organs.slice(0, 3);
       variants[i] = variant;
     }
   }
@@ -58,7 +69,7 @@ export default function Summary({ data, queryString }) {
                 Download TSV
               </ButtonLink>
             </div>
-            <SummaryTable data={variants} />
+            <SummaryTable data={variants} assembly={assembly} />
           </>
         )}
       </DataPanel>
