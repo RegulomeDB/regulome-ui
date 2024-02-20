@@ -23,7 +23,7 @@ export default function Summary({ data, queryString }) {
       variant.alt = data.variants[i].alt;
       variant.rsids = data.variants[i].rsids;
       variant.rank = data.variants[i].regulome_score.ranking;
-      variant.score = data.variants[i].regulome_score.probability;
+      variant.score = parseFloat(data.variants[i].regulome_score.probability);
       variant.tissue_specific_scores =
         data.variants[i].regulome_score.tissue_specific_scores;
       variant.assembly = assembly;

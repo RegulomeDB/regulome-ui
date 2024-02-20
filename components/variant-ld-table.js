@@ -6,7 +6,8 @@ import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
 const initialSort = {
-  columnId: "rank",
+  columnId: "score",
+  direction: "desc",
 };
 
 const variantLDColumns = [
@@ -41,11 +42,11 @@ const variantLDColumns = [
   },
   {
     id: "rank",
-    title: "Rank",
+    title: "Global rank",
   },
   {
     id: "score",
-    title: "Score",
+    title: "Global score",
   },
 ];
 
