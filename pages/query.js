@@ -14,6 +14,7 @@ import {
   TabPanes,
   TabTitle,
 } from "../components/tabs";
+import Navigation from "../components/navigation";
 
 const inputClassName =
   "border-form-element bg-form-element text-form-element appearance-none border-2 rounded w-full py-2 px-4 leading-tight";
@@ -123,6 +124,7 @@ export default function Query() {
 
   return (
     <>
+      <Navigation />
       <Breadcrumbs />
       <PagePreamble />
       <RegulomeVersionTag />
