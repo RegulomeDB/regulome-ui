@@ -222,7 +222,11 @@ SnpBox.propTypes = {
  * Renders a DNA logo with x- and y-axes and the box highlight the snp.
  *
  */
-function LogoRef({ pwm, strand, snpCoordinate, hideY, heightScale }, ref) {
+
+export const DnaLogo = React.forwardRef(function LogoRef(
+  { pwm, strand, snpCoordinate, hideY, heightScale },
+  ref
+) {
   if (pwm.length === 0 || pwm[0].length === 0) return <div />;
   const likelihood = pwm.map((row) => {
     const sum = row.reduce(
@@ -262,9 +266,9 @@ function LogoRef({ pwm, strand, snpCoordinate, hideY, heightScale }, ref) {
       </g>
     </svg>
   );
-}
+});
 
-LogoRef.propTypes = {
+DnaLogo.propTypes = {
   // position probability wighted matrix, for each row there are 4 colums and the values sum to 1
   pwm: PropTypes.array.isRequired,
   // whether to show Yaxis
@@ -273,6 +277,3 @@ LogoRef.propTypes = {
   snpCoordinate: PropTypes.number.isRequired,
   heightScale: PropTypes.number,
 };
-
-const DnaLogo = React.forwardRef(LogoRef);
-export default DnaLogo;

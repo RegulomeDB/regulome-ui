@@ -18,8 +18,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend,
-  Datalabels
+  Legend
 );
 
 export function TissueScoreBar({ normalizedTissueSpecificScore }) {
@@ -104,12 +103,12 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
           if (value % 2 === 0) {
             return (value * unitValue + MIN_SCORE).toFixed(2);
           }
-          return null;
+          return "";
         },
       },
     },
   };
-  return <Bar options={options} data={data} />;
+  return <Bar options={options} data={data} plugins={[Datalabels]} />;
 }
 
 TissueScoreBar.propTypes = {

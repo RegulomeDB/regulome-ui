@@ -79,7 +79,7 @@ const PINNED_FILES_HG19 = [
  */
 export function GenomeLegend() {
   return (
-    <div class="grid justify-items-end pb-4">
+    <div className="grid justify-items-end pb-4">
       <Tooltip
         content={
           <div className="bg-white border border-gray-400 grid grid-cols-3">

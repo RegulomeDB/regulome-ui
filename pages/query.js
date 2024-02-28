@@ -163,6 +163,7 @@ export default function Query() {
                       className={inputClassName}
                       id="region"
                       name="region"
+                      autoComplete="off"
                       rows="8"
                       cols="50"
                       placeholder="Enter the rsID, SPDI, HGVS or a region, only one single variant is allowed."
@@ -180,6 +181,7 @@ export default function Query() {
                   <div className="w-2/3">
                     <input
                       className="mr-1"
+                      name="include"
                       type="checkbox"
                       checked={includeVariantsInLD}
                       onChange={(e) => {
