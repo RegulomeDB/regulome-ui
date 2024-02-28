@@ -19,8 +19,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend,
-  zoomPlugin
+  Legend
 );
 
 export default function ChipDataBarChart({ chipData }) {
@@ -103,7 +102,7 @@ export default function ChipDataBarChart({ chipData }) {
       },
     },
   };
-  return <Bar options={options} data={data} />;
+  return <Bar options={options} data={data} plugins={[zoomPlugin]} />;
 }
 
 ChipDataBarChart.propTypes = {
