@@ -63,9 +63,6 @@ const options = {
     },
   },
   plugins: {
-    datalabels: {
-      display: false,
-    },
     legend: {
       display: false,
     },
@@ -102,9 +99,6 @@ const optionsForPopup = {
     },
   },
   plugins: {
-    datalabels: {
-      display: false,
-    },
     legend: {
       display: true,
     },

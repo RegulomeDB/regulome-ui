@@ -19,8 +19,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend,
-  zoomPlugin
+  Legend
 );
 
 export default function AccessibilityChart({ accessibilityData }) {
@@ -82,9 +81,6 @@ export default function AccessibilityChart({ accessibilityData }) {
       },
     },
     plugins: {
-      datalabels: {
-        display: false,
-      },
       legend: {
         //put legend on top
         position: "top",
@@ -106,7 +102,9 @@ export default function AccessibilityChart({ accessibilityData }) {
       },
     },
   };
-  return <Bar options={options} data={data} width={"400"} />;
+  return (
+    <Bar options={options} data={data} width={"400"} plugins={[zoomPlugin]} />
+  );
 }
 
 AccessibilityChart.propTypes = {

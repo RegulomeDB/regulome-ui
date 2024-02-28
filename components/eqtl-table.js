@@ -95,6 +95,7 @@ const eqtlDataColumns = [
           placeholder="Search for a target gene name"
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
+          name="gene"
         />
       </label>
       <DataGridContainer>

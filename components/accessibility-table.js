@@ -100,6 +100,7 @@ export default function AccessibilityDataTable({ data }) {
           placeholder="Search for a biosample name or an organ name"
           value={textInput}
           onChange={(e) => setTextInput(e.target.value)}
+          name="biosampleOrOrgan"
         />
       </label>
       <DataGridContainer>

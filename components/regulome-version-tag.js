@@ -13,8 +13,10 @@ export default function RegulomeVersionTag({ version = "2.2" }) {
         <Image
           src="/RegulomeLogoFinal.gif"
           alt="clickable image"
-          width="300"
-          height="96"
+          width="0"
+          height="0"
+          sizes="100vw"
+          className="w-full h-auto"
           priority
         />
         <span className="sr-only">Home</span>

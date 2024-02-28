@@ -8,7 +8,7 @@ import {
   DataItemValue,
   DataPanel,
 } from "./data-area";
-import DnaLogo from "./dna-logo/dna-logo";
+import { DnaLogo } from "./dna-logo/dna-logo";
 
 /**
  * Display information for a sigle motif. Each motif contains info about targets, strand, pwms and footprints, and a svg for DNA logo

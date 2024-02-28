@@ -19,8 +19,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend,
-  zoomPlugin
+  Legend
 );
 
 export default function QTLChart({ qtlData }) {
@@ -103,7 +102,9 @@ export default function QTLChart({ qtlData }) {
       },
     },
   };
-  return <Bar options={options} data={data} width={"400"} />;
+  return (
+    <Bar options={options} data={data} width={"400"} plugins={[zoomPlugin]} />
+  );
 }
 
 QTLChart.propTypes = {
