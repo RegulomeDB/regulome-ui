@@ -2,10 +2,11 @@ import PropTypes from "prop-types";
 import Breadcrumbs from "../components/breadcrumbs";
 import { DataPanel, DataAreaTitle } from "../components/data-area";
 import { ButtonLink } from "../components/form-elements";
+import Navigation from "../components/navigation";
+import Notifications from "../components/notifications";
 import PagePreamble from "../components/page-preamble";
 import RegulomeVersionTag from "../components/regulome-version-tag";
 import SummaryTable from "../components/summary-table";
-import Notifications from "../components/notifications";
 import { API_URL } from "../lib/constants";
 import errorObjectToProps from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
@@ -40,8 +41,9 @@ export default function Summary({ data, queryString }) {
 
   return (
     <>
-      <Breadcrumbs />
       <RegulomeVersionTag />
+      <Navigation />
+      <Breadcrumbs />
       <PagePreamble />
       <DataPanel>
         <DataAreaTitle>

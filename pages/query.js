@@ -4,6 +4,7 @@ import Breadcrumbs from "../components/breadcrumbs";
 import { Button } from "../components/form-elements";
 import { DataPanel, DataItemLabel } from "../components/data-area";
 import Modal from "../components/modal";
+import Navigation from "../components/navigation";
 import PagePreamble from "../components/page-preamble";
 import RegulomeVersionTag from "../components/regulome-version-tag";
 import { validateRegions, validateRegion } from "../lib/validate-regions";
@@ -123,9 +124,10 @@ export default function Query() {
 
   return (
     <>
+      <RegulomeVersionTag />
+      <Navigation />
       <Breadcrumbs />
       <PagePreamble />
-      <RegulomeVersionTag />
       <DataPanel>
         <TabGroup>
           <TabList>

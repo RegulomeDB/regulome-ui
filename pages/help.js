@@ -1,12 +1,16 @@
 import Image from "next/image";
 import Breadcrumbs from "../components/breadcrumbs";
-import PagePreamble from "../components/page-preamble";
-import FAQ from "../components/faq";
 import { DataPanel } from "../components/data-area";
+import FAQ from "../components/faq";
+import Navigation from "../components/navigation";
+import PagePreamble from "../components/page-preamble";
+import RegulomeVersionTag from "../components/regulome-version-tag";
 
 export default function Help() {
   return (
     <>
+      <RegulomeVersionTag />
+      <Navigation />
       <Breadcrumbs />
       <PagePreamble />
       <DataPanel>
