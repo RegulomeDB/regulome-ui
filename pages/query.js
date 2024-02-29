@@ -4,6 +4,7 @@ import Breadcrumbs from "../components/breadcrumbs";
 import { Button } from "../components/form-elements";
 import { DataPanel, DataItemLabel } from "../components/data-area";
 import Modal from "../components/modal";
+import Navigation from "../components/navigation";
 import PagePreamble from "../components/page-preamble";
 import RegulomeVersionTag from "../components/regulome-version-tag";
 import { validateRegions, validateRegion } from "../lib/validate-regions";
@@ -14,7 +15,6 @@ import {
   TabPanes,
   TabTitle,
 } from "../components/tabs";
-import Navigation from "../components/navigation";
 
 const inputClassName =
   "border-form-element bg-form-element text-form-element appearance-none border-2 rounded w-full py-2 px-4 leading-tight";
@@ -124,10 +124,10 @@ export default function Query() {
 
   return (
     <>
+      <RegulomeVersionTag />
       <Navigation />
       <Breadcrumbs />
       <PagePreamble />
-      <RegulomeVersionTag />
       <DataPanel>
         <TabGroup>
           <TabList>

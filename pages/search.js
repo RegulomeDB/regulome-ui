@@ -15,6 +15,7 @@ import {
 } from "../components/data-area";
 import { Button } from "../components/form-elements";
 import Motifs from "../components/motifs-view";
+import Navigation from "../components/navigation";
 import Notifications from "../components/notifications";
 import PagePreamble from "../components/page-preamble";
 import { QTLDataView } from "../components/qtl-data-view";
@@ -131,8 +132,11 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
 
     return (
       <>
-        <Breadcrumbs />
         <RegulomeVersionTag />
+
+        <Navigation />
+
+        <Breadcrumbs />
         <PagePreamble />
         <SearchPageHeader queryString={queryString} />
         {showScoreView && (
@@ -277,8 +281,10 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
   }
   return (
     <>
-      <Breadcrumbs />
       <RegulomeVersionTag />
+      <Navigation />
+
+      <Breadcrumbs />
       <PagePreamble />
       <Notifications notifications={data.notifications} />
     </>
