@@ -42,7 +42,6 @@ export default function Summary({ data, queryString }) {
   return (
     <>
       <RegulomeVersionTag />
-
       <Navigation />
       <Breadcrumbs />
       <PagePreamble />

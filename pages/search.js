@@ -133,9 +133,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
     return (
       <>
         <RegulomeVersionTag />
-
         <Navigation />
-
         <Breadcrumbs />
         <PagePreamble />
         <SearchPageHeader queryString={queryString} />
@@ -283,7 +281,6 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
     <>
       <RegulomeVersionTag />
       <Navigation />
-
       <Breadcrumbs />
       <PagePreamble />
       <Notifications notifications={data.notifications} />
