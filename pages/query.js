@@ -17,7 +17,7 @@ import {
 } from "../components/tabs";
 
 const inputClassName =
-  "appearance-none  border-form-element bg-form-element text-form-element border-2 rounded w-full py-2 px-4 leading-tight";
+  "border-form-element bg-form-element text-form-element appearance-none border-2 rounded w-full py-2 px-4 leading-tight";
 const buttonClassName =
   "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
 const exampleSnps =
