@@ -20,7 +20,6 @@ const inputClassName =
   "border-form-element bg-form-element text-form-element appearance-none border-2 rounded w-full py-2 px-4 leading-tight";
 const buttonClassName =
   "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
-
 const exampleSnps =
   "rs75982468\nrs10117931\nrs11749731\nrs11160830\nrs2808110\nrs2839467\nrs147375898\nrs111686660\nrs11145227\nrs190318542\nrs148232663\nrs74792881\nrs3087079\nrs2166521\nrs62319725";
 const exampleCoordinates =
@@ -34,14 +33,21 @@ const exampleHgvs = "NC_000009.12:g.4575120G>A";
 export default function Query() {
   const [fileInput, setFileInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [maf, setMaf] = useState("1.1");
-  const [assembly, setAssembly] = useState("GRCh38");
+  const [maf, setMaf] = useState("0.01");
   const [ancestry, setAncestry] = useState("");
   const [r2, setR2] = useState("0.8");
   const [textInputForMultiple, setTextInputForMultiple] = useState("");
   const [textInputForSingle, setTextInputForSingle] = useState("");
-  const [includeVariantsInLD, setIncludeVariantsInLD] = useState(true);
-  const [ldFieldsHidden, setLdFieldsHidden] = useState(false);
+  const [includeVariantsInLD, setIncludeVariantsInLD] = useState(false);
+  const [ldFieldsHidden, setLdFieldsHidden] = useState(true);
+  const [isGrch38, setIsGrch38] = useState(true);
+
+  const grch38LabelStyle = isGrch38
+    ? "text-black dark:text-white"
+    : "text-slate-400";
+  const grch19LabelStyle = isGrch38
+    ? "text-slate-400"
+    : "text-black dark:text-white";
 
   // Handles the submit event on single variant form submit.
   async function handleSingleSubmit(event) {
@@ -51,6 +57,7 @@ export default function Query() {
     if (!textInputForSingle) {
       setIsOpen(true);
     } else {
+      const assembly = isGrch38 ? "GRCh38" : "hg19";
       const region = textInputForSingle
         ? textInputForSingle.trim().replace(/\s/g, " ")
         : fileInput.trim().replace(/\s/g, " ");
@@ -89,6 +96,7 @@ export default function Query() {
     } else if (!textInputForMultiple && !fileInput) {
       setIsOpen(true);
     } else {
+      const assembly = isGrch38 ? "GRCh38" : "hg19";
       const regions = textInputForMultiple
         ? textInputForMultiple.trim().replace(/\s/g, " ")
         : fileInput.trim().replace(/\s/g, " ");
@@ -97,17 +105,11 @@ export default function Query() {
       if (!isValidInput) {
         setIsOpen(true);
       } else {
-        const query =
-          maf === "1.1"
-            ? {
-                regions,
-                genome: assembly,
-              }
-            : {
-                regions,
-                genome: assembly,
-                maf,
-              };
+        const query = {
+          regions,
+          genome: assembly,
+          maf,
+        };
         Router.push({
           pathname: "/summary",
           query,
@@ -128,6 +130,33 @@ export default function Query() {
       <Navigation />
       <Breadcrumbs />
       <PagePreamble />
+      <label className="m-2 relative inline-flex cursor-pointer select-none items-center">
+        <input
+          type="checkbox"
+          checked={!isGrch38}
+          onChange={(e) => {
+            setIsGrch38(!e.target.checked);
+          }}
+          className="sr-only"
+        />
+        <span
+          className={`${grch38LabelStyle}  flex items-center text-xl font-bold`}
+        >
+          GRCh38
+        </span>
+        <span className="mx-4 flex h-8 w-[60px] items-center rounded-full p-1 duration-200 bg-[#CCCCCE]">
+          <span
+            className={`h-6 w-6 rounded-full bg-brand duration-200 ${
+              isGrch38 ? "" : "translate-x-[28px]"
+            }`}
+          ></span>
+        </span>
+        <span
+          className={`${grch19LabelStyle} flex items-center text-xl font-bold`}
+        >
+          hg19
+        </span>
+      </label>
       <DataPanel>
         <TabGroup>
           <TabList>
@@ -137,25 +166,6 @@ export default function Query() {
           <TabPanes>
             <TabPane>
               <form onSubmit={handleSingleSubmit}>
-                <div className="flex items-center mb-6">
-                  <div className="w-1/3">
-                    <DataItemLabel htmlFor="assembly">Assembly</DataItemLabel>
-                  </div>
-                  <div className="w-2/3">
-                    <select
-                      className={inputClassName}
-                      name="assembly"
-                      value={assembly}
-                      onChange={(e) => setAssembly(e.target.value)}
-                    >
-                      <option value="GRCh38" defaultValue>
-                        GRCh38
-                      </option>
-                      <option value="hg19">hg19</option>
-                    </select>
-                  </div>
-                </div>
-
                 <div className="flex items-center mb-6">
                   <div className="w-1/3">
                     <DataItemLabel>Region</DataItemLabel>
@@ -204,7 +214,7 @@ export default function Query() {
                       LD Ancestry
                     </DataItemLabel>
                   </div>
-                  <div className="w-2/3">
+                  <div className="w-2/3 relative">
                     <select
                       className={inputClassName}
                       name="ancestry"
@@ -218,6 +228,15 @@ export default function Query() {
                       <option value="AFR">AFR</option>
                       <option value="SAS">SAS</option>
                     </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
+                      <svg
+                        class="fill-current h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
 
@@ -291,41 +310,28 @@ export default function Query() {
                   <div className="w-1/3">
                     <DataItemLabel htmlFor="maf">MAF Score</DataItemLabel>
                   </div>
-                  <div className="w-2/3">
+                  <div className="w-2/3 relative">
                     <select
                       className={inputClassName}
                       name="maf"
                       value={maf}
                       onChange={(e) => setMaf(e.target.value)}
                     >
-                      <option value="1.1" defaultValue>
-                        NA
+                      <option value="0.01" defaultValue>
+                        0.01
                       </option>
-                      <option value="0.2">0.2</option>
-                      <option value="0.4">0.4</option>
-                      <option value="0.6">0.6</option>
-                      <option value="0.8">0.8</option>
-                      <option value="1.0">1.0</option>
+                      <option value="0.02">0.02</option>
+                      <option value="0.05">0.05</option>
                     </select>
-                  </div>
-                </div>
-
-                <div className="flex items-center mb-6">
-                  <div className="w-1/3">
-                    <DataItemLabel htmlFor="assembly">Assembly</DataItemLabel>
-                  </div>
-                  <div className="w-2/3">
-                    <select
-                      className={inputClassName}
-                      name="assembly"
-                      value={assembly}
-                      onChange={(e) => setAssembly(e.target.value)}
-                    >
-                      <option value="GRCh38" defaultValue>
-                        GRCh38
-                      </option>
-                      <option value="hg19">hg19</option>
-                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
+                      <svg
+                        class="fill-current h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
 
