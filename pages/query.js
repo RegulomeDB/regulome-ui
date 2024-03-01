@@ -144,9 +144,7 @@ export default function Query() {
         >
           GRCh38
         </span>
-        <span
-          className={`mx-4 flex h-8 w-[60px] items-center rounded-full p-1 duration-200 ${"bg-[#CCCCCE]"}`}
-        >
+        <span className="mx-4 flex h-8 w-[60px] items-center rounded-full p-1 duration-200 bg-[#CCCCCE]">
           <span
             className={`h-6 w-6 rounded-full bg-brand duration-200 ${
               isGrch38 ? "" : "translate-x-[28px]"
