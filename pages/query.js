@@ -17,10 +17,9 @@ import {
 } from "../components/tabs";
 
 const inputClassName =
-  "border-form-element bg-form-element text-form-element border-2 rounded w-full py-2 px-4 leading-tight";
+  "appearance-none  border-form-element bg-form-element text-form-element border-2 rounded w-full py-2 px-4 leading-tight";
 const buttonClassName =
   "shadow bg-brand focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded";
-
 const exampleSnps =
   "rs75982468\nrs10117931\nrs11749731\nrs11160830\nrs2808110\nrs2839467\nrs147375898\nrs111686660\nrs11145227\nrs190318542\nrs148232663\nrs74792881\nrs3087079\nrs2166521\nrs62319725";
 const exampleCoordinates =
@@ -217,7 +216,7 @@ export default function Query() {
                       LD Ancestry
                     </DataItemLabel>
                   </div>
-                  <div className="w-2/3">
+                  <div className="w-2/3 relative">
                     <select
                       className={inputClassName}
                       name="ancestry"
@@ -231,6 +230,15 @@ export default function Query() {
                       <option value="AFR">AFR</option>
                       <option value="SAS">SAS</option>
                     </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
+                      <svg
+                        class="fill-current h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
 
@@ -304,7 +312,7 @@ export default function Query() {
                   <div className="w-1/3">
                     <DataItemLabel htmlFor="maf">MAF Score</DataItemLabel>
                   </div>
-                  <div className="w-2/3">
+                  <div className="w-2/3 relative">
                     <select
                       className={inputClassName}
                       name="maf"
@@ -317,6 +325,15 @@ export default function Query() {
                       <option value="0.02">0.02</option>
                       <option value="0.05">0.05</option>
                     </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
+                      <svg
+                        class="fill-current h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
 
