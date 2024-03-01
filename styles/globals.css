@@ -197,12 +197,12 @@
   --color-audit-level-detail-background: #d0d0d0;
 
   --color-tab-group-border: #d0d0d0;
-  --color-tab-selected-border: #3b82f6;
+  --color-tab-selected-border: #36582e;
   --color-tab-unselected-border: transparent;
   --color-tab-disabled-border: transparent;
-  --color-tab-hover-border: #bfdbfe;
-  --color-tab-title-selected-text: #2563eb;
-  --color-tab-title-unselected-text: #1f2937;
+  --color-tab-hover-border: #d1f8c8;
+  --color-tab-title-selected-text: #36582e;
+  --color-tab-title-unselected-text: #0a1008;
   --color-tab-title-disabled-text: #d1d5db;
   --color-tab-title-hover-text: #1f2937;
 
