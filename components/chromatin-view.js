@@ -258,7 +258,6 @@ export function ChromatinView({
               </div>
               <Button onClick={clearAllFilters}>Clear all filters </Button>
             </DataPanel>
-
             <DataPanel>
               <ChromatinTable data={filteredData} />
             </DataPanel>

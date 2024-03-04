@@ -99,7 +99,6 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
                             getFillColorTailwind={
                               getFillColorTailwindTissueScore
                             }
-                            getFillColorHex={getFillColorHexTissueScore}
                             normalizedTissueSpecificScore={
                               normalizedTissueSpecificScore
                             }

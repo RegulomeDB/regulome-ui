@@ -102,7 +102,6 @@ export function AccessibilityDataView({
                             getFillColorTailwind={
                               getFillColorTailwindTissueScore
                             }
-                            getFillColorHex={getFillColorHexTissueScore}
                             normalizedTissueSpecificScore={
                               normalizedTissueSpecificScore
                             }
