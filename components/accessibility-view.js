@@ -7,10 +7,10 @@ import AccessibilityDataTable from "./accessibility-table";
 import { BodyMapThumbnailAndModal } from "./body-map";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import {
-  getFillColorHex,
-  getFillColorTailwind,
+  getFillColorHexTissueScore,
+  getFillColorTailwindTissueScore,
   getFilteredData,
-  getOrganFacets,
+  getOrganFacetsForTissueScore,
   getOrganFilter,
 } from "../lib/tissue-specific-score";
 import { TissueScoreBar } from "./tissue-score-bar";
@@ -96,9 +96,13 @@ export function AccessibilityDataView({
                             assembly={assembly}
                             organFilters={organFilters}
                             handleClickOrgan={handleClickOrgan}
-                            getOrganFacets={getOrganFacets}
-                            getFillColorTailwind={getFillColorTailwind}
-                            getFillColorHex={getFillColorHex}
+                            getOrganFacetsForTissue={
+                              getOrganFacetsForTissueScore
+                            }
+                            getFillColorTailwind={
+                              getFillColorTailwindTissueScore
+                            }
+                            getFillColorHex={getFillColorHexTissueScore}
                             normalizedTissueSpecificScore={
                               normalizedTissueSpecificScore
                             }

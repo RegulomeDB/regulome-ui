@@ -14,7 +14,13 @@ import {
   COMPLETE_CELLS_LIST_HG19,
   COMPLETE_ORGAN_LIST_GRCH38,
   COMPLETE_ORGAN_LIST_HG19,
+  getFillColorHexChromatin,
+  getFillColorTailwindChromatin,
 } from "../lib/chromatin-data";
+import {
+  getFillColorHexTissueScore,
+  getFillColorTailwindTissueScore,
+} from "../lib/tissue-specific-score";
 
 /**
  * HumanCells component display the list of cell images.
@@ -23,7 +29,7 @@ import {
  * Each cell image is clickable. Click the image will select or deselect the cell type.
  * If the cell image is selected, then the color will have a higher opacity compare to unselected.
  */
-export function HumanCells({
+function HumanCells({
   facets,
   cellList,
   organFilters,
@@ -83,6 +89,50 @@ HumanCells.propTypes = {
   getFillColorTailwind: PropTypes.func.isRequired,
 };
 
+function HumanCellsThumbnail({
+  facets,
+  cellList,
+  organFilters,
+  getFillColorTailwind,
+}) {
+  return (
+    <ul className="flex">
+      {cellList.map((cell) => {
+        const src = ["lymph node", "lymphatic vessel"].includes(cell)
+          ? `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.png`
+          : `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.svg`;
+        const color = getFillColorTailwind(facets, cell);
+        const opacity = organFilters.includes(cell)
+          ? "opacity-60"
+          : "opacity-30";
+        return (
+          <li
+            className={`body-inset ${cell}`}
+            id={cell}
+            key={`${cell}-bodymap-cellslist`}
+          >
+            <div className="relative">
+              <Image src={src} alt="clickable image" width="50" height="50" />
+              {color && (
+                <div
+                  className={`absolute inset-0 ${color} ${opacity} rounded-full`}
+                />
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+HumanCellsThumbnail.propTypes = {
+  facets: PropTypes.object.isRequired,
+  cellList: PropTypes.array.isRequired,
+  organFilters: PropTypes.array.isRequired,
+  getFillColorTailwind: PropTypes.func.isRequired,
+};
+
 /**
  * The BodyMap component is comprised of several different elements:
  * (1) Diagram of body in svg format with selectable organs
@@ -93,17 +143,17 @@ HumanCells.propTypes = {
  * Each image and text item in list are clickable if enabled for selecting or deselecting the filter the user wants.
  * If the organ slim is selected then the responding image's color opacity will increase compare to unselected.
  */
-export function BodyMap({
-  facets,
+function BodyMap({
+  facetsChromatin,
+  facetsTissueScore,
   organList,
   cellList,
   enabledBodyMapFilters,
   organFilters,
   handleClickOrgan,
+  isColorByChromatinState,
   isThumbnailExpanded,
   setIsThumbnailExpanded,
-  getFillColorTailwind,
-  getFillColorHex,
 }) {
   const [highlightedOrgans, setHighlightedOrgans] = useState([]);
   function highlightOrgans(organ) {
@@ -136,13 +186,19 @@ export function BodyMap({
             <div className="grid grid-cols-1">
               <HumanBodyDiagram
                 organList={organList}
-                facets={facets}
+                facets={
+                  isColorByChromatinState ? facetsChromatin : facetsTissueScore
+                }
                 organFilters={organFilters}
                 enabledBodyMapFilters={enabledBodyMapFilters}
                 handleClickOrgan={handleClickOrgan}
                 highlightedOrgans={highlightedOrgans}
                 highlightOrgans={highlightOrgans}
-                getFillColorHex={getFillColorHex}
+                getFillColorHex={
+                  isColorByChromatinState
+                    ? getFillColorHexChromatin
+                    : getFillColorHexTissueScore
+                }
               />
             </div>
             <div className="grid grid-cols-1">
@@ -182,14 +238,20 @@ export function BodyMap({
             </div>
             <div>
               <HumanCells
-                facets={facets}
+                facets={
+                  isColorByChromatinState ? facetsChromatin : facetsTissueScore
+                }
                 cellList={cellList}
                 organFilters={organFilters}
                 handleClickOrgan={handleClickOrgan}
                 enabledBodyMapFilters={enabledBodyMapFilters}
                 highlightedOrgans={highlightedOrgans}
                 highlightOrgans={highlightOrgans}
-                getFillColorTailwind={getFillColorTailwind}
+                getFillColorTailwind={
+                  isColorByChromatinState
+                    ? getFillColorTailwindChromatin
+                    : getFillColorTailwindTissueScore
+                }
               />
             </div>
             <div>
@@ -237,32 +299,31 @@ export function BodyMap({
 }
 
 BodyMap.propTypes = {
-  facets: PropTypes.object.isRequired,
+  facetsChromatin: PropTypes.object.isRequired,
+  facetsTissueScore: PropTypes.object.isRequired,
   organList: PropTypes.array.isRequired,
   cellList: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
   handleClickOrgan: PropTypes.func.isRequired,
   enabledBodyMapFilters: PropTypes.array,
+  isColorByChromatinState: PropTypes.bool,
   isThumbnailExpanded: PropTypes.bool.isRequired,
   setIsThumbnailExpanded: PropTypes.func.isRequired,
-  getFillColorTailwind: PropTypes.func.isRequired,
-  getFillColorHex: PropTypes.func.isRequired,
 };
 /**
  * It is a clickable thumbnail comprised of body map svg and inset images, with expand icon and instructions
  * Click the thumbnail will display the actual body map.
  */
-export function BodyMapThumbnail({
+function BodyMapThumbnail({
   organList,
   cellList,
-  facets,
+  facetsChromatin,
+  facetsTissueScore,
   organFilters,
   enabledBodyMapFilters,
   isThumbnailExpanded,
   setIsThumbnailExpanded,
-  getFillColorTailwind,
-  getFillColorHex,
-  colorBy,
+  isColorByChromatinState,
   width,
 }) {
   return (
@@ -275,51 +336,40 @@ export function BodyMapThumbnail({
         <FunnelIcon className="h-5" />
         <div>Filter by body diagram</div>
       </div>
-      <div className="text-data-label text-sm italic">{colorBy}</div>
+      <div className="text-data-label text-sm italic">
+        {isColorByChromatinState
+          ? "Colored by most active state"
+          : "Colored by tissue specific score"}
+      </div>
       <div className="grid border-2 border-panel h-80 p-1">
         <div className={`relative ${width}`}>
           <HumanBodyDiagram
             organList={organList}
-            facets={facets}
+            facets={
+              isColorByChromatinState ? facetsChromatin : facetsTissueScore
+            }
+            facetsTissueScore={facetsTissueScore}
             organFilters={organFilters}
             enabledBodyMapFilters={enabledBodyMapFilters}
-            getFillColorHex={getFillColorHex}
+            getFillColorHex={
+              isColorByChromatinState
+                ? getFillColorHexChromatin
+                : getFillColorHexTissueScore
+            }
           />
           <ArrowsPointingOutIcon className="absolute inset-0 h-6" />
         </div>
 
-        <ul className="flex">
-          {cellList.map((cell) => {
-            const src = ["lymph node", "lymphatic vessel"].includes(cell)
-              ? `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.png`
-              : `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.svg`;
-            const color = getFillColorTailwind(facets, cell);
-            const opacity = organFilters.includes(cell)
-              ? "opacity-60"
-              : "opacity-30";
-            return (
-              <li
-                className={`body-inset ${cell}`}
-                id={cell}
-                key={`${cell}-bodymap-cellslist`}
-              >
-                <div className="relative">
-                  <Image
-                    src={src}
-                    alt="clickable image"
-                    width="50"
-                    height="50"
-                  />
-                  {color && (
-                    <div
-                      className={`absolute inset-0 ${color} ${opacity} rounded-full`}
-                    />
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <HumanCellsThumbnail
+          facets={isColorByChromatinState ? facetsChromatin : facetsTissueScore}
+          cellList={cellList}
+          organFilters={organFilters}
+          getFillColorTailwind={
+            isColorByChromatinState
+              ? getFillColorTailwindChromatin
+              : getFillColorTailwindTissueScore
+          }
+        />
       </div>
     </div>
   );
@@ -328,14 +378,13 @@ export function BodyMapThumbnail({
 BodyMapThumbnail.propTypes = {
   organList: PropTypes.array.isRequired,
   cellList: PropTypes.array.isRequired,
-  facets: PropTypes.object.isRequired,
+  facetsChromatin: PropTypes.object.isRequired,
+  facetsTissueScore: PropTypes.object.isRequired,
   organFilters: PropTypes.array.isRequired,
   enabledBodyMapFilters: PropTypes.array.isRequired,
+  isColorByChromatinState: PropTypes.bool,
   isThumbnailExpanded: PropTypes.bool.isRequired,
   setIsThumbnailExpanded: PropTypes.func.isRequired,
-  getFillColorTailwind: PropTypes.func.isRequired,
-  getFillColorHex: PropTypes.func.isRequired,
-  colorBy: PropTypes.string.isRequired,
   width: PropTypes.string,
 };
 
@@ -347,18 +396,22 @@ export function BodyMapThumbnailAndModal({
   assembly,
   organFilters,
   handleClickOrgan,
-  getOrganFacets,
-  getFillColorTailwind,
-  getFillColorHex,
+  getOrganFacetsForChromatin,
+  getOrganFacetsForTissue,
   normalizedTissueSpecificScore,
-  colorBy,
+  isColorByChromatinState,
   width,
 }) {
   const [isThumbnailExpanded, setIsThumbnailExpanded] = useState(false);
-  let facets = {};
+  let facetsChromatin = {};
+  const facetsTissueScore = getOrganFacetsForTissue(
+    normalizedTissueSpecificScore
+  );
   let enabledBodyMapFilters = [];
-  if (normalizedTissueSpecificScore) {
-    facets = getOrganFacets(normalizedTissueSpecificScore);
+  if (getOrganFacetsForChromatin) {
+    facetsChromatin = getOrganFacetsForChromatin(data, assembly);
+    enabledBodyMapFilters = Object.keys(facetsChromatin);
+  } else {
     const organsSet = new Set();
     data.forEach((dataset) => {
       const organs = dataset.biosample_ontology?.organ_slims
@@ -367,10 +420,8 @@ export function BodyMapThumbnailAndModal({
       organs.forEach((organ) => organsSet.add(organ));
     });
     enabledBodyMapFilters = Array.from(organsSet);
-  } else {
-    facets = getOrganFacets(data, assembly);
-    enabledBodyMapFilters = Object.keys(facets);
   }
+
   const organList =
     assembly === "hg19" ? COMPLETE_ORGAN_LIST_HG19 : COMPLETE_ORGAN_LIST_GRCH38;
   const cellList =
@@ -381,19 +432,19 @@ export function BodyMapThumbnailAndModal({
       <BodyMapThumbnail
         organList={organList}
         cellList={cellList}
-        facets={facets}
+        facetsChromatin={facetsChromatin}
+        facetsTissueScore={facetsTissueScore}
         organFilters={organFilters}
         enabledBodyMapFilters={enabledBodyMapFilters}
         setIsThumbnailExpanded={setIsThumbnailExpanded}
         isThumbnailExpanded={isThumbnailExpanded}
-        getFillColorTailwind={getFillColorTailwind}
-        getFillColorHex={getFillColorHex}
-        colorBy={colorBy}
+        isColorByChromatinState={isColorByChromatinState}
         width={width}
       />
 
       <BodyMap
-        facets={facets}
+        facetsChromatin={facetsChromatin}
+        facetsTissueScore={facetsTissueScore}
         organList={organList}
         cellList={cellList}
         enabledBodyMapFilters={enabledBodyMapFilters}
@@ -401,8 +452,7 @@ export function BodyMapThumbnailAndModal({
         handleClickOrgan={handleClickOrgan}
         setIsThumbnailExpanded={setIsThumbnailExpanded}
         isThumbnailExpanded={isThumbnailExpanded}
-        getFillColorTailwind={getFillColorTailwind}
-        getFillColorHex={getFillColorHex}
+        isColorByChromatinState={isColorByChromatinState}
       />
     </div>
   );
@@ -413,10 +463,9 @@ BodyMapThumbnailAndModal.propTypes = {
   assembly: PropTypes.string.isRequired,
   organFilters: PropTypes.array.isRequired,
   handleClickOrgan: PropTypes.func.isRequired,
-  getOrganFacets: PropTypes.func.isRequired,
-  getFillColorTailwind: PropTypes.func.isRequired,
-  getFillColorHex: PropTypes.func.isRequired,
+  getOrganFacetsForChromatin: PropTypes.func,
+  getOrganFacetsForTissue: PropTypes.func.isRequired,
   normalizedTissueSpecificScore: PropTypes.object,
-  colorBy: PropTypes.string.isRequired,
+  isColorByChromatinState: PropTypes.bool,
   width: PropTypes.string,
 };

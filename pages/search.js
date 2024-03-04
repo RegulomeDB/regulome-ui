@@ -268,7 +268,11 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
           coordinates={coordinates}
           assembly={data.assembly}
         ></Motifs>
-        <ChromatinView data={chromatinData} assembly={data.assembly} />
+        <ChromatinView
+          data={chromatinData}
+          normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+          assembly={data.assembly}
+        />
         <GenomeBrowserView
           files={filesForGenomeBrowser}
           assembly={data.assembly}

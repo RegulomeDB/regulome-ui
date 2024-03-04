@@ -5,17 +5,18 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   ASSOCIATED_ORGAN_MAP,
-  getFillColorHex,
-  getFillColorTailwind,
   getFilteredChromatinData,
   getOrganFacets,
 } from "../lib/chromatin-data";
+import { getOrganFacetsForTissueScore } from "../lib/tissue-specific-score";
 import { BodyMapThumbnailAndModal } from "./body-map";
 import ChromatinTable from "./chromatin-table";
 import ChromatinStateFacets from "./chromatin-state-facets";
 import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import { Button } from "./form-elements";
+import ToggleSwitch from "./toggle-switch";
+import { TissueScoreBar } from "./tissue-score-bar";
 
 /**
  *  Display selected filters and allow user to de-select them.
@@ -50,7 +51,11 @@ Selections.propTypes = {
  * It contains three facets group: Organ slim facets, biosample facets and chromatin state facets
  * and a cortable table to display the chromatin state datasets
  */
-export function ChromatinView({ data, assembly }) {
+export function ChromatinView({
+  data,
+  assembly,
+  normalizedTissueSpecificScore,
+}) {
   const router = useRouter();
   useEffect(() => {
     const isChromatin = router.asPath.endsWith(`#!chromatin`);
@@ -60,6 +65,7 @@ export function ChromatinView({ data, assembly }) {
   const [organFilters, setOrganFilters] = useState([]);
   const [stateFilters, setStateFilters] = useState([]);
   const [biosampleFilters, setBiosampleFilters] = useState([]);
+  const [isColorByChromatinState, setIsColorByChromatinState] = useState(true);
   const filteredData = getFilteredChromatinData(
     data,
     stateFilters,
@@ -151,28 +157,76 @@ export function ChromatinView({ data, assembly }) {
         {data.length > 0 ? (
           <>
             <DataAreaTitle>Chromatin State</DataAreaTitle>
+            <ToggleSwitch
+              label="Color by:"
+              isLeftOption={isColorByChromatinState}
+              setIsLeftOption={setIsColorByChromatinState}
+              leftOption="Chromatin state"
+              rightOption="Tissue specific score"
+            />
             <DataPanel>
               <div className="@container">
                 <div className="grid @5xl:grid-cols-5 @5xl:grid-rows-1 @md:grid-cols-2  grid-cols-1 grid-rows-2 gap-1 mb-2 @md:justify-items-center">
                   <div className="@5xl:col-span-1 @5xl:row-start-1 w-56">
-                    <BodyMapThumbnailAndModal
-                      data={filteredDataForBodyMap}
-                      assembly={assembly}
-                      organFilters={organFilters}
-                      handleClickOrgan={handleClickOrgan}
-                      getOrganFacets={getOrganFacets}
-                      getFillColorTailwind={getFillColorTailwind}
-                      getFillColorHex={getFillColorHex}
-                      colorBy={"Colored by most active state"}
-                    />
-                    {organFilters.length > 0 && (
-                      <Selections
-                        filters={organFilters}
-                        clearFilterFunc={handleClickOrgan}
-                      />
+                    {isColorByChromatinState ? (
+                      <>
+                        <BodyMapThumbnailAndModal
+                          data={filteredDataForBodyMap}
+                          assembly={assembly}
+                          organFilters={organFilters}
+                          handleClickOrgan={handleClickOrgan}
+                          getOrganFacetsForChromatin={getOrganFacets}
+                          getOrganFacetsForTissue={getOrganFacetsForTissueScore}
+                          normalizedTissueSpecificScore={
+                            normalizedTissueSpecificScore
+                          }
+                          isColorByChromatinState
+                          colorBy={"Colored by most active state"}
+                        />
+                        {organFilters.length > 0 && (
+                          <Selections
+                            filters={organFilters}
+                            clearFilterFunc={handleClickOrgan}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <div className="relative">
+                        <div className="w-56">
+                          <BodyMapThumbnailAndModal
+                            data={filteredDataForBodyMap}
+                            assembly={assembly}
+                            organFilters={organFilters}
+                            handleClickOrgan={handleClickOrgan}
+                            getOrganFacetsForChromatin={getOrganFacets}
+                            getOrganFacetsForTissue={
+                              getOrganFacetsForTissueScore
+                            }
+                            normalizedTissueSpecificScore={
+                              normalizedTissueSpecificScore
+                            }
+                            isChromatinStateFilter
+                            colorBy={"Colored by tissue specific score"}
+                            width={"w-10/12"}
+                          />
+                          {organFilters.length > 0 && (
+                            <Selections
+                              filters={organFilters}
+                              clearFilterFunc={handleClickOrgan}
+                            />
+                          )}
+                        </div>
+                        <div className="absolute top-12 right-2 h-48">
+                          <TissueScoreBar
+                            normalizedTissueSpecificScore={
+                              normalizedTissueSpecificScore
+                            }
+                          />
+                        </div>
+                      </div>
                     )}
                   </div>
-                  <div className="@5xl:col-span-3 @5xl:row-start-1 @md:row-start-2 @md:col-span-2 ">
+                  <div className="@5xl:col-span-3 @5xl:row-start-1 @md:row-start-2 @md:col-span-2">
                     <ChromatinBiosampleFacets
                       data={filteredDataForBiosample}
                       assembly={assembly}
@@ -204,6 +258,7 @@ export function ChromatinView({ data, assembly }) {
               </div>
               <Button onClick={clearAllFilters}>Clear all filters </Button>
             </DataPanel>
+
             <DataPanel>
               <ChromatinTable data={filteredData} />
             </DataPanel>
@@ -224,4 +279,5 @@ export function ChromatinView({ data, assembly }) {
 ChromatinView.propTypes = {
   data: PropTypes.array.isRequired,
   assembly: PropTypes.string.isRequired,
+  normalizedTissueSpecificScore: PropTypes.object.isRequired,
 };

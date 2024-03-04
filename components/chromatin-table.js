@@ -23,6 +23,10 @@ const chromatinDataColumns = [
     title: "Organ",
   },
   {
+    id: "tissue_specific_score",
+    title: "Tissue specific score",
+  },
+  {
     id: "dataset",
     title: "Dataset",
     display: ({ source }) => (
