@@ -7,8 +7,6 @@ import AccessibilityDataTable from "./accessibility-table";
 import { BodyMapThumbnailAndModal } from "./body-map";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import {
-  getFillColorHexTissueScore,
-  getFillColorTailwindTissueScore,
   getFilteredData,
   getOrganFacetsForTissueScore,
   getOrganFilter,
@@ -98,9 +96,6 @@ export function AccessibilityDataView({
                             handleClickOrgan={handleClickOrgan}
                             getOrganFacetsForTissue={
                               getOrganFacetsForTissueScore
-                            }
-                            getFillColorTailwind={
-                              getFillColorTailwindTissueScore
                             }
                             normalizedTissueSpecificScore={
                               normalizedTissueSpecificScore
