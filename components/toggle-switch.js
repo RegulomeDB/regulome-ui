@@ -49,9 +49,14 @@ export default function ToggleSwitch({
   );
 }
 ToggleSwitch.propTypes = {
+  // is left option on
   isLeftOption: PropTypes.bool.isRequired,
+  // To set whether switch to left option
   setIsLeftOption: PropTypes.func.isRequired,
+  // Option on the left
   leftOption: PropTypes.string.isRequired,
+  // Option on the right
   rightOption: PropTypes.string.isRequired,
+  // drescription text before the two options
   label: PropTypes.string,
 };
