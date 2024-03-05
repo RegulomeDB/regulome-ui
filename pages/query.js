@@ -15,6 +15,7 @@ import {
   TabPanes,
   TabTitle,
 } from "../components/tabs";
+import ToggleSwitch from "../components/toggle-switch";
 
 const inputClassName =
   "border-form-element bg-form-element text-form-element appearance-none border-2 rounded w-full py-2 px-4 leading-tight";
@@ -41,13 +42,6 @@ export default function Query() {
   const [includeVariantsInLD, setIncludeVariantsInLD] = useState(false);
   const [ldFieldsHidden, setLdFieldsHidden] = useState(true);
   const [isGrch38, setIsGrch38] = useState(true);
-
-  const grch38LabelStyle = isGrch38
-    ? "text-black dark:text-white"
-    : "text-slate-400";
-  const grch19LabelStyle = isGrch38
-    ? "text-slate-400"
-    : "text-black dark:text-white";
 
   // Handles the submit event on single variant form submit.
   async function handleSingleSubmit(event) {
@@ -130,33 +124,12 @@ export default function Query() {
       <Navigation />
       <Breadcrumbs />
       <PagePreamble />
-      <label className="m-2 relative inline-flex cursor-pointer select-none items-center">
-        <input
-          type="checkbox"
-          checked={!isGrch38}
-          onChange={(e) => {
-            setIsGrch38(!e.target.checked);
-          }}
-          className="sr-only"
-        />
-        <span
-          className={`${grch38LabelStyle}  flex items-center text-xl font-bold`}
-        >
-          GRCh38
-        </span>
-        <span className="mx-4 flex h-8 w-[60px] items-center rounded-full p-1 duration-200 bg-[#CCCCCE]">
-          <span
-            className={`h-6 w-6 rounded-full bg-brand duration-200 ${
-              isGrch38 ? "" : "translate-x-[28px]"
-            }`}
-          ></span>
-        </span>
-        <span
-          className={`${grch19LabelStyle} flex items-center text-xl font-bold`}
-        >
-          hg19
-        </span>
-      </label>
+      <ToggleSwitch
+        isLeftOption={isGrch38}
+        setIsLeftOption={setIsGrch38}
+        leftOption="GRCh38"
+        rightOption="hg19"
+      />
       <DataPanel>
         <TabGroup>
           <TabList>
@@ -228,9 +201,9 @@ export default function Query() {
                       <option value="AFR">AFR</option>
                       <option value="SAS">SAS</option>
                     </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
                       <svg
-                        class="fill-current h-6 w-6"
+                        className="fill-current h-6 w-6"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                       >
@@ -323,9 +296,9 @@ export default function Query() {
                       <option value="0.02">0.02</option>
                       <option value="0.05">0.05</option>
                     </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
                       <svg
-                        class="fill-current h-6 w-6"
+                        className="fill-current h-6 w-6"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                       >

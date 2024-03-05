@@ -9,10 +9,8 @@ import { DataAreaTitle, DataPanel } from "./data-area";
 import EQTLDataTable from "./eqtl-table";
 import { TissueScoreBar } from "./tissue-score-bar";
 import {
-  getFillColorHex,
-  getFillColorTailwind,
   getFilteredData,
-  getOrganFacets,
+  getOrganFacetsForTissueScore,
   getOrganFilter,
 } from "../lib/tissue-specific-score";
 
@@ -93,9 +91,9 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
                             assembly={assembly}
                             organFilters={organFilters}
                             handleClickOrgan={handleClickOrgan}
-                            getOrganFacets={getOrganFacets}
-                            getFillColorTailwind={getFillColorTailwind}
-                            getFillColorHex={getFillColorHex}
+                            getOrganFacetsForTissue={
+                              getOrganFacetsForTissueScore
+                            }
                             normalizedTissueSpecificScore={
                               normalizedTissueSpecificScore
                             }
