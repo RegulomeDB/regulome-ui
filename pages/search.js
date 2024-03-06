@@ -1,19 +1,10 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import _ from "lodash";
 import { AccessibilityDataView } from "../components/accessibility-view";
 import Breadcrumbs from "../components/breadcrumbs";
 import { ChipDataView } from "../components/chip-data-view";
 import { ChromatinView } from "../components/chromatin-view";
-import {
-  DataArea,
-  DataAreaTitle,
-  DataItemLabel,
-  DataItemValue,
-  DataPanel,
-} from "../components/data-area";
-import { Button } from "../components/form-elements";
 import Motifs from "../components/motifs-view";
 import Navigation from "../components/navigation";
 import Notifications from "../components/notifications";
@@ -21,11 +12,12 @@ import PagePreamble from "../components/page-preamble";
 import { QTLDataView } from "../components/qtl-data-view";
 import RegulomeVersionTag from "../components/regulome-version-tag";
 import {
-  ScoreDataArea,
-  ScoreDataItem,
-} from "../components/score-view-data-area";
-import SearchPageHeader from "../components/search-page-header";
-import SnpsDiagram from "../components/snps-diagram";
+  TabGroup,
+  TabList,
+  TabPane,
+  TabPanes,
+  TabTitle,
+} from "../components/tabs";
 import { getChromatinData } from "../lib/chromatin-data";
 import errorObjectToProps from "../lib/errors";
 import fetchMotifDoc from "../lib/fetch-motif-doc";
@@ -35,25 +27,13 @@ import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
 import { GenomeBrowserView } from "../components/genome-browser-view";
 import fetchVariantLD from "../lib/fetch_variant_ld";
-import VariantLDTable from "../components/variant-ld-table";
 import {
   getDataWithTissueScore,
   getNormalizedTissueSpecificScore,
 } from "../lib/tissue-specific-score";
+import ScoreView from "../components/score-view";
 
-// Default number of populations to display for allele frequencies.
-const DEFAULT_DISPLAY_COUNT = 3;
-
-export default function Search({ data, motifDocList, variantLD, queryString }) {
-  const [showMoreFreqs, setShowMoreFreqs] = useState(false);
-  const [showScoreView, setShowScoreView] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    const isScoreView = !router.asPath.includes(`#!`);
-    setShowScoreView(isScoreView);
-  }, [router]);
-
+export default function Search({ data, motifDocList, variantLD }) {
   if (Object.keys(data.notifications).length === 0) {
     const hitSnps = getSnpsInfo(data);
     const coordinates = data.query_coordinates[0];
@@ -68,7 +48,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
     const chipData = filterOverlappingPeaks(
       allData.filter((d) => d.method === "ChIP-seq")
     );
-    const dnaseData = filterOverlappingPeaks(
+    const accessibilityData = filterOverlappingPeaks(
       allData.filter(
         (d) =>
           d.method === "FAIRE-seq" ||
@@ -125,7 +105,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
 
     const numberOfPeaks =
       chipData.length +
-      dnaseData.length +
+      accessibilityData.length +
       histoneData.length +
       QTLData.length +
       motifsData.length;
@@ -136,148 +116,74 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
         <Navigation />
         <Breadcrumbs />
         <PagePreamble />
-        <SearchPageHeader queryString={queryString} />
-        {showScoreView && (
-          <>
-            <DataAreaTitle>Score</DataAreaTitle>
-            <DataPanel>
-              <ScoreDataArea>
-                <ScoreDataItem
-                  label="Searched Coordinates"
-                  value={coordinates}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Genome Assembly"
-                  value={data.assembly}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Rank"
-                  value={data.regulome_score.ranking}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Score"
-                  value={data.regulome_score.probability}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Number of Total Peaks"
-                  value={numberOfPeaks}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Number of ChIP-seq Peaks"
-                  value={chipData.length}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Number of Accessibility Peaks"
-                  value={dnaseData.length}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Number of Motifs Peaks"
-                  value={motifsData.length}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Number of QTL Peaks"
-                  value={QTLData.length}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Number of Histone ChIP-seq Peaks"
-                  value={histoneData.length}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Number of Files to Show in Genome Browser"
-                  value={filesForGenomeBrowser.length}
-                ></ScoreDataItem>
-                <ScoreDataItem
-                  label="Number of Chromatin State Datasets"
-                  value={chromatinData.length}
-                ></ScoreDataItem>
-              </ScoreDataArea>
-            </DataPanel>
-            {Object.keys(hitSnps).length > 0 && (
-              <>
-                <DataAreaTitle>
-                  SNPs Matching Searched Coordinates
-                </DataAreaTitle>
-                <DataPanel>
-                  <DataArea>
-                    {Object.keys(hitSnps).map((rsid) => (
-                      <React.Fragment key={rsid}>
-                        <DataItemLabel>{rsid}</DataItemLabel>
-                        <DataItemValue>
-                          <div>
-                            {hitSnps[rsid].slice(0, 3).map((populationInfo) => (
-                              <div
-                                key={populationInfo.population}
-                              >{`${populationInfo.info} (${populationInfo.population})`}</div>
-                            ))}
-                          </div>
-                          {hitSnps[rsid].length > 3 && showMoreFreqs ? (
-                            <div>
-                              {hitSnps[rsid]
-                                .slice(3, hitSnps[rsid].length)
-                                .map((populationInfo) => (
-                                  <div
-                                    key={populationInfo.population}
-                                  >{`${populationInfo.info} (${populationInfo.population})`}</div>
-                                ))}
-                            </div>
-                          ) : null}
-                          {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT ? (
-                            <Button
-                              type="secondary"
-                              onClick={() => setShowMoreFreqs(!showMoreFreqs)}
-                            >
-                              {hitSnps[rsid].length - 3}{" "}
-                              {showMoreFreqs ? "fewer" : "more"}
-                            </Button>
-                          ) : null}
-                        </DataItemValue>
-                      </React.Fragment>
-                    ))}
-                  </DataArea>
-                </DataPanel>
-              </>
-            )}
-
-            {data.nearby_snps?.length > 0 ? <SnpsDiagram data={data} /> : null}
-            <div id="container"></div>
-
-            {variantLD.length > 0 && (
-              <>
-                <DataAreaTitle>Variant LD Table</DataAreaTitle>
-                <DataPanel>
-                  <VariantLDTable data={variantLD} />
-                </DataPanel>
-              </>
-            )}
-          </>
-        )}
-        <ChipDataView chipData={chipData}></ChipDataView>
-        <AccessibilityDataView
-          data={dnaseData}
-          normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-          assembly={data.assembly}
-        ></AccessibilityDataView>
-        <QTLDataView
-          data={QTLData}
-          normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-          assembly={data.assembly}
-        ></QTLDataView>
-        <Motifs
-          motifsList={motifDocList}
-          sequence={data.sequence}
-          coordinates={coordinates}
-          assembly={data.assembly}
-        ></Motifs>
-        <ChromatinView
-          data={chromatinData}
-          normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-          assembly={data.assembly}
-        />
-        <GenomeBrowserView
-          files={filesForGenomeBrowser}
-          assembly={data.assembly}
-          coordinates={coordinates}
-        />
+        <TabGroup>
+          <TabList>
+            <TabTitle>Summary</TabTitle>
+            <TabTitle>{`ChIP Data (${chipData.length})`}</TabTitle>
+            <TabTitle>{`Accessibility Data (${accessibilityData.length})`}</TabTitle>
+            <TabTitle>{`QTL Data (${QTLData.length})`}</TabTitle>
+            <TabTitle>{`Motifs (${motifsData.length})`}</TabTitle>
+            <TabTitle>{`Chromatin State (${chromatinData.length})`}</TabTitle>
+            <TabTitle>{`Genome Browser (${filesForGenomeBrowser.length})`}</TabTitle>
+          </TabList>
+          <TabPanes>
+            <TabPane>
+              <ScoreView
+                coordinates={coordinates}
+                data={data}
+                numberOfPeaks={numberOfPeaks}
+                chipData={chipData}
+                dnaseData={accessibilityData}
+                motifsData={motifsData}
+                QTLData={QTLData}
+                histoneData={histoneData}
+                filesForGenomeBrowser={filesForGenomeBrowser}
+                chromatinData={chromatinData}
+                hitSnps={hitSnps}
+                variantLD={variantLD}
+              />
+            </TabPane>
+            <TabPane>
+              <ChipDataView chipData={chipData}></ChipDataView>
+            </TabPane>
+            <TabPane>
+              <AccessibilityDataView
+                data={accessibilityData}
+                normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+                assembly={data.assembly}
+              ></AccessibilityDataView>
+            </TabPane>
+            <TabPane>
+              <QTLDataView
+                data={QTLData}
+                normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+                assembly={data.assembly}
+              ></QTLDataView>
+            </TabPane>
+            <TabPane>
+              <Motifs
+                motifsList={motifDocList}
+                sequence={data.sequence}
+                coordinates={coordinates}
+                assembly={data.assembly}
+              ></Motifs>
+            </TabPane>
+            <TabPane>
+              <ChromatinView
+                data={chromatinData}
+                normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+                assembly={data.assembly}
+              />
+            </TabPane>
+            <TabPane>
+              <GenomeBrowserView
+                files={filesForGenomeBrowser}
+                assembly={data.assembly}
+                coordinates={coordinates}
+              />
+            </TabPane>
+          </TabPanes>
+        </TabGroup>
       </>
     );
   }
@@ -294,7 +200,6 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
 
 Search.propTypes = {
   data: PropTypes.object.isRequired,
-  queryString: PropTypes.string.isRequired,
   motifDocList: PropTypes.array.isRequired,
   variantLD: PropTypes.array.isRequired,
 };

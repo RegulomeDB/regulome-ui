@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/router";
+import { useRef } from "react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/20/solid";
 import {
   DataAreaTitle,
@@ -158,14 +157,6 @@ export default function Motifs({
   coordinates,
   assembly,
 }) {
-  const [showMotif, setShowAccessibilityData] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    const isChip = router.asPath.endsWith(`#!motifs`);
-    setShowAccessibilityData(isChip);
-  }, [router]);
-
   const snpCoordinate = +coordinates.split(":")[1].split("-")[0];
 
   // Compute offsets for the different pwms to find the widest window
@@ -198,54 +189,51 @@ export default function Motifs({
   });
 
   return (
-    showMotif && (
-      <>
-        {motifsList.length > 0 ? (
-          <>
-            <DataAreaTitle>Motifs</DataAreaTitle>
-            <DataPanel>
-              <div className="grid @lg:grid-cols-2 grid-cols-1 gap-4 bg-panel sticky top-0">
-                <div className="grid grid-cols-1">
-                  <DataItemValue>
-                    {assembly} Reference {windowStartPos + 1}-{windowEndPos}
-                  </DataItemValue>
-                </div>
-                <div className="grid grid-cols-1">
-                  <DnaLogo
-                    ref={ref}
-                    pwm={fakePWM}
-                    snpCoordinate={relativeSnpCoordinate}
-                    hideY
-                    strand="+"
-                    heightScale={heightScale}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-rows-1 gap-4">
-                {motifsList.map((motif) => (
-                  <MotifElement
-                    key={motif.pwm}
-                    motif={motif}
-                    coordinates={coordinates}
-                    windowStartPos={windowStartPos}
-                    windowEndPos={windowEndPos}
-                    relativeSnpCoordinate={relativeSnpCoordinate}
-                  />
-                ))}
-              </div>
-            </DataPanel>
-          </>
-        ) : (
+    <>
+      {motifsList.length > 0 ? (
+        <>
+          <DataAreaTitle>Motifs</DataAreaTitle>
           <DataPanel>
-            <DataAreaTitle>
-              No motifs data available to display, please choose a different
-              SNP.
-            </DataAreaTitle>
+            <div className="grid @lg:grid-cols-2 grid-cols-1 gap-4 bg-panel sticky top-0">
+              <div className="grid grid-cols-1">
+                <DataItemValue>
+                  {assembly} Reference {windowStartPos + 1}-{windowEndPos}
+                </DataItemValue>
+              </div>
+              <div className="grid grid-cols-1">
+                <DnaLogo
+                  ref={ref}
+                  pwm={fakePWM}
+                  snpCoordinate={relativeSnpCoordinate}
+                  hideY
+                  strand="+"
+                  heightScale={heightScale}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-rows-1 gap-4">
+              {motifsList.map((motif) => (
+                <MotifElement
+                  key={motif.pwm}
+                  motif={motif}
+                  coordinates={coordinates}
+                  windowStartPos={windowStartPos}
+                  windowEndPos={windowEndPos}
+                  relativeSnpCoordinate={relativeSnpCoordinate}
+                />
+              ))}
+            </div>
           </DataPanel>
-        )}
-      </>
-    )
+        </>
+      ) : (
+        <DataPanel>
+          <DataAreaTitle>
+            No motifs data available to display, please choose a different SNP.
+          </DataAreaTitle>
+        </DataPanel>
+      )}
+    </>
   );
 }
 

@@ -1,6 +1,5 @@
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import { BodyMapThumbnailAndModal } from "./body-map";
@@ -52,12 +51,6 @@ Selections.propTypes = {
  * This is the view for display QTL data for a variant.
  */
 export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
-  const [showQtlData, setShowQtlData] = useState(false);
-  const router = useRouter();
-  useEffect(() => {
-    const isQTL = router.asPath.endsWith(`#!qtl`);
-    setShowQtlData(isQTL);
-  }, [router]);
   const [organFilters, setOrganFilters] = useState([]);
   const filteredData = getFilteredData(data, organFilters);
   const eQTLData = filteredData.filter((d) => d.method === "eQTLs");
@@ -74,91 +67,87 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
   }
 
   return (
-    showQtlData && (
-      <>
-        {data.length > 0 ? (
-          <>
-            <DataAreaTitle>QTL</DataAreaTitle>
-            {assembly === "GRCh38" ? (
-              <DataPanel>
-                <div className="@container">
-                  <div className="grid @5xl:grid-cols-7  @5xl:grid-rows-1 grid-cols-1 grid-rows-2 gap-1 mb-2 justify-items-center">
-                    <div className="@5xl:col-span-2">
-                      <div className="relative">
-                        <div className="w-64">
-                          <BodyMapThumbnailAndModal
-                            data={data}
-                            assembly={assembly}
-                            organFilters={organFilters}
-                            handleClickOrgan={handleClickOrgan}
-                            getOrganFacetsForTissue={
-                              getOrganFacetsForTissueScore
-                            }
-                            normalizedTissueSpecificScore={
-                              normalizedTissueSpecificScore
-                            }
-                            colorBy={"Colored by tissue specific score"}
-                            width={"w-10/12"}
+    <>
+      {data.length > 0 ? (
+        <>
+          <DataAreaTitle>QTL</DataAreaTitle>
+          {assembly === "GRCh38" ? (
+            <DataPanel>
+              <div className="@container">
+                <div className="grid @5xl:grid-cols-7  @5xl:grid-rows-1 grid-cols-1 grid-rows-2 gap-1 mb-2 justify-items-center">
+                  <div className="@5xl:col-span-2">
+                    <div className="relative">
+                      <div className="w-64">
+                        <BodyMapThumbnailAndModal
+                          data={data}
+                          assembly={assembly}
+                          organFilters={organFilters}
+                          handleClickOrgan={handleClickOrgan}
+                          getOrganFacetsForTissue={getOrganFacetsForTissueScore}
+                          normalizedTissueSpecificScore={
+                            normalizedTissueSpecificScore
+                          }
+                          colorBy={"Colored by tissue specific score"}
+                          width={"w-10/12"}
+                        />
+                        {organFilters.length > 0 && (
+                          <Selections
+                            filters={organFilters}
+                            clearFilterFunc={handleClickOrgan}
                           />
-                          {organFilters.length > 0 && (
-                            <Selections
-                              filters={organFilters}
-                              clearFilterFunc={handleClickOrgan}
-                            />
-                          )}
-                        </div>
-                        <div className="absolute top-12 right-3 h-48">
-                          <TissueScoreBar
-                            normalizedTissueSpecificScore={
-                              normalizedTissueSpecificScore
-                            }
-                          />
-                        </div>
+                        )}
                       </div>
-                    </div>
-                    <div className="@5xl:col-span-5 w-full">
-                      <div>Number of QTL datasets </div>
-                      <div className="text-data-label text-sm italic">
-                        Grouped by biosamples
-                      </div>
-                      <div className="h-80 border-2 border-panel p-1">
-                        <QTLChart qtlData={filteredData} />
+                      <div className="absolute top-12 right-3 h-48">
+                        <TissueScoreBar
+                          normalizedTissueSpecificScore={
+                            normalizedTissueSpecificScore
+                          }
+                        />
                       </div>
                     </div>
                   </div>
+                  <div className="@5xl:col-span-5 w-full">
+                    <div>Number of QTL datasets </div>
+                    <div className="text-data-label text-sm italic">
+                      Grouped by biosamples
+                    </div>
+                    <div className="h-80 border-2 border-panel p-1">
+                      <QTLChart qtlData={filteredData} />
+                    </div>
+                  </div>
                 </div>
-              </DataPanel>
-            ) : (
+              </div>
+            </DataPanel>
+          ) : (
+            <DataPanel>
+              <QTLChart qtlData={filteredData} />
+            </DataPanel>
+          )}
+          {caQTLData.length > 0 && (
+            <>
+              <DataAreaTitle>caQTL Data</DataAreaTitle>
               <DataPanel>
-                <QTLChart qtlData={filteredData} />
+                <CaQTLDataTable data={caQTLData} />
               </DataPanel>
-            )}
-            {caQTLData.length > 0 && (
-              <>
-                <DataAreaTitle>caQTL Data</DataAreaTitle>
-                <DataPanel>
-                  <CaQTLDataTable data={caQTLData} />
-                </DataPanel>
-              </>
-            )}
-            {eQTLData.length > 0 && (
-              <>
-                <DataAreaTitle>eQTL Data</DataAreaTitle>
-                <DataPanel>
-                  <EQTLDataTable data={eQTLData} />
-                </DataPanel>
-              </>
-            )}
-          </>
-        ) : (
-          <DataPanel>
-            <DataAreaTitle>
-              No QTL data available to display, please choose a different SNP.
-            </DataAreaTitle>
-          </DataPanel>
-        )}
-      </>
-    )
+            </>
+          )}
+          {eQTLData.length > 0 && (
+            <>
+              <DataAreaTitle>eQTL Data</DataAreaTitle>
+              <DataPanel>
+                <EQTLDataTable data={eQTLData} />
+              </DataPanel>
+            </>
+          )}
+        </>
+      ) : (
+        <DataPanel>
+          <DataAreaTitle>
+            No QTL data available to display, please choose a different SNP.
+          </DataAreaTitle>
+        </DataPanel>
+      )}
+    </>
   );
 }
 
