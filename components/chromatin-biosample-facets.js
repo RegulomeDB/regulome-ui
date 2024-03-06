@@ -30,8 +30,8 @@ export default function ChromatinBiosampleFacets({
           const isSelected = biosampleFilters.includes(facet.biosample);
           return (
             <div key={key}>
-              <div className="grid grid-cols-4">
-                <div className="col-span-3">
+              <div className="grid grid-cols-10">
+                <div className="col-span-6">
                   <button
                     className={`text-sm hover:bg-highlight
                     ${isSelected ? "border-solid border-2 border-brand" : ""}`}
@@ -43,8 +43,20 @@ export default function ChromatinBiosampleFacets({
                     </div>
                   </button>
                 </div>
-                <div className="col-span-1 pl-2">
+                <div className="col-span-3 pl-2">
                   <BiosampleStateBar states={facet.states} />
+                </div>
+                <div className="col-span-1 flex">
+                  {facet.tissue_specific_score && (
+                    <>
+                      <div
+                        className={`box-content h-3 w-3 p-1 ${facet.tissue_specific_score_color}`}
+                      ></div>
+                      <span className="pl-2">
+                        {facet.tissue_specific_score.toFixed(2)}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
