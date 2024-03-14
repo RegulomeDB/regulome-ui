@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
-import _ from "lodash";
+import React, { useEffect, useState } from "react";
 import { AccessibilityDataView } from "../components/accessibility-view";
 import Breadcrumbs from "../components/breadcrumbs";
 import { ChipDataView } from "../components/chip-data-view";
@@ -11,13 +10,6 @@ import Notifications from "../components/notifications";
 import PagePreamble from "../components/page-preamble";
 import { QTLDataView } from "../components/qtl-data-view";
 import RegulomeVersionTag from "../components/regulome-version-tag";
-import {
-  TabGroup,
-  TabList,
-  TabPane,
-  TabPanes,
-  TabTitle,
-} from "../components/tabs";
 import { getChromatinData } from "../lib/chromatin-data";
 import errorObjectToProps from "../lib/errors";
 import fetchMotifDoc from "../lib/fetch-motif-doc";
@@ -31,9 +23,35 @@ import {
   getDataWithTissueScore,
   getNormalizedTissueSpecificScore,
 } from "../lib/tissue-specific-score";
-import ScoreView from "../components/score-view";
+import VariantSummary from "../components/variant-summary";
+import SearchPageHeader from "../components/search-page-header";
+import { useRouter } from "next/router";
+import {
+  getChipDatasets,
+  getFilesForGenomeBrowser,
+} from "../lib/datasets-proccessing";
 
-export default function Search({ data, motifDocList, variantLD }) {
+export default function Search({ data, motifDocList, variantLD, queryString }) {
+  const [view, setView] = useState("summary");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.asPath.includes(`#!accessibility`)) {
+      setView("accessibility");
+    } else if (router.asPath.includes(`#!chip`)) {
+      setView("chip");
+    } else if (router.asPath.includes(`#!qtl`)) {
+      setView("qtl");
+    } else if (router.asPath.includes(`#!motifs`)) {
+      setView("motifs");
+    } else if (router.asPath.includes(`#!chromatin`)) {
+      setView("chromatin");
+    } else if (router.asPath.includes(`#!browser`)) {
+      setView("browser");
+    } else {
+      setView("summary");
+    }
+  }, [router]);
   if (Object.keys(data.notifications).length === 0) {
     const hitSnps = getSnpsInfo(data);
     const coordinates = data.query_coordinates[0];
@@ -45,9 +63,7 @@ export default function Search({ data, motifDocList, variantLD }) {
       (d) => d.method && d.method.indexOf("QTL") !== -1
     );
     const chromatinData = getChromatinData(allData);
-    const chipData = filterOverlappingPeaks(
-      allData.filter((d) => d.method === "ChIP-seq")
-    );
+    const chipData = getChipDatasets(allData);
     const accessibilityData = filterOverlappingPeaks(
       allData.filter(
         (d) =>
@@ -56,59 +72,7 @@ export default function Search({ data, motifDocList, variantLD }) {
           d.method === "ATAC-seq"
       )
     );
-    const histoneData = filterOverlappingPeaks(
-      allData.filter((d) => d.method === "Histone ChIP-seq")
-    );
-
-    const motifsData = filterOverlappingPeaks(
-      allData.filter((d) => d.method === "footprints" || d.method === "PWMs")
-    );
-
-    const duplicatedExperimentDatasets = data["@graph"].filter((d) =>
-      d.dataset.includes("experiment")
-    );
-    // for some reason we are getting duplicates here so we need to filter those out
-    const experimentDatasets = _.uniqBy(
-      duplicatedExperimentDatasets,
-      "dataset"
-    );
-    experimentDatasets.sort((a, b) => (a.method > b.method ? 1 : -1));
-    // genome browser files
-    let filesForGenomeBrowser = [];
-    experimentDatasets.forEach((dataset) => {
-      const files = dataset.files_for_genome_browser;
-      let target = "";
-      // use target labels instead of gene symbols for histone ChIP-seq targets
-      if (dataset.method === "Histone ChIP-seq") {
-        target = dataset.target_label ? dataset.target_label : "";
-      } else {
-        target = dataset.targets ? dataset.targets.join(", ") : "";
-      }
-      for (let i = 0; i < files.length; i++) {
-        files[i].assay_term_name = dataset.method;
-        files[i].biosample_ontology = dataset.biosample_ontology;
-        files[i].file_format = files[i].href.split(".")[1];
-        files[i].dataset = dataset.dataset_rel;
-        files[i].title = files[i].accession;
-        files[i].target = target;
-        files[i].biosample = dataset.biosample_ontology.term_name || "";
-        files[i].assay = dataset.method || "";
-        files[i].organ =
-          dataset.biosample_ontology.classification === "tissue"
-            ? dataset.biosample_ontology.organ_slims.join(", ")
-            : dataset.biosample_ontology.cell_slims.join(", ");
-      }
-      filesForGenomeBrowser = filesForGenomeBrowser.concat(
-        dataset.files_for_genome_browser
-      );
-    });
-
-    const numberOfPeaks =
-      chipData.length +
-      accessibilityData.length +
-      histoneData.length +
-      QTLData.length +
-      motifsData.length;
+    const filesForGenomeBrowser = getFilesForGenomeBrowser(data["@graph"]);
 
     return (
       <>
@@ -116,74 +80,56 @@ export default function Search({ data, motifDocList, variantLD }) {
         <Navigation />
         <Breadcrumbs />
         <PagePreamble />
-        <TabGroup>
-          <TabList>
-            <TabTitle>Summary</TabTitle>
-            <TabTitle>{`ChIP Data (${chipData.length})`}</TabTitle>
-            <TabTitle>{`Accessibility Data (${accessibilityData.length})`}</TabTitle>
-            <TabTitle>{`QTL Data (${QTLData.length})`}</TabTitle>
-            <TabTitle>{`Motifs (${motifsData.length})`}</TabTitle>
-            <TabTitle>{`Chromatin State (${chromatinData.length})`}</TabTitle>
-            <TabTitle>{`Genome Browser (${filesForGenomeBrowser.length})`}</TabTitle>
-          </TabList>
-          <TabPanes>
-            <TabPane>
-              <ScoreView
-                coordinates={coordinates}
-                data={data}
-                numberOfPeaks={numberOfPeaks}
-                chipData={chipData}
-                dnaseData={accessibilityData}
-                motifsData={motifsData}
-                QTLData={QTLData}
-                histoneData={histoneData}
-                filesForGenomeBrowser={filesForGenomeBrowser}
-                chromatinData={chromatinData}
-                hitSnps={hitSnps}
-                variantLD={variantLD}
-              />
-            </TabPane>
-            <TabPane>
-              <ChipDataView chipData={chipData}></ChipDataView>
-            </TabPane>
-            <TabPane>
-              <AccessibilityDataView
-                data={accessibilityData}
-                normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-                assembly={data.assembly}
-              ></AccessibilityDataView>
-            </TabPane>
-            <TabPane>
-              <QTLDataView
-                data={QTLData}
-                normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-                assembly={data.assembly}
-              ></QTLDataView>
-            </TabPane>
-            <TabPane>
-              <Motifs
-                motifsList={motifDocList}
-                sequence={data.sequence}
-                coordinates={coordinates}
-                assembly={data.assembly}
-              ></Motifs>
-            </TabPane>
-            <TabPane>
-              <ChromatinView
-                data={chromatinData}
-                normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-                assembly={data.assembly}
-              />
-            </TabPane>
-            <TabPane>
-              <GenomeBrowserView
-                files={filesForGenomeBrowser}
-                assembly={data.assembly}
-                coordinates={coordinates}
-              />
-            </TabPane>
-          </TabPanes>
-        </TabGroup>
+        <SearchPageHeader queryString={queryString} />
+        {view === "summary" && (
+          <VariantSummary
+            coordinates={coordinates}
+            data={data}
+            motifDocList={motifDocList}
+            hitSnps={hitSnps}
+            variantLD={variantLD}
+            normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+            assembly={data.assembly}
+            queryString={queryString}
+          />
+        )}
+        {view === "chip" && <ChipDataView chipData={chipData}></ChipDataView>}
+        {view === "accessibility" && (
+          <AccessibilityDataView
+            data={accessibilityData}
+            normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+            assembly={data.assembly}
+          ></AccessibilityDataView>
+        )}
+        {view === "qtl" && (
+          <QTLDataView
+            data={QTLData}
+            normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+            assembly={data.assembly}
+          ></QTLDataView>
+        )}
+        {view === "motifs" && (
+          <Motifs
+            motifsList={motifDocList}
+            sequence={data.sequence}
+            coordinates={coordinates}
+            assembly={data.assembly}
+          ></Motifs>
+        )}
+        {view === "chromatin" && (
+          <ChromatinView
+            data={chromatinData}
+            normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+            assembly={data.assembly}
+          />
+        )}
+        {view === "browser" && (
+          <GenomeBrowserView
+            files={filesForGenomeBrowser}
+            assembly={data.assembly}
+            coordinates={coordinates}
+          />
+        )}
       </>
     );
   }
@@ -200,6 +146,7 @@ export default function Search({ data, motifDocList, variantLD }) {
 
 Search.propTypes = {
   data: PropTypes.object.isRequired,
+  queryString: PropTypes.string.isRequired,
   motifDocList: PropTypes.array.isRequired,
   variantLD: PropTypes.array.isRequired,
 };

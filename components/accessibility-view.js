@@ -11,6 +11,7 @@ import {
 } from "../lib/tissue-specific-score";
 import { TissueScoreBar } from "./tissue-score-bar";
 import { useState } from "react";
+import PagedDataGrid from "./paged-data-grid";
 
 // To dynamically load component AccessibilityChart on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
@@ -126,7 +127,11 @@ export function AccessibilityDataView({
           )}
           <DataAreaTitle>Datasets Table</DataAreaTitle>
           <DataPanel>
-            <AccessibilityDataTable data={filteredData} />
+            <PagedDataGrid data={data}>
+              {(pageData) => {
+                return <AccessibilityDataTable data={pageData} />;
+              }}
+            </PagedDataGrid>
           </DataPanel>
         </>
       ) : (

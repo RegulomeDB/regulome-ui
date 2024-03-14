@@ -17,6 +17,7 @@ export function MotifElement({
   windowStartPos,
   windowEndPos,
   relativeSnpCoordinate,
+  thumbnail,
 }) {
   const pwm = motif.dataMatrix;
 
@@ -73,7 +74,42 @@ export function MotifElement({
     footprintsLength > 1 ? `Footprints (${footprintsLength})` : "Footprint";
   const heightScale = 0.8;
 
-  return (
+  return thumbnail ? (
+    <>
+      <div className="flex gap-4">
+        {targetList.length > 0 && (
+          <div className="flex gap-2">
+            <DataItemLabel>{targetListLabel}</DataItemLabel>
+            <DataItemValue>{targetList}</DataItemValue>
+          </div>
+        )}
+        {motif.strand && (
+          <div className="flex gap-2">
+            <DataItemLabel>Strand</DataItemLabel>
+            {motif.strand === "+" ? (
+              <PlusCircleIcon className="h-6" />
+            ) : (
+              <MinusCircleIcon className="h-6" />
+            )}
+          </div>
+        )}
+        <div className="flex gap-2">
+          <DataItemLabel>PWMs</DataItemLabel>
+          <DataItemValue>{pwmsLength}</DataItemValue>
+        </div>
+        <div className="flex gap-2">
+          <DataItemLabel>Footprints</DataItemLabel>
+          <DataItemValue>{footprintsLength}</DataItemValue>
+        </div>
+      </div>
+      <DnaLogo
+        pwm={newPWM}
+        strand={motif.strand}
+        snpCoordinate={relativeSnpCoordinate}
+        heightScale={heightScale}
+      />
+    </>
+  ) : (
     <div className="@container">
       <div className="grid @lg:grid-cols-2 grid-cols-1 gap-1">
         <div className="grid grid-rows-1 gap-1">
@@ -128,7 +164,7 @@ export function MotifElement({
             </div>
           )}
         </div>
-        <div className="pt-8 ">
+        <div className="pt-8">
           <DnaLogo
             pwm={newPWM}
             strand={motif.strand}
@@ -146,6 +182,8 @@ MotifElement.propTypes = {
   windowStartPos: PropTypes.number.isRequired,
   windowEndPos: PropTypes.number.isRequired,
   relativeSnpCoordinate: PropTypes.number.isRequired,
+  //whether the view is thumbnail,
+  thumbnail: PropTypes.bool,
 };
 
 /**
@@ -156,6 +194,7 @@ export default function Motifs({
   sequence,
   coordinates,
   assembly,
+  thumbnail,
 }) {
   const snpCoordinate = +coordinates.split(":")[1].split("-")[0];
 
@@ -191,28 +230,9 @@ export default function Motifs({
   return (
     <>
       {motifsList.length > 0 ? (
-        <>
-          <DataAreaTitle>Motifs</DataAreaTitle>
-          <DataPanel>
-            <div className="grid @lg:grid-cols-2 grid-cols-1 gap-4 bg-panel sticky top-0">
-              <div className="grid grid-cols-1">
-                <DataItemValue>
-                  {assembly} Reference {windowStartPos + 1}-{windowEndPos}
-                </DataItemValue>
-              </div>
-              <div className="grid grid-cols-1">
-                <DnaLogo
-                  ref={ref}
-                  pwm={fakePWM}
-                  snpCoordinate={relativeSnpCoordinate}
-                  hideY
-                  strand="+"
-                  heightScale={heightScale}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-rows-1 gap-4">
+        thumbnail ? (
+          <>
+            <div className="grid grid-rows-1 gap-4 justify-center">
               {motifsList.map((motif) => (
                 <MotifElement
                   key={motif.pwm}
@@ -221,11 +241,48 @@ export default function Motifs({
                   windowStartPos={windowStartPos}
                   windowEndPos={windowEndPos}
                   relativeSnpCoordinate={relativeSnpCoordinate}
+                  thumbnail
                 />
               ))}
             </div>
-          </DataPanel>
-        </>
+          </>
+        ) : (
+          <>
+            <DataAreaTitle>Motifs</DataAreaTitle>
+            <DataPanel>
+              <div className="grid @lg:grid-cols-2 grid-cols-1 gap-4 bg-panel sticky top-0">
+                <div className="grid grid-cols-1">
+                  <DataItemValue>
+                    {assembly} Reference {windowStartPos + 1}-{windowEndPos}
+                  </DataItemValue>
+                </div>
+                <div className="grid grid-cols-1">
+                  <DnaLogo
+                    ref={ref}
+                    pwm={fakePWM}
+                    snpCoordinate={relativeSnpCoordinate}
+                    hideY
+                    strand="+"
+                    heightScale={heightScale}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-rows-1 gap-4">
+                {motifsList.map((motif) => (
+                  <MotifElement
+                    key={motif.pwm}
+                    motif={motif}
+                    coordinates={coordinates}
+                    windowStartPos={windowStartPos}
+                    windowEndPos={windowEndPos}
+                    relativeSnpCoordinate={relativeSnpCoordinate}
+                  />
+                ))}
+              </div>
+            </DataPanel>
+          </>
+        )
       ) : (
         <DataPanel>
           <DataAreaTitle>
@@ -242,4 +299,6 @@ Motifs.propTypes = {
   coordinates: PropTypes.string.isRequired,
   assembly: PropTypes.string.isRequired,
   sequence: PropTypes.object.isRequired,
+  //whether the view is thumbnail,
+  thumbnail: PropTypes.bool,
 };
