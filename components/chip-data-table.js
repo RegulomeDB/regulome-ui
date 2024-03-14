@@ -1,7 +1,6 @@
 // node_modules
 import PropTypes from "prop-types";
 // components
-import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
 const chipDataColumns = [
@@ -62,11 +61,7 @@ const chipDataColumns = [
 /**
  * Display a sortable table of the given data.
  */ export default function ChipDataTable({ data }) {
-  return (
-    <DataGridContainer>
-      <SortableGrid data={data} columns={chipDataColumns} />
-    </DataGridContainer>
-  );
+  return <SortableGrid data={data} columns={chipDataColumns} pager={{}} />;
 }
 
 ChipDataTable.propTypes = {

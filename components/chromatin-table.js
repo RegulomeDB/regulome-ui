@@ -1,7 +1,6 @@
 // node_modules
 import PropTypes from "prop-types";
 // components
-import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
 const chromatinDataColumns = [
@@ -48,11 +47,7 @@ const chromatinDataColumns = [
  * Display a sortable table of the given chromatin data.
  */
 export default function ChromatinTable({ data }) {
-  return (
-    <DataGridContainer>
-      <SortableGrid data={data} columns={chromatinDataColumns} />
-    </DataGridContainer>
-  );
+  return <SortableGrid data={data} columns={chromatinDataColumns} pager={{}} />;
 }
 
 ChromatinTable.propTypes = {

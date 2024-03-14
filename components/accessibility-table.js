@@ -2,7 +2,6 @@
 import PropTypes from "prop-types";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 // components
-import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 import { useState } from "react";
 import { sanitizedString } from "../lib/general";
@@ -103,13 +102,12 @@ export default function AccessibilityDataTable({ data }) {
           name="biosampleOrOrgan"
         />
       </label>
-      <DataGridContainer>
-        <SortableGrid
-          data={data}
-          columns={accessibilityDataColumns}
-          initialSort={initialSort}
-        />
-      </DataGridContainer>
+      <SortableGrid
+        data={data}
+        columns={accessibilityDataColumns}
+        initialSort={initialSort}
+        pager={{}}
+      />
     </div>
   );
 }

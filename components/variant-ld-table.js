@@ -2,7 +2,6 @@
 import PropTypes from "prop-types";
 import Link from "next/link";
 // components
-import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
 const initialSort = {
@@ -54,13 +53,12 @@ const variantLDColumns = [
  * Display a sortable table of the given data.
  */ export default function VariantLDTable({ data }) {
   return (
-    <DataGridContainer>
-      <SortableGrid
-        data={data}
-        columns={variantLDColumns}
-        initialSort={initialSort}
-      />
-    </DataGridContainer>
+    <SortableGrid
+      data={data}
+      columns={variantLDColumns}
+      initialSort={initialSort}
+      pager={{}}
+    />
   );
 }
 

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Tooltip, Button } from "@nextui-org/react";
 
 // components
-import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 import Sparkline from "./sparkline";
 
@@ -121,14 +120,13 @@ const summaryColumnsHg19 = [
   const columns =
     assembly === "GRCh38" ? summaryColumnsGRCh38 : summaryColumnsHg19;
   return (
-    <DataGridContainer>
-      <SortableGrid
-        data={data}
-        columns={columns}
-        keyProp="chrom_location"
-        initialSort={initialSort}
-      />
-    </DataGridContainer>
+    <SortableGrid
+      data={data}
+      columns={columns}
+      keyProp="chrom_location"
+      initialSort={initialSort}
+      pager={{}}
+    />
   );
 }
 
