@@ -71,7 +71,7 @@ export default function SearchPageHeader({ queryString }) {
           queryString={queryString}
           buttonInFocus={buttonInFocus}
           buttonType="chromatin"
-          buttonText="Chromatin state"
+          buttonText="Chromatin State"
           suffix
         />
         <HeaderButton

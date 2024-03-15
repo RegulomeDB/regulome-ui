@@ -11,19 +11,21 @@ export function Card({
 }) {
   return (
     <Link
-      className="bg-white border rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 no-underline "
+      className="grid bg-white border rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 no-underline place-items-center"
       href={`/search?${queryString}#!${viewType}`}
     >
       <div className="px-4 pb-3">
         <h5 className="text-xl font-semibold flex justify-center">{title}</h5>
         <div className="mt-2 flex justify-center">
-          <span className="text-sm dark:text-gray-400">{trackingLabel}</span>
-          <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">
+          <span className="text-base dark:text-gray-400">{trackingLabel}</span>
+          <span className="bg-blue-100 text-blue-800 text-base font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">
             {datasets.length}
           </span>
         </div>
       </div>
-      <div className="p-2 flex justify-center w-full">{children}</div>
+      {children && (
+        <div className="p-2 flex justify-center w-full">{children}</div>
+      )}
     </Link>
   );
 }

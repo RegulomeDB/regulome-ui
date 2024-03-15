@@ -206,7 +206,7 @@ export function ChromatinView({
                           />
                         )}
                       </div>
-                      <div className="absolute top-12 right-2 h-48">
+                      <div className="absolute top-12 right-0 h-48">
                         <TissueScoreBar
                           normalizedTissueSpecificScore={
                             normalizedTissueSpecificScore

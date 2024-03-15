@@ -33,7 +33,7 @@ import { getChromatinData } from "../lib/chromatin-data";
 import ChromatinBarChart from "./chromatin-bar-chart";
 import Sparkline from "./sparkline";
 
-// To dynamically load component AccessibilityChart on the client side,
+// To dynamically load those components on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
 const AccessibilityChart = dynamic(() => import("./accessibility-chart"), {
   ssr: false,
@@ -104,35 +104,97 @@ export default function VariantSummary({
   return (
     <>
       <DataAreaTitle>Scores</DataAreaTitle>
-      <div className="grid grid-cols-1 lg:space-x-4 lg:grid-cols-3">
-        <DataPanel className="grid place-items-center">
-          <div className="relative w-64">
-            <div>
-              <BodyMapThumbnailAndModal
-                data={data["@graph"]}
-                assembly={assembly}
-                organFilters={organFilters}
-                handleClickOrgan={handleClickOrgan}
-                getOrganFacetsForTissue={getOrganFacetsForTissueScore}
-                normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-                colorBy={"Colored by tissue specific score"}
-                width={"w-10/12"}
-              />
-              {organFilters.length > 0 && (
-                <Selections
-                  filters={organFilters}
-                  clearFilterFunc={handleClickOrgan}
+      {assembly === "GRCh38" ? (
+        <div className="grid grid-cols-1 lg:space-x-4 lg:grid-cols-3">
+          <DataPanel className="grid place-items-center">
+            <div className="relative w-64">
+              <div>
+                <BodyMapThumbnailAndModal
+                  data={data["@graph"]}
+                  assembly={assembly}
+                  organFilters={organFilters}
+                  handleClickOrgan={handleClickOrgan}
+                  getOrganFacetsForTissue={getOrganFacetsForTissueScore}
+                  normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+                  colorBy={"Colored by tissue specific score"}
+                  width={"w-10/12"}
                 />
+                {organFilters.length > 0 && (
+                  <Selections
+                    filters={organFilters}
+                    clearFilterFunc={handleClickOrgan}
+                  />
+                )}
+              </div>
+              <div className="absolute top-12 right-6 h-48">
+                <TissueScoreBar
+                  normalizedTissueSpecificScore={normalizedTissueSpecificScore}
+                />
+              </div>
+            </div>
+          </DataPanel>
+          <DataPanel className="col-span-2">
+            <DataArea>
+              <DataItemLabel>Searched Coordinates</DataItemLabel>
+              <DataItemValue>{coordinates}</DataItemValue>
+              <DataItemLabel>Genome Assembly</DataItemLabel>
+              <DataItemValue>{data.assembly}</DataItemValue>
+              <DataItemLabel>Global Rank</DataItemLabel>
+              <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
+              <DataItemLabel>Global Score</DataItemLabel>
+              <DataItemValue>{data.regulome_score.probability}</DataItemValue>
+              <DataItemLabel>Tissue Specific Scores</DataItemLabel>
+              <div className="w-11/12">
+                <Sparkline
+                  scores={data.regulome_score.tissue_specific_scores}
+                  maxBarThickness={8}
+                  thumbnail
+                />
+              </div>
+
+              {Object.keys(hitSnps).length > 0 && (
+                <>
+                  {Object.keys(hitSnps).map((rsid) => (
+                    <React.Fragment key={rsid}>
+                      <DataItemLabel>{rsid}</DataItemLabel>
+                      <DataItemValue>
+                        <div>
+                          {hitSnps[rsid].slice(0, 3).map((populationInfo) => (
+                            <div
+                              key={populationInfo.population}
+                            >{`${populationInfo.info} (${populationInfo.population})`}</div>
+                          ))}
+                        </div>
+                        {hitSnps[rsid].length > 3 && showMoreFreqs ? (
+                          <div>
+                            {hitSnps[rsid]
+                              .slice(3, hitSnps[rsid].length)
+                              .map((populationInfo) => (
+                                <div
+                                  key={populationInfo.population}
+                                >{`${populationInfo.info} (${populationInfo.population})`}</div>
+                              ))}
+                          </div>
+                        ) : null}
+                        {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT ? (
+                          <Button
+                            type="secondary"
+                            onClick={() => setShowMoreFreqs(!showMoreFreqs)}
+                          >
+                            {hitSnps[rsid].length - 3}{" "}
+                            {showMoreFreqs ? "fewer" : "more"}
+                          </Button>
+                        ) : null}
+                      </DataItemValue>
+                    </React.Fragment>
+                  ))}
+                </>
               )}
-            </div>
-            <div className="absolute top-12 right-6 h-48">
-              <TissueScoreBar
-                normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-              />
-            </div>
-          </div>
-        </DataPanel>
-        <DataPanel className="col-span-2">
+            </DataArea>
+          </DataPanel>
+        </div>
+      ) : (
+        <DataPanel>
           <DataArea>
             <DataItemLabel>Searched Coordinates</DataItemLabel>
             <DataItemValue>{coordinates}</DataItemValue>
@@ -142,14 +204,6 @@ export default function VariantSummary({
             <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
             <DataItemLabel>Global Score</DataItemLabel>
             <DataItemValue>{data.regulome_score.probability}</DataItemValue>
-            <DataItemLabel>Tissue Specific Scores</DataItemLabel>
-            <div className="w-11/12">
-              <Sparkline
-                scores={data.regulome_score.tissue_specific_scores}
-                maxBarThickness={8}
-                thumbnail
-              />
-            </div>
 
             {Object.keys(hitSnps).length > 0 && (
               <>
@@ -191,7 +245,7 @@ export default function VariantSummary({
             )}
           </DataArea>
         </DataPanel>
-      </div>
+      )}
 
       {data.nearby_snps?.length > 0 ? <SnpsDiagram data={data} /> : null}
       <div id="container"></div>
@@ -204,7 +258,7 @@ export default function VariantSummary({
               queryString={queryString}
               viewType={"browser"}
               title={"Genome Browser"}
-              trackingLabel="tracks"
+              trackingLabel="Tracks"
               datasets={filesForGenomeBrowser}
             >
               <Image

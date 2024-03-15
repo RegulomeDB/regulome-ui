@@ -70,6 +70,8 @@ const summaryColumnsGRCh38 = [
               <Sparkline
                 scores={source.tissue_specific_scores}
                 maxBarThickness={3}
+                min={0}
+                max={1}
                 thumbnail
               />
             </Button>

@@ -27,8 +27,6 @@ const optionsThumbnail = {
   responsive: true,
   scales: {
     y: {
-      min: 0,
-      max: 1,
       grid: {
         display: true,
       },
@@ -63,8 +61,6 @@ const options = {
   responsive: true,
   scales: {
     y: {
-      min: 0,
-      max: 1,
       grid: {
         display: true,
       },
@@ -113,14 +109,28 @@ function getSparklineData(scores, maxBarThickness) {
     ],
   };
 }
-export default function Sparkline({ scores, maxBarThickness, thumbnail }) {
+export default function Sparkline({
+  scores,
+  maxBarThickness,
+  min,
+  max,
+  thumbnail,
+}) {
+  const appliedOptions = thumbnail ? optionsThumbnail : options;
+  if ((min || min === 0) && max) {
+    appliedOptions.scales.y.min = min;
+    appliedOptions.scales.y.max = max;
+  }
   return thumbnail ? (
     <Bar
-      options={optionsThumbnail}
+      options={appliedOptions}
       data={getSparklineData(scores, maxBarThickness)}
     />
   ) : (
-    <Bar options={options} data={getSparklineData(scores, maxBarThickness)} />
+    <Bar
+      options={appliedOptions}
+      data={getSparklineData(scores, maxBarThickness)}
+    />
   );
 }
 Sparkline.propTypes = {
@@ -129,4 +139,8 @@ Sparkline.propTypes = {
   maxBarThickness: PropTypes.number,
   // whether this chart is a small thumbnail
   thumbnail: PropTypes.bool,
+  // the min value of y-axis
+  min: PropTypes.number,
+  // the max value of y-axis
+  max: PropTypes.number,
 };
