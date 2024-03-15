@@ -109,7 +109,7 @@ export default function VariantSummary({
           <div className="relative w-64">
             <div>
               <BodyMapThumbnailAndModal
-                data={filteredData}
+                data={data["@graph"]}
                 assembly={assembly}
                 organFilters={organFilters}
                 handleClickOrgan={handleClickOrgan}

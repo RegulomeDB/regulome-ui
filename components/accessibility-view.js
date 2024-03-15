@@ -126,7 +126,7 @@ export function AccessibilityDataView({
           )}
           <DataAreaTitle>Datasets Table</DataAreaTitle>
           <DataPanel>
-            <AccessibilityDataTable data={data} />
+            <AccessibilityDataTable data={filteredData} />
           </DataPanel>
         </>
       ) : (

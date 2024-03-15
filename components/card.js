@@ -35,7 +35,7 @@ Card.propTypes = {
   title: PropTypes.string.isRequired,
   // the name of the data to track
   trackingLabel: PropTypes.string.isRequired,
-  // the dataset to track
-  datasets: PropTypes.object.isRequired,
+  // the datasets to track
+  datasets: PropTypes.array.isRequired,
   queryString: PropTypes.string.isRequired,
 };

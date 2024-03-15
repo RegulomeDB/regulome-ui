@@ -1,5 +1,4 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { DataGridContainer } from "../data-grid";
 import SortableGrid from "../sortable-grid";
 
 const data = [
@@ -66,11 +65,7 @@ describe("SortableGrid", () => {
       },
     ];
 
-    render(
-      <DataGridContainer>
-        <SortableGrid data={data} columns={columns} />
-      </DataGridContainer>
-    );
+    render(<SortableGrid data={data} columns={columns} />);
 
     const table = screen.getByRole("table");
     expect(table).toBeInTheDocument();
@@ -151,52 +146,6 @@ describe("SortableGrid", () => {
     expect(cells[7]).toHaveTextContent("2021-09-15");
   });
 
-  it("renders a two-column sortable table with sorting suppressed", () => {
-    const columns = [
-      {
-        id: "accession",
-        title: "Accession",
-      },
-      {
-        id: "biosample_ontology",
-        title: "Biosample",
-        value: (item) =>
-          `${item.biosample_ontology.term_name} / ${item.biosample_ontology.classification}`,
-      },
-      {
-        id: "description",
-        title: "Description",
-        isSortable: false,
-      },
-      {
-        id: "date_obtained",
-        title: "Date Obtained",
-      },
-    ];
-
-    const initialSort = { isSortingSuppressed: true };
-
-    render(
-      <DataGridContainer>
-        <SortableGrid data={data} columns={columns} initialSort={initialSort} />
-      </DataGridContainer>
-    );
-
-    const table = screen.getByRole("table");
-    expect(table).toBeInTheDocument();
-    const cells = within(table).getAllByRole("cell");
-
-    // Before clicking a header cell to change sorting.
-    expect(cells[0]).toHaveTextContent("ENCBS697LCA");
-    expect(cells[1]).toHaveTextContent("HepG2 / cell line");
-    expect(cells[2]).toHaveTextContent("RNA-seq on HepG2");
-    expect(cells[3]).toHaveTextContent("2021-09-15");
-    expect(cells[4]).toHaveTextContent("ENCBS255XED");
-    expect(cells[5]).toHaveTextContent("K562 / cell line");
-    expect(cells[6]).toHaveTextContent("RNA-seq on K562");
-    expect(cells[7]).not.toHaveValue();
-  });
-
   it("renders a table with a custom sorting function", () => {
     const columns = [
       {
@@ -221,11 +170,7 @@ describe("SortableGrid", () => {
       },
     ];
 
-    render(
-      <DataGridContainer>
-        <SortableGrid data={data} columns={columns} keyProp="uuid" />
-      </DataGridContainer>
-    );
+    render(<SortableGrid data={data} columns={columns} keyProp="uuid" />);
 
     let cells = screen.getAllByRole("cell");
     expect(cells[2]).toHaveTextContent("9");
@@ -271,14 +216,13 @@ describe("SortableGrid", () => {
     ];
 
     render(
-      <DataGridContainer>
-        <SortableGrid
-          data={data}
-          columns={columns}
-          keyProp="uuid"
-          initialSort={{ columnId: "doesnt_exist" }}
-        />
-      </DataGridContainer>
+      <SortableGrid
+        data={data}
+        columns={columns}
+        keyProp="uuid"
+        initialSort={{ columnId: "doesnt_exist", isSortingSuppressed: true }}
+        pager={{}}
+      />
     );
 
     const headers = screen.getAllByRole("columnheader");
@@ -300,18 +244,55 @@ describe("SortableGrid", () => {
     ];
 
     render(
-      <DataGridContainer>
-        <SortableGrid
-          data={data}
-          columns={columns}
-          meta={{ isSmallViewport: true }}
-          keyProp="uuid"
-        />
-      </DataGridContainer>
+      <SortableGrid
+        data={data}
+        columns={columns}
+        meta={{ isSmallViewport: true }}
+        keyProp="uuid"
+      />
     );
 
     const headers = screen.getAllByRole("columnheader");
     expect(headers).toHaveLength(1);
     expect(headers[0]).toHaveTextContent("Accession");
+  });
+});
+
+describe("Test the pager", () => {
+  it("renders a pager", () => {
+    const columns = [
+      {
+        id: "accession",
+        title: "Accession",
+      },
+      {
+        id: "description",
+        title: "Description",
+      },
+    ];
+
+    render(
+      <SortableGrid
+        data={data}
+        columns={columns}
+        keyProp="uuid"
+        pager={{ maxItemsPerPage: 1 }}
+      />
+    );
+
+    const pager = screen.getByRole("navigation");
+    expect(pager).toBeInTheDocument();
+
+    const pageButtons = within(pager).getAllByRole("button");
+    expect(pageButtons).toHaveLength(4);
+    expect(pageButtons[1]).toHaveTextContent("1");
+    expect(pageButtons[2]).toHaveTextContent("2");
+
+    // Click the right arrow to go to the next page.
+    fireEvent.click(pageButtons[3]);
+
+    // Make sure the right arrow button is disabled and the left arrow button is enabled.
+    expect(pageButtons[0]).not.toBeDisabled();
+    expect(pageButtons[3]).toBeDisabled();
   });
 });
