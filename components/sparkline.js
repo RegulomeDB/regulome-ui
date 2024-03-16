@@ -20,7 +20,7 @@ ChartJS.register(
   Legend
 );
 
-// opstions for tissue specific scores sparkline
+// options for tissue specific scores sparkline
 const optionsThumbnail = {
   // Resizes the chart canvas when its container does
   maintainAspectRatio: false,

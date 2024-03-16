@@ -26,7 +26,7 @@ import {
   getChipDatasets,
   getFilesForGenomeBrowser,
   getQtlDatasets,
-} from "../lib/datasets-proccessing";
+} from "../lib/datasets-processing";
 import { Card } from "./card";
 import Motifs from "./motifs-view";
 import { getChromatinData } from "../lib/chromatin-data";

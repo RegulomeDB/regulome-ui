@@ -29,7 +29,7 @@ import { useRouter } from "next/router";
 import {
   getChipDatasets,
   getFilesForGenomeBrowser,
-} from "../lib/datasets-proccessing";
+} from "../lib/datasets-processing";
 
 export default function Search({ data, motifDocList, variantLD, queryString }) {
   const [view, setView] = useState("summary");
