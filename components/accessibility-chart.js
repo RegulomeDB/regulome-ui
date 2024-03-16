@@ -22,7 +22,11 @@ ChartJS.register(
   Legend
 );
 
-export default function AccessibilityChart({ accessibilityData }) {
+export default function AccessibilityChart({
+  accessibilityData,
+  height = 600,
+  thumbnail,
+}) {
   /**
    * Group datasets by dataset.biosample_ontology.term_name and get a count for each group.
    * the counts looks like this:
@@ -43,12 +47,16 @@ export default function AccessibilityChart({ accessibilityData }) {
     return groupCountByBiosample;
   }, {});
   // biosamples are sorted by its group count
-  const biosamples = Object.keys(counts).sort((a, b) => {
+  let biosamples = Object.keys(counts).sort((a, b) => {
     return counts[b] - counts[a];
   });
-  const groupCounts = biosamples.map((label) => {
+  let groupCounts = biosamples.map((label) => {
     return counts[label];
   });
+  if (thumbnail && groupCounts.length > 10) {
+    groupCounts = groupCounts.slice(0, 10);
+    biosamples = biosamples.slice(0, 10);
+  }
   const data = {
     labels: biosamples,
     datasets: [
@@ -63,6 +71,7 @@ export default function AccessibilityChart({ accessibilityData }) {
   // Check here for options setting detail: https://react-chartjs-2.js.org/components/bar
   const options = {
     // Resizes the chart canvas when its container does
+    maintainAspectRatio: false,
     responsive: true,
     scales: {
       y: {
@@ -102,11 +111,49 @@ export default function AccessibilityChart({ accessibilityData }) {
       },
     },
   };
-  return (
-    <Bar options={options} data={data} width={"400"} plugins={[zoomPlugin]} />
+  const optionForThumbnail = {
+    // Resizes the chart canvas when its container does
+    maintainAspectRatio: false,
+    responsive: true,
+    scales: {
+      y: {
+        // only display tick when it is a integer
+        ticks: {
+          callback: (val) => {
+            return Number.isInteger(val) ? val : "";
+          },
+        },
+      },
+      x: {
+        ticks: {
+          //autoSkip to prevent over crowded ticks
+          autoSkip: true,
+
+          maxRotation: 90,
+          minRotation: 90,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+  };
+  return thumbnail ? (
+    <Bar options={optionForThumbnail} data={data} height={height} />
+  ) : (
+    <Bar options={options} data={data} plugins={[zoomPlugin]} height={height} />
   );
 }
 
 AccessibilityChart.propTypes = {
   accessibilityData: PropTypes.array.isRequired,
+  // the height of the chart
+  height: PropTypes.number,
+  // whether this chart is a small thumbnail
+  thumbnail: PropTypes.bool,
 };

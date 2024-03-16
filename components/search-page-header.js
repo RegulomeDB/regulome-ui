@@ -8,7 +8,7 @@ import { ButtonLink } from "./form-elements";
  * the left and right side of the header to show different components.
  */
 export default function SearchPageHeader({ queryString }) {
-  const [buttonInFocus, setButtonInFocus] = useState("score");
+  const [buttonInFocus, setButtonInFocus] = useState("summary");
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function SearchPageHeader({ queryString }) {
     } else if (path.endsWith(`#!browser`)) {
       setButtonInFocus("browser");
     } else {
-      setButtonInFocus("score");
+      setButtonInFocus("summary");
     }
   }, [router]);
 
@@ -36,8 +36,8 @@ export default function SearchPageHeader({ queryString }) {
         <HeaderButton
           queryString={queryString}
           buttonInFocus={buttonInFocus}
-          buttonType="score"
-          buttonText="Score"
+          buttonType="summary"
+          buttonText="Summary"
         />
         <HeaderButton
           queryString={queryString}
@@ -71,7 +71,7 @@ export default function SearchPageHeader({ queryString }) {
           queryString={queryString}
           buttonInFocus={buttonInFocus}
           buttonType="chromatin"
-          buttonText="Chromatin state"
+          buttonText="Chromatin State"
           suffix
         />
         <HeaderButton

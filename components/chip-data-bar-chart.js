@@ -22,7 +22,11 @@ ChartJS.register(
   Legend
 );
 
-export default function ChipDataBarChart({ chipData }) {
+export default function ChipDataBarChart({
+  chipData,
+  height = 600,
+  thumbnail,
+}) {
   /**
    * Group datasets by dataset.targets and get a count for each group.
    * the counts looks like this:
@@ -43,12 +47,16 @@ export default function ChipDataBarChart({ chipData }) {
     return groupCountBytarget;
   }, {});
   // targets are target names for bar chart x labels, and are sorted by its group count
-  const targets = Object.keys(counts).sort((a, b) => {
+  let targets = Object.keys(counts).sort((a, b) => {
     return counts[b] - counts[a];
   });
-  const groupCounts = targets.map((label) => {
+  let groupCounts = targets.map((label) => {
     return counts[label];
   });
+  if (thumbnail && groupCounts.length > 10) {
+    groupCounts = groupCounts.slice(0, 10);
+    targets = targets.slice(0, 10);
+  }
   const data = {
     labels: targets,
     datasets: [
@@ -63,6 +71,7 @@ export default function ChipDataBarChart({ chipData }) {
   // Check here for options setting detail: https://react-chartjs-2.js.org/components/bar
   const options = {
     // Resizes the chart canvas when its container does
+    maintainAspectRatio: false,
     responsive: true,
     scales: {
       y: {
@@ -102,9 +111,47 @@ export default function ChipDataBarChart({ chipData }) {
       },
     },
   };
-  return <Bar options={options} data={data} plugins={[zoomPlugin]} />;
+
+  const optionsThumbnail = {
+    // Resizes the chart canvas when its container does
+    maintainAspectRatio: false,
+    responsive: true,
+    scales: {
+      y: {
+        // only display tick when it is a integer
+        ticks: {
+          callback: (val) => {
+            return Number.isInteger(val) ? val : "";
+          },
+        },
+      },
+      x: {
+        ticks: {
+          //autoSkip to prevent over crowded ticks
+          autoSkip: true,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+  };
+  return thumbnail ? (
+    <Bar options={optionsThumbnail} data={data} height={height} />
+  ) : (
+    <Bar options={options} data={data} plugins={[zoomPlugin]} height={height} />
+  );
 }
 
 ChipDataBarChart.propTypes = {
   chipData: PropTypes.array.isRequired,
+  // the height of the chart
+  height: PropTypes.number,
+  // whether this chart is a small thumbnail
+  thumbnail: PropTypes.bool,
 };

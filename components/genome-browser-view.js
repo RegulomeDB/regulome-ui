@@ -1,5 +1,4 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import {
   DataArea,
@@ -23,12 +22,6 @@ const NUMBER_OF_FILES_FOR_DISPLAY = 20;
  * It contains facets for filter the files, genome browser to display the files and pagination if needed.
  */
 export function GenomeBrowserView({ files, assembly, coordinates }) {
-  const router = useRouter();
-  useEffect(() => {
-    const isBrowser = router.asPath.endsWith(`#!browser`);
-    setShowBrowserData(isBrowser);
-  }, [router]);
-  const [showBrowserData, setShowBrowserData] = useState(false);
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [totalPage, setTotalPage] = useState(
@@ -70,72 +63,70 @@ export function GenomeBrowserView({ files, assembly, coordinates }) {
   }
 
   return (
-    showBrowserData && (
-      <>
-        {files.length > 0 ? (
-          <>
-            <DataAreaTitle>Genome Browser</DataAreaTitle>
-            <DataPanel>
-              <DataArea>
-                <DataItemLabel>Number of tracks:</DataItemLabel>
-                <DataItemValue>{filteredFiles.length}</DataItemValue>
-              </DataArea>
-              <GenomeBrowserFacets
-                files={files}
-                handleFacetList={handleFacetList}
-                filteredFiles={filteredFiles}
-                selectedFilters={selectedFilters}
-              />
-              <GenomeBrowser
-                files={displayedFiles}
-                assembly={assembly}
-                coordinates={coordinates}
-              />
-              {totalPage > 1 && (
-                <div className="text-center mt-6">
-                  <div>
-                    <button
-                      disabled={currentPage === 1}
-                      onClick={() => handlePagination("minus")}
-                    >
-                      <ChevronLeftIcon
-                        className={`h-8 w-8 ${
-                          currentPage === 1
-                            ? "text-gray-200"
-                            : "hover:bg-gray-200"
-                        }`}
-                      />
-                    </button>
-                    <button
-                      disabled={currentPage === totalPage}
-                      onClick={() => handlePagination("plus")}
-                    >
-                      <ChevronRightIcon
-                        className={`h-8 w-8 ${
-                          currentPage === totalPage
-                            ? "text-gray-200"
-                            : "hover:bg-gray-200"
-                        }`}
-                      />
-                    </button>
-                  </div>
-                  <div>
-                    Page <b>{currentPage}</b> of <b>{totalPage}</b>
-                  </div>
-                </div>
-              )}
-            </DataPanel>
-          </>
-        ) : (
+    <>
+      {files.length > 0 ? (
+        <>
+          <DataAreaTitle>Genome Browser</DataAreaTitle>
           <DataPanel>
-            <DataAreaTitle>
-              No genome browser data available to display, please choose a
-              different SNP.
-            </DataAreaTitle>
+            <DataArea>
+              <DataItemLabel>Number of tracks:</DataItemLabel>
+              <DataItemValue>{filteredFiles.length}</DataItemValue>
+            </DataArea>
+            <GenomeBrowserFacets
+              files={files}
+              handleFacetList={handleFacetList}
+              filteredFiles={filteredFiles}
+              selectedFilters={selectedFilters}
+            />
+            <GenomeBrowser
+              files={displayedFiles}
+              assembly={assembly}
+              coordinates={coordinates}
+            />
+            {totalPage > 1 && (
+              <div className="text-center mt-6">
+                <div>
+                  <button
+                    disabled={currentPage === 1}
+                    onClick={() => handlePagination("minus")}
+                  >
+                    <ChevronLeftIcon
+                      className={`h-8 w-8 ${
+                        currentPage === 1
+                          ? "text-gray-200"
+                          : "hover:bg-gray-200"
+                      }`}
+                    />
+                  </button>
+                  <button
+                    disabled={currentPage === totalPage}
+                    onClick={() => handlePagination("plus")}
+                  >
+                    <ChevronRightIcon
+                      className={`h-8 w-8 ${
+                        currentPage === totalPage
+                          ? "text-gray-200"
+                          : "hover:bg-gray-200"
+                      }`}
+                    />
+                  </button>
+                </div>
+                <div>
+                  Page <b>{currentPage}</b> of <b>{totalPage}</b>
+                </div>
+              </div>
+            )}
           </DataPanel>
-        )}
-      </>
-    )
+        </>
+      ) : (
+        <DataPanel>
+          <DataAreaTitle>
+            No genome browser data available to display, please choose a
+            different SNP.
+          </DataAreaTitle>
+        </DataPanel>
+      )}
+    </>
   );
 }
 

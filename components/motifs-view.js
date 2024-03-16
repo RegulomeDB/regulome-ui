@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/router";
+import { useRef } from "react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/20/solid";
 import {
   DataAreaTitle,
@@ -18,6 +17,7 @@ export function MotifElement({
   windowStartPos,
   windowEndPos,
   relativeSnpCoordinate,
+  thumbnail,
 }) {
   const pwm = motif.dataMatrix;
 
@@ -74,7 +74,42 @@ export function MotifElement({
     footprintsLength > 1 ? `Footprints (${footprintsLength})` : "Footprint";
   const heightScale = 0.8;
 
-  return (
+  return thumbnail ? (
+    <>
+      <div className="flex gap-4">
+        {targetList.length > 0 && (
+          <div className="flex gap-2">
+            <DataItemLabel>{targetListLabel}</DataItemLabel>
+            <DataItemValue>{targetList}</DataItemValue>
+          </div>
+        )}
+        {motif.strand && (
+          <div className="flex gap-2">
+            <DataItemLabel>Strand</DataItemLabel>
+            {motif.strand === "+" ? (
+              <PlusCircleIcon className="h-6" />
+            ) : (
+              <MinusCircleIcon className="h-6" />
+            )}
+          </div>
+        )}
+        <div className="flex gap-2">
+          <DataItemLabel>PWMs</DataItemLabel>
+          <DataItemValue>{pwmsLength}</DataItemValue>
+        </div>
+        <div className="flex gap-2">
+          <DataItemLabel>Footprints</DataItemLabel>
+          <DataItemValue>{footprintsLength}</DataItemValue>
+        </div>
+      </div>
+      <DnaLogo
+        pwm={newPWM}
+        strand={motif.strand}
+        snpCoordinate={relativeSnpCoordinate}
+        heightScale={heightScale}
+      />
+    </>
+  ) : (
     <div className="@container">
       <div className="grid @lg:grid-cols-2 grid-cols-1 gap-1">
         <div className="grid grid-rows-1 gap-1">
@@ -129,7 +164,7 @@ export function MotifElement({
             </div>
           )}
         </div>
-        <div className="pt-8 ">
+        <div className="pt-8">
           <DnaLogo
             pwm={newPWM}
             strand={motif.strand}
@@ -147,6 +182,8 @@ MotifElement.propTypes = {
   windowStartPos: PropTypes.number.isRequired,
   windowEndPos: PropTypes.number.isRequired,
   relativeSnpCoordinate: PropTypes.number.isRequired,
+  //whether the view is thumbnail,
+  thumbnail: PropTypes.bool,
 };
 
 /**
@@ -157,15 +194,8 @@ export default function Motifs({
   sequence,
   coordinates,
   assembly,
+  thumbnail,
 }) {
-  const [showMotif, setShowAccessibilityData] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    const isChip = router.asPath.endsWith(`#!motifs`);
-    setShowAccessibilityData(isChip);
-  }, [router]);
-
   const snpCoordinate = +coordinates.split(":")[1].split("-")[0];
 
   // Compute offsets for the different pwms to find the widest window
@@ -198,9 +228,25 @@ export default function Motifs({
   });
 
   return (
-    showMotif && (
-      <>
-        {motifsList.length > 0 ? (
+    <>
+      {motifsList.length > 0 ? (
+        thumbnail ? (
+          <>
+            <div className="grid grid-rows-1 gap-4 justify-center">
+              {motifsList.map((motif) => (
+                <MotifElement
+                  key={motif.pwm}
+                  motif={motif}
+                  coordinates={coordinates}
+                  windowStartPos={windowStartPos}
+                  windowEndPos={windowEndPos}
+                  relativeSnpCoordinate={relativeSnpCoordinate}
+                  thumbnail
+                />
+              ))}
+            </div>
+          </>
+        ) : (
           <>
             <DataAreaTitle>Motifs</DataAreaTitle>
             <DataPanel>
@@ -236,16 +282,15 @@ export default function Motifs({
               </div>
             </DataPanel>
           </>
-        ) : (
-          <DataPanel>
-            <DataAreaTitle>
-              No motifs data available to display, please choose a different
-              SNP.
-            </DataAreaTitle>
-          </DataPanel>
-        )}
-      </>
-    )
+        )
+      ) : (
+        <DataPanel>
+          <DataAreaTitle>
+            No motifs data available to display, please choose a different SNP.
+          </DataAreaTitle>
+        </DataPanel>
+      )}
+    </>
   );
 }
 
@@ -254,4 +299,6 @@ Motifs.propTypes = {
   coordinates: PropTypes.string.isRequired,
   assembly: PropTypes.string.isRequired,
   sequence: PropTypes.object.isRequired,
+  //whether the view is thumbnail,
+  thumbnail: PropTypes.bool,
 };

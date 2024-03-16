@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import zoomPlugin from "chartjs-plugin-zoom";
 
 import {
   Chart as ChartJS,
@@ -21,45 +20,64 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+import {
+  SORTED_CHROMATIN_STATES_HG19,
+  SORTED_CHROMATIN_STATES_GRCH38,
+  ChromatinStateColor,
+} from "../lib/chromatin-data";
 
-export default function QTLChart({ qtlData, height = 600, thumbnail }) {
+export default function ChromatinBarChart({
+  chromatinData,
+  assembly,
+  height = 600,
+  thumbnail,
+}) {
   /**
-   * Group datasets by dataset.biosample_ontology.term_name and get a count for each group.
+   * Group datasets by dataset.chromatin_state and get a count for each group.
    * the counts looks like this:
    * {
-   *   spleen: 4,
-   *   ovary: 1,
-   *   pancreas: 1,
+   *   "Quiescent/Low": 4,
+   *   "Weak enhancer": 1,
+   *   "Strong transcription": 1,
    * }
    *
    **/
-  const counts = qtlData.reduce((groupCountByBiosample, dataset) => {
-    const biosample = dataset.biosample_ontology.term_name;
-    if (biosample in groupCountByBiosample) {
-      groupCountByBiosample[biosample] += 1;
+  const counts = chromatinData.reduce((groupCountByState, dataset) => {
+    const state = dataset.chromatin_state;
+    if (state in groupCountByState) {
+      groupCountByState[state] += 1;
     } else {
-      groupCountByBiosample[biosample] = 1;
+      groupCountByState[state] = 1;
     }
-    return groupCountByBiosample;
+    return groupCountByState;
   }, {});
-  // biosamples are sorted by its group count
-  let biosamples = Object.keys(counts).sort((a, b) => {
-    return counts[b] - counts[a];
+  // chromatin states are sorted by most active state
+  const order =
+    assembly === "hg19"
+      ? SORTED_CHROMATIN_STATES_HG19
+      : SORTED_CHROMATIN_STATES_GRCH38;
+  const states = Object.keys(counts);
+  let sortedStates = [];
+  order.forEach((state) => {
+    if (states.includes(state)) {
+      sortedStates.push(state);
+    }
   });
-  let groupCounts = biosamples.map((label) => {
+  let groupCounts = sortedStates.map((label) => {
     return counts[label];
   });
-  if (thumbnail && groupCounts.length > 10) {
-    groupCounts = groupCounts.slice(0, 10);
-    biosamples = biosamples.slice(0, 10);
+  if (thumbnail && groupCounts.length > 7) {
+    groupCounts = groupCounts.slice(0, 7);
+    sortedStates = sortedStates.slice(0, 7);
   }
+  const colors = sortedStates.map((state) => ChromatinStateColor[state].hex);
   const data = {
-    labels: biosamples,
+    labels: sortedStates,
     datasets: [
       {
-        label: "Number of QTL datasets",
+        label: "Number of chromatin state datasets",
         data: groupCounts,
-        backgroundColor: "#276A8E",
+        backgroundColor: colors,
         maxBarThickness: 50,
       },
     ],
@@ -90,24 +108,9 @@ export default function QTLChart({ qtlData, height = 600, thumbnail }) {
         //put legend on top
         position: "top",
       },
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: "x",
-        },
-        zoom: {
-          pinch: {
-            enabled: true, // Enable pinch zooming
-          },
-          wheel: {
-            enabled: true, // Enable wheel zooming
-          },
-          mode: "x",
-        },
-      },
     },
   };
-  const optionsThumbnail = {
+  const optionForThumbnail = {
     // Resizes the chart canvas when its container does
     maintainAspectRatio: false,
     responsive: true,
@@ -124,6 +127,9 @@ export default function QTLChart({ qtlData, height = 600, thumbnail }) {
         ticks: {
           //autoSkip to prevent over crowded ticks
           autoSkip: true,
+
+          maxRotation: 90,
+          minRotation: 90,
         },
       },
     },
@@ -137,14 +143,15 @@ export default function QTLChart({ qtlData, height = 600, thumbnail }) {
     },
   };
   return thumbnail ? (
-    <Bar options={optionsThumbnail} data={data} height={height} />
+    <Bar options={optionForThumbnail} data={data} height={height} />
   ) : (
-    <Bar options={options} data={data} plugins={[zoomPlugin]} height={height} />
+    <Bar options={options} data={data} height={height} />
   );
 }
 
-QTLChart.propTypes = {
-  qtlData: PropTypes.array.isRequired,
+ChromatinBarChart.propTypes = {
+  assembly: PropTypes.string.isRequired,
+  chromatinData: PropTypes.array.isRequired,
   // the height of the chart
   height: PropTypes.number,
   // whether this chart is a small thumbnail

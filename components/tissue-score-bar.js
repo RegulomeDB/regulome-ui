@@ -87,6 +87,11 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
         },
       },
     },
+    layout: {
+      padding: {
+        right: 20,
+      },
+    },
     plugins: {
       legend: {
         display: false,
@@ -101,7 +106,11 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
         align: "right",
         formatter: (value) => {
           if (value % 2 === 0) {
-            return (value * unitValue + MIN_SCORE).toFixed(2);
+            const label = value * unitValue + MIN_SCORE;
+            if (label < 0.01) {
+              return "< 0.01";
+            }
+            return label.toFixed(2);
           }
           return "";
         },

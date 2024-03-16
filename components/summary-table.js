@@ -4,127 +4,13 @@ import Link from "next/link";
 import { Tooltip, Button } from "@nextui-org/react";
 
 // components
-import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip as ChartTooltip,
-  Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  ChartTooltip,
-  Legend
-);
+import Sparkline from "./sparkline";
 
 const initialSort = {
   columnId: "score",
   direction: "desc",
 };
-
-// opstions for tissue specific scores sparkline
-const options = {
-  // Resizes the chart canvas when its container does
-  maintainAspectRatio: false,
-  responsive: true,
-  scales: {
-    y: {
-      min: 0,
-      max: 1,
-      grid: {
-        display: true,
-      },
-      border: {
-        display: false,
-      },
-      ticks: {
-        stepSize: 1,
-        display: true,
-      },
-    },
-    x: {
-      display: false,
-      grid: {
-        display: false,
-      },
-      border: {
-        display: false,
-      },
-    },
-  },
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-};
-
-const optionsForPopup = {
-  // Resizes the chart canvas when its container does
-  maintainAspectRatio: false,
-  responsive: true,
-  scales: {
-    y: {
-      min: 0,
-      max: 1,
-      grid: {
-        display: true,
-      },
-      border: {
-        display: false,
-      },
-      ticks: {
-        stepSize: 0.2,
-        display: true,
-      },
-    },
-    x: {
-      display: true,
-      grid: {
-        display: false,
-      },
-      border: {
-        display: true,
-      },
-    },
-  },
-  plugins: {
-    legend: {
-      display: true,
-    },
-  },
-};
-
-/**
- * @param {object} scores to generate data for chart
- * @param {number} maxBarThickness to set the max bar thickness
- * @returns data used to draw tissue specific scores sparkline
- */
-function getSparklineData(scores, maxBarThickness) {
-  const labels = Object.keys(scores);
-  const data = Object.values(scores).map((score) => parseFloat(score));
-  return {
-    labels,
-    datasets: [
-      {
-        label: "Score",
-        data,
-        backgroundColor: "#276A8E",
-        maxBarThickness,
-      },
-    ],
-  };
-}
 
 const summaryColumnsGRCh38 = [
   {
@@ -172,18 +58,21 @@ const summaryColumnsGRCh38 = [
           <Tooltip
             content={
               <div className="w-[600px] h-72 bg-gray-100">
-                <Bar
-                  options={optionsForPopup}
-                  data={getSparklineData(source.tissue_specific_scores, 10)}
+                <Sparkline
+                  scores={source.tissue_specific_scores}
+                  maxBarThickness={10}
                 />
               </div>
             }
             placement={"left-start"}
           >
             <Button className="h-12">
-              <Bar
-                options={options}
-                data={getSparklineData(source.tissue_specific_scores, 3)}
+              <Sparkline
+                scores={source.tissue_specific_scores}
+                maxBarThickness={3}
+                min={0}
+                max={1}
+                thumbnail
               />
             </Button>
           </Tooltip>
@@ -233,14 +122,13 @@ const summaryColumnsHg19 = [
   const columns =
     assembly === "GRCh38" ? summaryColumnsGRCh38 : summaryColumnsHg19;
   return (
-    <DataGridContainer>
-      <SortableGrid
-        data={data}
-        columns={columns}
-        keyProp="chrom_location"
-        initialSort={initialSort}
-      />
-    </DataGridContainer>
+    <SortableGrid
+      data={data}
+      columns={columns}
+      keyProp="chrom_location"
+      initialSort={initialSort}
+      pager={{}}
+    />
   );
 }
 

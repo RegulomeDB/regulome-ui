@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 // components
-import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 // lib
 import { sanitizedString } from "../lib/general";
@@ -98,13 +97,12 @@ const eqtlDataColumns = [
           name="gene"
         />
       </label>
-      <DataGridContainer>
-        <SortableGrid
-          data={data}
-          columns={eqtlDataColumns}
-          initialSort={initialSort}
-        />
-      </DataGridContainer>
+      <SortableGrid
+        data={data}
+        columns={eqtlDataColumns}
+        initialSort={initialSort}
+        pager={{}}
+      />
     </div>
   );
 }

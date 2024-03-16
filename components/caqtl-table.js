@@ -1,7 +1,6 @@
 // node_modules
 import PropTypes from "prop-types";
 // components
-import { DataGridContainer } from "./data-grid";
 import SortableGrid from "./sortable-grid";
 
 const initialSort = {
@@ -74,13 +73,12 @@ const caqtlDataColumns = [
  * Display a sortable table of the given data.
  */ export default function CaQTLDataTable({ data }) {
   return (
-    <DataGridContainer>
-      <SortableGrid
-        data={data}
-        columns={caqtlDataColumns}
-        initialSort={initialSort}
-      />
-    </DataGridContainer>
+    <SortableGrid
+      data={data}
+      columns={caqtlDataColumns}
+      initialSort={initialSort}
+      pager={{}}
+    />
   );
 }
 
