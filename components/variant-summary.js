@@ -256,24 +256,24 @@ export default function VariantSummary({
           <div className="grid gap-8 grid-cols-1 @2xl:grid-cols-2 p-3">
             <Card
               queryString={queryString}
-              viewType={"browser"}
-              title={"Genome Browser"}
-              trackingLabel="Tracks"
-              datasets={filesForGenomeBrowser}
+              viewType={"motifs"}
+              title={"Motifs"}
+              trackingLabel="Motifs"
+              datasets={motifDocList}
             >
-              <Image
-                src={
-                  assembly === "hg19"
-                    ? "/browser-thumbnail-hg19.png"
-                    : "/browser-thumbnail-grch38.png"
-                }
-                alt="a screen shot of genome broswer view"
-                width="0"
-                height="0"
-                sizes="100vw"
-                className="w-full h-auto rounded-lg"
-                priority
-              />
+              {motifDocList.length > 0 && (
+                <Motifs
+                  motifsList={
+                    motifDocList.length > 3
+                      ? motifDocList.slice(0, 3)
+                      : motifDocList
+                  }
+                  sequence={data.sequence}
+                  coordinates={coordinates}
+                  assembly={data.assembly}
+                  thumbnail
+                />
+              )}
             </Card>
             <Card
               queryString={queryString}
@@ -318,24 +318,24 @@ export default function VariantSummary({
             </Card>
             <Card
               queryString={queryString}
-              viewType={"motifs"}
-              title={"Motifs"}
-              trackingLabel="Motifs"
-              datasets={motifDocList}
+              viewType={"browser"}
+              title={"Genome Browser"}
+              trackingLabel="Tracks"
+              datasets={filesForGenomeBrowser}
             >
-              {motifDocList.length > 0 && (
-                <Motifs
-                  motifsList={
-                    motifDocList.length > 3
-                      ? motifDocList.slice(0, 3)
-                      : motifDocList
-                  }
-                  sequence={data.sequence}
-                  coordinates={coordinates}
-                  assembly={data.assembly}
-                  thumbnail
-                />
-              )}
+              <Image
+                src={
+                  assembly === "hg19"
+                    ? "/browser-thumbnail-hg19.png"
+                    : "/browser-thumbnail-grch38.png"
+                }
+                alt="a screen shot of genome broswer view"
+                width="0"
+                height="0"
+                sizes="100vw"
+                className="w-full h-auto rounded-lg"
+                priority
+              />
             </Card>
             <Card
               queryString={queryString}

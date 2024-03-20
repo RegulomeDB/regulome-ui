@@ -24,7 +24,9 @@ export function Card({
         </div>
       </div>
       {children && (
-        <div className="p-2 flex justify-center w-full">{children}</div>
+        <div className="p-2 flex justify-center w-full overflow-hidden">
+          {children}
+        </div>
       )}
     </Link>
   );
