@@ -7,7 +7,7 @@ import Notifications from "../components/notifications";
 import PagePreamble from "../components/page-preamble";
 import RegulomeVersionTag from "../components/regulome-version-tag";
 import SummaryTable from "../components/summary-table";
-import { API_URL } from "../lib/constants";
+import { API_URL_GDS } from "../lib/constants";
 import errorObjectToProps from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
@@ -59,13 +59,13 @@ export default function Summary({ data, queryString }) {
           <>
             <div className="flex justify-end gap-1 mb-1">
               <ButtonLink
-                href={`${API_URL}/summary/?${queryString}&format=bed`}
+                href={`${API_URL_GDS}/summary/?${queryString}&format=bed`}
                 type="primary"
               >
                 Download BED
               </ButtonLink>
               <ButtonLink
-                href={`${API_URL}/summary/?${queryString}&format=tsv`}
+                href={`${API_URL_GDS}/summary/?${queryString}&format=tsv`}
                 type="primary"
               >
                 Download TSV

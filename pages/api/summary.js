@@ -1,4 +1,4 @@
-import { API_URL } from "../../lib/constants";
+import { API_URL_GDS } from "../../lib/constants";
 import { getQueryStringFromServerQuery } from "../../lib/query-utils";
 /**
  * This api is used for querying several given variants by intersecting its position with the genomic intervals
@@ -15,7 +15,7 @@ import { getQueryStringFromServerQuery } from "../../lib/query-utils";
  */
 export default async function handler(req, res) {
   const queryString = getQueryStringFromServerQuery(req.query);
-  const url = `${API_URL}/summary?${queryString}`;
+  const url = `${API_URL_GDS}/summary?${queryString}`;
   const response = await fetch(url);
   const data = await response.json();
   if (response.status !== 200) {
