@@ -4,8 +4,8 @@ import {
   MinusIcon,
   ViewfinderCircleIcon,
 } from "@heroicons/react/20/solid";
+import React, { useEffect, useRef, useState } from "react";
 import { Tooltip, Button as TooltipButton } from "@nextui-org/react";
-import { useEffect, useRef, useState } from "react";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import Base from "./dna-logo/base";
 import { MotifDnaLogo } from "./dna-logo/motif";
@@ -112,6 +112,30 @@ const regRegionSourceOrder = [
   "PMID:34017130",
 ];
 
+const tickWidth = 200;
+const blankHeight = 10;
+const DnaBaseHeight = 50;
+const variantLabelWidth = 120;
+const labelHeight = 28;
+const fontSize = 20;
+const regRegionFontSize = 16;
+const scalePositionY = 50;
+const genePositionY = 80;
+const geneUnitHeight = 50;
+const geneLabelWidth = 200;
+const viewBoxLength = 2000;
+const regRegionPositionUnitHeight = 25;
+
+/**
+ * In this nearby drawing, we show groups of data from top to bottom:
+ * The scale is at the top.
+ * The nearest genes with their gene names as labels
+ * The regulatory regions separated into trackes by sources, labeled by the source
+ * The sequence near the coordinateds
+ * The variant got hit labeled by rsid
+ * The variants in LD labeled by rsid
+ * The motifs labeled by the targets
+ */
 export default function NearbyDiagram({
   data,
   motifsList,
@@ -119,27 +143,12 @@ export default function NearbyDiagram({
   targetSnp,
   variantLD,
 }) {
-  const tickWidth = 200;
-  const blankHeight = 10;
-  const DnaBaseHeight = 50;
-  const variantLabelWidth = 120;
-  const labelHeight = 28;
-  const fontSize = 20;
-  const regRegionFontSize = 16;
-  const scalePositionY = 50;
-  const genePositionY = 80;
-  // there are two lanes of genes
-  const geneUnitHeight = 50;
-  const regRegionPositionY = genePositionY + geneUnitHeight * 2 + blankHeight;
-  const regRegionPositionUnitHeight = 25;
-
+  const regRegionPositionY =
+    genePositionY + geneUnitHeight * nearbyData.genes.length + blankHeight;
   const coordinates = data.query_coordinates[0];
   const [sliderValue, setSliderValue] = useState(19);
   const [scaleX, setScaleX] = useState(20);
   const svgRef = useRef(null);
-  const mouseDownXRef = useRef(null);
-  const initialViewBoxXRef = useRef(null);
-  const isDraggingRef = useRef(false);
 
   const genes = nearbyData.genes;
   const regulatoryRegions = nearbyData.regulatoryRegions;
@@ -167,8 +176,9 @@ export default function NearbyDiagram({
     Object.keys(regulatoryRegionsBySource).length *
       (regRegionPositionUnitHeight + labelHeight) +
     blankHeight;
+  const altLength = targetSnp[0].alt.length > 0 ? targetSnp[0].alt.length : 1;
   const variantPositionY =
-    sequencePositionY + DnaBaseHeight * targetSnp[0].alt.length + blankHeight;
+    sequencePositionY + DnaBaseHeight * altLength + blankHeight;
   const motifPositionY =
     variantPositionY +
     DnaBaseHeight +
@@ -179,7 +189,6 @@ export default function NearbyDiagram({
     scaleX >= 2
       ? motifPositionY + motifsList.length * geneUnitHeight + blankHeight * 2
       : sequencePositionY + blankHeight * 2;
-  const viewBoxMaxX = 2000;
   const baseHeight = 50;
   const displayRegionToken = nearbyData.displayRegion.split(":")[1];
   const offsetX = +displayRegionToken.split("-")[0];
@@ -187,51 +196,23 @@ export default function NearbyDiagram({
 
   const variantPosX = coordinates.split(":")[1].split("-")[0] - offsetX;
   const [viewBoxMinX, setViewBoxMinX] = useState(
-    Math.floor(variantPosX * scaleX - viewBoxMaxX / 2)
+    Math.floor(variantPosX * scaleX - viewBoxLength / 2)
   );
-
-  useEffect(() => {
-    const svgElement = svgRef.current;
-    function handleMouseDown(event) {
-      event.preventDefault();
-      mouseDownXRef.current = event.clientX;
-      initialViewBoxXRef.current = viewBoxMinX;
-      isDraggingRef.current = true;
-    }
-    function handleMouseMove(event) {
-      if (!isDraggingRef.current) return;
-      const deltaX = event.clientX - mouseDownXRef.current;
-      setViewBoxMinX(initialViewBoxXRef.current - deltaX);
-    }
-
-    function handleMouseUp() {
-      isDraggingRef.current = false;
-    }
-
-    svgElement.addEventListener("mousedown", handleMouseDown);
-    svgElement.addEventListener("mousemove", handleMouseMove);
-    svgElement.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      svgElement.removeEventListener("mousedown", handleMouseDown);
-      svgElement.removeEventListener("mousemove", handleMouseMove);
-      svgElement.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [viewBoxMinX]);
 
   useEffect(() => {
     const svgElement = svgRef.current;
     function handleScroll(event) {
       event.preventDefault();
-      const scrollDelta = event.deltaY || event.detail || event.wheelDelta;
+      const scrollDelta = event.deltaX || event.detail || event.wheelDelta;
+
       setViewBoxMinX((prevViewBoxX) => {
-        const newViewBoxX = prevViewBoxX - scrollDelta;
+        const newViewBoxX = prevViewBoxX + scrollDelta;
         const endX = displayRegionLength * scaleX;
         if (newViewBoxX < 0) {
           return 0;
         }
-        if (newViewBoxX > endX - 2000) {
-          return endX - 2000;
+        if (newViewBoxX > endX - viewBoxLength) {
+          return endX - viewBoxLength;
         }
         return newViewBoxX;
       });
@@ -252,7 +233,8 @@ export default function NearbyDiagram({
 
     setViewBoxMinX(
       Math.floor(
-        ((viewBoxMinX + viewBoxMaxX / 2) / scaleX) * newScaleX - viewBoxMaxX / 2
+        ((viewBoxMinX + viewBoxLength / 2) / scaleX) * newScaleX -
+          viewBoxLength / 2
       )
     );
     setScaleX(newScaleX);
@@ -274,8 +256,8 @@ export default function NearbyDiagram({
 
       setViewBoxMinX(
         Math.floor(
-          ((viewBoxMinX + viewBoxMaxX / 2) / scaleX) * newScaleX -
-            viewBoxMaxX / 2
+          ((viewBoxMinX + viewBoxLength / 2) / scaleX) * newScaleX -
+            viewBoxLength / 2
         )
       );
       setScaleX(newScaleX);
@@ -292,8 +274,8 @@ export default function NearbyDiagram({
 
       setViewBoxMinX(
         Math.floor(
-          ((viewBoxMinX + viewBoxMaxX / 2) / scaleX) * newScaleX -
-            viewBoxMaxX / 2
+          ((viewBoxMinX + viewBoxLength / 2) / scaleX) * newScaleX -
+            viewBoxLength / 2
         )
       );
       setScaleX(newScaleX);
@@ -330,7 +312,7 @@ export default function NearbyDiagram({
           </div>
 
           <svg
-            viewBox={`${viewBoxMinX} 0  ${viewBoxMaxX} ${viewBoxHeight}`}
+            viewBox={`${viewBoxMinX} 0  ${viewBoxLength} ${viewBoxHeight}`}
             preserveAspectRatio="xMidYMid meet"
             ref={svgRef}
             style={{ border: "1px solid black" }}
@@ -374,7 +356,17 @@ export default function NearbyDiagram({
             </g>
             <g id="genes">
               {genes.map((gene, i) => {
-                let labelX = (gene.start - offsetX) * scaleX;
+                const geneStart = (gene.start - offsetX) * scaleX;
+                const viewBoxMaxX = viewBoxMinX + viewBoxLength;
+                // show gene label at the top beginning of the gene
+                let labelX = geneStart;
+                //make sure we show the whole gene label
+                if (
+                  viewBoxMaxX > labelX &&
+                  (viewBoxMaxX - labelX) * scaleX < geneLabelWidth
+                ) {
+                  labelX = viewBoxMaxX - geneLabelWidth;
+                }
                 if (
                   viewBoxMinX > (gene.start - offsetX) * scaleX &&
                   viewBoxMinX < (gene.end - offsetX) * scaleX
@@ -427,7 +419,7 @@ export default function NearbyDiagram({
             <g id="regulatory-regions">
               {Object.keys(regulatoryRegionsBySource).map((source) => {
                 return (
-                  <>
+                  <React.Fragment key={source}>
                     {regulatoryRegionsBySource[source].items.map((region) => {
                       return (
                         <rect
@@ -449,7 +441,7 @@ export default function NearbyDiagram({
                         />
                       );
                     })}
-                  </>
+                  </React.Fragment>
                 );
               })}
             </g>
@@ -517,14 +509,6 @@ export default function NearbyDiagram({
                     const start = parseInt(region.split("-")[0]);
                     return (
                       <g key={variant.location + variant.ancestry}>
-                        <rect
-                          x={(start - offsetX) * scaleX}
-                          y={variantPositionY}
-                          width={scaleX}
-                          height={DnaBaseHeight}
-                          fill="gray"
-                          opacity="0.2"
-                        />
                         <g
                           transform={`translate(${
                             (start - offsetX) * scaleX
@@ -532,27 +516,23 @@ export default function NearbyDiagram({
                         >
                           <Base xscale={0.01} yscale={0.5} base={variant.alt} />
                         </g>
-                        {scaleX >= 2 && (
-                          <g>
-                            <rect
-                              x={(start - offsetX) * scaleX - 50}
-                              y={
-                                variantPositionY + geneUnitHeight + blankHeight
-                              }
-                              width={variantLabelWidth}
-                              height={labelHeight}
-                              fill="blue"
-                            />
-                            <text
-                              fontSize={fontSize}
-                              fill="white"
-                              x={(start - offsetX) * scaleX - 40}
-                              y={variantPositionY + 80}
-                            >
-                              {variant.rsid}
-                            </text>
-                          </g>
-                        )}
+                        <g>
+                          <rect
+                            x={(start - offsetX) * scaleX - 50}
+                            y={variantPositionY + geneUnitHeight + blankHeight}
+                            width={variantLabelWidth}
+                            height={labelHeight}
+                            fill="blue"
+                          />
+                          <text
+                            fontSize={fontSize}
+                            fill="white"
+                            x={(start - offsetX) * scaleX - 40}
+                            y={variantPositionY + 80}
+                          >
+                            {variant.rsid}
+                          </text>
+                        </g>
                       </g>
                     );
                   })}
@@ -570,7 +550,7 @@ export default function NearbyDiagram({
                       </g>
                     );
                   })}
-                  {scaleX >= 2 && targetSnp.length > 0 && (
+                  {targetSnp.length > 0 && (
                     <g id="target-snp-label">
                       <rect
                         x={(targetSnp[0].start - offsetX) * scaleX - 50}
@@ -593,9 +573,8 @@ export default function NearbyDiagram({
                 <g id="motifs">
                   {motifsList.map((motif, i) => {
                     return (
-                      <>
+                      <React.Fragment key={motif.pwm}>
                         <MotifDnaLogo
-                          key={motif.pwm}
                           pwm={motif.dataMatrix}
                           strand={motif.strand}
                           startX={motif.start - offsetX}
@@ -614,7 +593,7 @@ export default function NearbyDiagram({
                         >
                           motif target: {motif.targets}
                         </text>
-                      </>
+                      </React.Fragment>
                     );
                   })}
                 </g>
@@ -682,6 +661,17 @@ export function NearybyLegend() {
                   <div className="legend-label">{ccre}</div>
                 </div>
               ))}
+            </div>
+            <div>
+              <strong>Variant</strong>
+              <div className="flex space-x-1">
+                <div className="h-5 w-5" style={{ background: `red` }} />
+                <div className="legend-label">Hit target</div>
+              </div>
+              <div className="flex space-x-1">
+                <div className="h-5 w-5" style={{ background: `blue` }} />
+                <div className="legend-label">variants in LD</div>
+              </div>
             </div>
           </div>
         }
