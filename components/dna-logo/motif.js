@@ -54,7 +54,7 @@ BaseStackMotif.propTypes = {
  * Calculate the likelihood of each base at the certain posistion,
  * and sort the likelihoods from smallest to biggest for each position
  * @param {array} pwm data matrix used for calculation
- * @param {*} strand the strand of the motif
+ * @param {string} strand the strand of the motif
  * @returns an array of sorted likelihood
  */
 function getSortedValuesWithIndex(pwm, strand) {
