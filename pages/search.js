@@ -30,8 +30,15 @@ import {
   getChipDatasets,
   getFilesForGenomeBrowser,
 } from "../lib/datasets-processing";
+import fetchNearby from "../lib/fetch-nearby";
 
-export default function Search({ data, motifDocList, variantLD, queryString }) {
+export default function Search({
+  data,
+  nearbyData,
+  motifDocList,
+  variantLD,
+  queryString,
+}) {
   const [view, setView] = useState("summary");
   const router = useRouter();
 
@@ -54,7 +61,6 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
   }, [router]);
   if (Object.keys(data.notifications).length === 0) {
     const hitSnps = getSnpsInfo(data);
-    const coordinates = data.query_coordinates[0];
     const normalizedTissueSpecificScore = getNormalizedTissueSpecificScore(
       data.regulome_score.tissue_specific_scores
     );
@@ -83,13 +89,12 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
         <SearchPageHeader queryString={queryString} />
         {view === "summary" && (
           <VariantSummary
-            coordinates={coordinates}
             data={data}
+            nearbyData={nearbyData}
             motifDocList={motifDocList}
             hitSnps={hitSnps}
             variantLD={variantLD}
             normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-            assembly={data.assembly}
             queryString={queryString}
           />
         )}
@@ -112,7 +117,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
           <Motifs
             motifsList={motifDocList}
             sequence={data.sequence}
-            coordinates={coordinates}
+            coordinates={data.query_coordinates[0]}
             assembly={data.assembly}
           ></Motifs>
         )}
@@ -127,7 +132,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
           <GenomeBrowserView
             files={filesForGenomeBrowser}
             assembly={data.assembly}
-            coordinates={coordinates}
+            coordinates={data.query_coordinates[0]}
           />
         )}
       </>
@@ -146,6 +151,7 @@ export default function Search({ data, motifDocList, variantLD, queryString }) {
 
 Search.propTypes = {
   data: PropTypes.object.isRequired,
+  nearbyData: PropTypes.object.isRequired,
   queryString: PropTypes.string.isRequired,
   motifDocList: PropTypes.array.isRequired,
   variantLD: PropTypes.array.isRequired,
@@ -158,8 +164,14 @@ export async function getServerSideProps({ query }) {
   if (FetchRequest.isResponseSuccess(data)) {
     let motifDocList = [];
     let variantLD = [];
+    let nearbyData = {};
     if (data.query_coordinates.length === 1) {
       motifDocList = await fetchMotifDoc(request, data["@graph"]);
+      nearbyData = await fetchNearby(
+        request,
+        data.query_coordinates[0],
+        data.assembly
+      );
       if (query.ld) {
         const response = await fetchVariantLD(
           request,
@@ -183,6 +195,7 @@ export async function getServerSideProps({ query }) {
     return {
       props: {
         data,
+        nearbyData,
         motifDocList,
         variantLD,
         breadcrumbs,

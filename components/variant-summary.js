@@ -45,6 +45,10 @@ const QTLChart = dynamic(() => import("./qtl-chart"), {
   ssr: false,
 });
 
+const NearbyDiagram = dynamic(() => import("./nearby-diagram"), {
+  ssr: false,
+});
+
 // Default number of populations to display for allele frequencies.
 const DEFAULT_DISPLAY_COUNT = 3;
 
@@ -74,13 +78,12 @@ Selections.propTypes = {
 };
 
 export default function VariantSummary({
-  coordinates,
   data,
   hitSnps,
+  nearbyData,
   motifDocList,
   variantLD,
   normalizedTissueSpecificScore,
-  assembly,
   queryString,
 }) {
   const [showMoreFreqs, setShowMoreFreqs] = useState(false);
@@ -104,14 +107,14 @@ export default function VariantSummary({
   return (
     <>
       <DataAreaTitle>Scores</DataAreaTitle>
-      {assembly === "GRCh38" ? (
+      {data.assembly === "GRCh38" ? (
         <div className="grid grid-cols-1 lg:space-x-4 lg:grid-cols-3">
           <DataPanel className="grid place-items-center">
             <div className="relative w-64">
               <div>
                 <BodyMapThumbnailAndModal
                   data={data["@graph"]}
-                  assembly={assembly}
+                  assembly={data.assembly}
                   organFilters={organFilters}
                   handleClickOrgan={handleClickOrgan}
                   getOrganFacetsForTissue={getOrganFacetsForTissueScore}
@@ -136,7 +139,7 @@ export default function VariantSummary({
           <DataPanel className="col-span-2">
             <DataArea>
               <DataItemLabel>Searched Coordinates</DataItemLabel>
-              <DataItemValue>{coordinates}</DataItemValue>
+              <DataItemValue>{data.query_coordinates[0]}</DataItemValue>
               <DataItemLabel>Genome Assembly</DataItemLabel>
               <DataItemValue>{data.assembly}</DataItemValue>
               <DataItemLabel>Global Rank</DataItemLabel>
@@ -197,7 +200,7 @@ export default function VariantSummary({
         <DataPanel>
           <DataArea>
             <DataItemLabel>Searched Coordinates</DataItemLabel>
-            <DataItemValue>{coordinates}</DataItemValue>
+            <DataItemValue>{data.query_coordinates[0]}</DataItemValue>
             <DataItemLabel>Genome Assembly</DataItemLabel>
             <DataItemValue>{data.assembly}</DataItemValue>
             <DataItemLabel>Global Rank</DataItemLabel>
@@ -247,8 +250,17 @@ export default function VariantSummary({
         </DataPanel>
       )}
 
-      {data.nearby_snps?.length > 0 ? <SnpsDiagram data={data} /> : null}
-      <div id="container"></div>
+      {data.assembly === "GRCh38" ? (
+        <NearbyDiagram
+          data={data}
+          targetSnp={data.variants}
+          nearbyData={nearbyData}
+          variantLD={variantLD}
+          motifsList={motifDocList}
+        />
+      ) : data.nearby_snps?.length > 0 ? (
+        <SnpsDiagram data={data} />
+      ) : null}
 
       <DataAreaTitle>Summary</DataAreaTitle>
       <DataPanel>
@@ -269,7 +281,7 @@ export default function VariantSummary({
                       : motifDocList
                   }
                   sequence={data.sequence}
-                  coordinates={coordinates}
+                  coordinates={data.query_coordinates[0]}
                   assembly={data.assembly}
                   thumbnail
                 />
@@ -325,7 +337,7 @@ export default function VariantSummary({
             >
               <Image
                 src={
-                  assembly === "hg19"
+                  data.assembly === "hg19"
                     ? "/browser-thumbnail-hg19.png"
                     : "/browser-thumbnail-grch38.png"
                 }
@@ -347,7 +359,7 @@ export default function VariantSummary({
               {chromatinDatasets.length > 0 && (
                 <ChromatinBarChart
                   chromatinData={chromatinDatasets}
-                  assembly={assembly}
+                  assembly={data.assembly}
                   height={500}
                   thumbnail
                 />
@@ -371,9 +383,8 @@ export default function VariantSummary({
 
 VariantSummary.propTypes = {
   data: PropTypes.object.isRequired,
-  coordinates: PropTypes.string.isRequired,
-  assembly: PropTypes.string.isRequired,
   hitSnps: PropTypes.object.isRequired,
+  nearbyData: PropTypes.object.isRequired,
   variantLD: PropTypes.array.isRequired,
   motifDocList: PropTypes.array.isRequired,
   normalizedTissueSpecificScore: PropTypes.object.isRequired,
