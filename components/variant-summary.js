@@ -250,14 +250,17 @@ export default function VariantSummary({
         </DataPanel>
       )}
 
-      {data.nearby_snps?.length > 0 ? <SnpsDiagram data={data} /> : null}
-      <NearbyDiagram
-        data={data}
-        targetSnp={data.variants}
-        nearbyData={nearbyData}
-        variantLD={variantLD}
-        motifsList={motifDocList}
-      />
+      {data.assembly === "GRCh38" ? (
+        <NearbyDiagram
+          data={data}
+          targetSnp={data.variants}
+          nearbyData={nearbyData}
+          variantLD={variantLD}
+          motifsList={motifDocList}
+        />
+      ) : data.nearby_snps?.length > 0 ? (
+        <SnpsDiagram data={data} />
+      ) : null}
 
       <DataAreaTitle>Summary</DataAreaTitle>
       <DataPanel>
