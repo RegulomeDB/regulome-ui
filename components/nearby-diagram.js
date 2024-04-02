@@ -614,7 +614,7 @@ NearbyDiagram.propTypes = {
 };
 
 /**
- * Display the legend for genome browser
+ * Display the legend for nearby drawing
  */
 export function NearybyLegend() {
   return (
@@ -661,17 +661,6 @@ export function NearybyLegend() {
                   <div className="legend-label">{ccre}</div>
                 </div>
               ))}
-            </div>
-            <div>
-              <strong>Variant</strong>
-              <div className="flex space-x-1">
-                <div className="h-5 w-5" style={{ background: `red` }} />
-                <div className="legend-label">Hit target</div>
-              </div>
-              <div className="flex space-x-1">
-                <div className="h-5 w-5" style={{ background: `blue` }} />
-                <div className="legend-label">variants in LD</div>
-              </div>
             </div>
           </div>
         }
