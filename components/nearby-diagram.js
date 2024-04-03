@@ -207,26 +207,36 @@ export default function NearbyDiagram({
       <DataPanel>
         <div>
           <NearybyLegend />
-
           <svg
             viewBox={`${viewBoxMinX} 0  ${viewBoxLength} ${viewBoxHeight}`}
             preserveAspectRatio="xMidYMid meet"
             className="border-2 border-panel"
           >
-            <defs>
-              <marker
-                id="arrow"
-                viewBox="0 0 10 10"
-                refX="5"
-                refY="5"
-                markerWidth="5"
-                markerHeight="6"
-                orient="auto-start-reverse"
-              >
-                <path d="M 0 0 L 10 5 L 0 10 z" />
-              </marker>
-            </defs>
-            <g id="scale-for-genes">
+            <g id="variant-position-vertical-line-top">
+              <line
+                x1={viewBoxLength / 2}
+                x2={viewBoxLength / 2}
+                y1={0}
+                y2={sequencePositionY}
+                stroke="#e9d66b"
+                strokeDasharray="40,8"
+                strokeWidth={3}
+                opacity="0.8"
+              />
+            </g>
+            <g id="variant-position-vertical-line-bottom">
+              <line
+                x1={viewBoxLength / 2}
+                x2={viewBoxLength / 2}
+                y1={sequencePositionY}
+                y2={viewBoxHeight}
+                stroke="#e9d66b"
+                strokeDasharray="40,8"
+                strokeWidth={baseWidth}
+                opacity="0.5"
+              />
+            </g>
+            <g id="small-scale">
               <line
                 x1={viewBoxMinX}
                 y1={smallScalePositionY}
@@ -345,68 +355,43 @@ export default function NearbyDiagram({
                 );
               })}
             </g>
-            <g id="variant-position-vertical-line-top">
+            <g id="large-scale">
               <line
-                x1={viewBoxLength / 2}
-                x2={viewBoxLength / 2}
-                y1={0}
-                y2={sequencePositionY}
-                stroke="#e9d66b"
-                strokeDasharray="40,8"
-                strokeWidth={2}
+                x1={viewBoxMinX}
+                x2={viewBoxLength}
+                y1={bigScalePositionY}
+                y2={bigScalePositionY}
+                className="stroke-data-label stroke-2"
               />
+              {/* Draw ticks and labels */}
+              {Array.from({
+                length: Math.floor(viewBoxLength / tickWidth + 1),
+              }).map((_, index) => {
+                return (
+                  <g key={index}>
+                    <line
+                      x1={index * tickWidth}
+                      y1={bigScalePositionY}
+                      x2={index * tickWidth}
+                      y2={bigScalePositionY - tickHeight}
+                      className="stroke-data-label stroke-2"
+                    />
+                    <text
+                      className="fill-data-label"
+                      fontSize={fontSizeLarge}
+                      x={index * tickWidth}
+                      y={bigScalePositionY - tickHeight - 5}
+                      textAnchor="middle"
+                    >
+                      {Math.floor(
+                        (index * tickWidth) / baseWidth + offsetXForVariant
+                      )}
+                    </text>
+                  </g>
+                );
+              })}
             </g>
-            <g id="variant-position-vertical-line-bottom">
-              <line
-                x1={viewBoxLength / 2}
-                x2={viewBoxLength / 2}
-                y1={sequencePositionY}
-                y2={viewBoxHeight}
-                stroke="#e9d66b"
-                strokeDasharray="40,8"
-                strokeWidth={baseWidth}
-                opacity="0.5"
-              />
-            </g>
-
             <g id="sequence">
-              <g id="x-axis">
-                <line
-                  x1={viewBoxMinX}
-                  x2={viewBoxLength}
-                  y1={bigScalePositionY}
-                  y2={bigScalePositionY}
-                  stroke="#7F7F7F"
-                  strokeWidth="2"
-                />
-                {/* Draw ticks and labels */}
-                {Array.from({
-                  length: Math.floor(viewBoxLength / tickWidth + 1),
-                }).map((_, index) => {
-                  return (
-                    <g key={index}>
-                      <line
-                        x1={index * tickWidth}
-                        y1={bigScalePositionY}
-                        x2={index * tickWidth}
-                        y2={bigScalePositionY - tickHeight}
-                        className="stroke-data-label stroke-2"
-                      />
-                      <text
-                        className="fill-data-label"
-                        fontSize={fontSizeLarge}
-                        x={index * tickWidth}
-                        y={bigScalePositionY - tickHeight - 5}
-                        textAnchor="middle"
-                      >
-                        {Math.floor(
-                          (index * tickWidth) / baseWidth + offsetXForVariant
-                        )}
-                      </text>
-                    </g>
-                  );
-                })}
-              </g>
               {data.sequence.sequence.split("").map((base, i) => {
                 return (
                   <g
