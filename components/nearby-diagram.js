@@ -1,10 +1,5 @@
 import PropTypes from "prop-types";
-import {
-  PlusIcon,
-  MinusIcon,
-  ViewfinderCircleIcon,
-} from "@heroicons/react/20/solid";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Tooltip, Button as TooltipButton } from "@nextui-org/react";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import Base from "./dna-logo/base";
@@ -113,28 +108,33 @@ const regRegionSourceOrder = [
 ];
 
 const tickWidth = 200;
+const tickHeight = 10;
 const blankHeight = 10;
-const DnaBaseHeight = 50;
-const variantLabelWidth = 120;
+const textTokenWidth = 12;
 const labelHeight = 28;
-const fontSize = 20;
-const regRegionFontSize = 16;
-const scalePositionY = 50;
+const fontSizeLarge = 20;
+const fontSizeSmall = 16;
+const smallScalePositionY = 50;
 const genePositionY = 80;
+const geneRectHeight = 20;
 const geneUnitHeight = 50;
-const geneLabelWidth = 200;
+const viewBoxMinX = 0;
 const viewBoxLength = 2000;
-const regRegionPositionUnitHeight = 25;
+const regRegionPositiontrackHeight = 25;
+const baseMaxWidth = 100;
+const baseWidth = 25;
+const baseHeight = 50;
 
 /**
  * In this nearby drawing, we show groups of data from top to bottom:
- * The scale is at the top.
  * The nearest genes with their gene names as labels
  * The regulatory regions separated into trackes by sources, labeled by the source
  * The sequence near the coordinateds
  * The variant got hit labeled by rsid
  * The variants in LD labeled by rsid
  * The motifs labeled by the targets
+ * This svg use two different scales to draw all the elements.
+ * Genes, and regulatory regions use the same smaller scale. Sequence, variants and motifs use the same larger scale.
  */
 export default function NearbyDiagram({
   data,
@@ -143,15 +143,30 @@ export default function NearbyDiagram({
   targetSnp,
   variantLD,
 }) {
-  const regRegionPositionY =
-    genePositionY + geneUnitHeight * nearbyData.genes.length + blankHeight;
-  const coordinates = data.query_coordinates[0];
-  const [sliderValue, setSliderValue] = useState(19);
-  const [scaleX, setScaleX] = useState(20);
-  const svgRef = useRef(null);
-
   const genes = nearbyData.genes;
   const regulatoryRegions = nearbyData.regulatoryRegions;
+  const targetRsids = targetSnp[0].rsids.join(", ");
+  const targetRsidsTextLength = textTokenWidth * targetRsids.length;
+  const targetCoordinatesStart = +data.query_coordinates[0]
+    .split(":")[1]
+    .split("-")[0];
+  const offsetXForVariant =
+    targetCoordinatesStart - viewBoxLength / (2 * baseWidth);
+  const displayRegionToken = nearbyData.displayRegion.split(":")[1];
+  const displayRegionStart = +displayRegionToken.split("-")[0];
+  const displayRegionEnd = +displayRegionToken.split("-")[1];
+  const displayRegionMid =
+    (displayRegionEnd - displayRegionStart) / 2 + displayRegionStart;
+  const scaleForGene =
+    displayRegionMid > targetCoordinatesStart
+      ? viewBoxLength / 2 / (displayRegionEnd - targetCoordinatesStart)
+      : viewBoxLength / 2 / (targetCoordinatesStart - displayRegionStart);
+  const offsetXForGene =
+    displayRegionMid < targetCoordinatesStart
+      ? displayRegionStart
+      : targetCoordinatesStart - (displayRegionEnd - targetCoordinatesStart);
+  const regRegionPositionY =
+    genePositionY + geneUnitHeight * nearbyData.genes.length + blankHeight;
   const regulatoryRegionsBySource = regulatoryRegions.reduce(
     (groups, region) => {
       if (region.source in groups) {
@@ -171,116 +186,20 @@ export default function NearbyDiagram({
       index += 1;
     }
   });
-  const sequencePositionY =
+  const bigScalePositionY =
     regRegionPositionY +
     Object.keys(regulatoryRegionsBySource).length *
-      (regRegionPositionUnitHeight + labelHeight) +
-    blankHeight;
+      (regRegionPositiontrackHeight + labelHeight) +
+    blankHeight +
+    30;
+  const sequencePositionY = bigScalePositionY + blankHeight;
   const altLength = targetSnp[0].alt.length > 0 ? targetSnp[0].alt.length : 1;
   const variantPositionY =
-    sequencePositionY + DnaBaseHeight * altLength + blankHeight;
+    sequencePositionY + baseHeight * altLength + blankHeight;
   const motifPositionY =
-    variantPositionY +
-    DnaBaseHeight +
-    blankHeight +
-    labelHeight +
-    blankHeight * 2;
+    variantPositionY + baseHeight + blankHeight + labelHeight + blankHeight * 2;
   const viewBoxHeight =
-    scaleX >= 2
-      ? motifPositionY + motifsList.length * geneUnitHeight + blankHeight * 2
-      : sequencePositionY + blankHeight * 2;
-  const baseHeight = 50;
-  const displayRegionToken = nearbyData.displayRegion.split(":")[1];
-  const offsetX = +displayRegionToken.split("-")[0];
-  const displayRegionLength = +displayRegionToken.split("-")[1] - offsetX;
-
-  const variantPosX = coordinates.split(":")[1].split("-")[0] - offsetX;
-  const [viewBoxMinX, setViewBoxMinX] = useState(
-    Math.floor(variantPosX * scaleX - viewBoxLength / 2)
-  );
-
-  useEffect(() => {
-    const svgElement = svgRef.current;
-    function handleScroll(event) {
-      event.preventDefault();
-      const scrollDelta = event.deltaX || event.detail || event.wheelDelta;
-
-      setViewBoxMinX((prevViewBoxX) => {
-        const newViewBoxX = prevViewBoxX + scrollDelta;
-        const endX = displayRegionLength * scaleX;
-        if (newViewBoxX < 0) {
-          return 0;
-        }
-        if (newViewBoxX > endX - viewBoxLength) {
-          return endX - viewBoxLength;
-        }
-        return newViewBoxX;
-      });
-    }
-
-    svgElement.addEventListener("wheel", handleScroll, { passive: false });
-
-    return () => {
-      svgElement.removeEventListener("wheel", handleScroll);
-    };
-  }, [displayRegionLength, scaleX]);
-
-  function handleSliderChange(event) {
-    const newSliderValue = parseInt(event.target.value);
-    setSliderValue(newSliderValue);
-    const newScaleX =
-      newSliderValue >= 0 ? newSliderValue + 1 : 1 / (newSliderValue * -1 + 1);
-
-    setViewBoxMinX(
-      Math.floor(
-        ((viewBoxMinX + viewBoxLength / 2) / scaleX) * newScaleX -
-          viewBoxLength / 2
-      )
-    );
-    setScaleX(newScaleX);
-  }
-
-  function handleFocusClick() {
-    const newViewBoxX = variantPosX * scaleX - 1000;
-    setViewBoxMinX(newViewBoxX);
-  }
-
-  function handleZoomIn() {
-    if (sliderValue < 19) {
-      const newSliderValue = sliderValue + 2;
-      const newScaleX =
-        newSliderValue >= 0
-          ? newSliderValue + 1
-          : 1 / (newSliderValue * -1 + 1);
-      setSliderValue(newSliderValue);
-
-      setViewBoxMinX(
-        Math.floor(
-          ((viewBoxMinX + viewBoxLength / 2) / scaleX) * newScaleX -
-            viewBoxLength / 2
-        )
-      );
-      setScaleX(newScaleX);
-    }
-  }
-  function handleZoomOut() {
-    if (sliderValue > -19) {
-      const newSliderValue = sliderValue - 2;
-      const newScaleX =
-        newSliderValue >= 0
-          ? newSliderValue + 1
-          : 1 / (newSliderValue * -1 + 1);
-      setSliderValue(newSliderValue);
-
-      setViewBoxMinX(
-        Math.floor(
-          ((viewBoxMinX + viewBoxLength / 2) / scaleX) * newScaleX -
-            viewBoxLength / 2
-        )
-      );
-      setScaleX(newScaleX);
-    }
-  }
+    motifPositionY + motifsList.length * geneUnitHeight + blankHeight * 2;
 
   return (
     <>
@@ -288,107 +207,98 @@ export default function NearbyDiagram({
       <DataPanel>
         <div>
           <NearybyLegend />
-          <div className="flex space-x-2 py-2 justify-center">
-            <div>
-              <button onClick={handleZoomOut}>
-                <MinusIcon className="w-5 h-5" />
-              </button>
-              <input
-                type="range"
-                min="-19"
-                max="19"
-                step="2"
-                value={sliderValue}
-                onChange={handleSliderChange}
-              />
-              <button onClick={handleZoomIn}>
-                <PlusIcon className="w-5 h-5" />
-              </button>
-            </div>
-
-            <button onClick={handleFocusClick}>
-              <ViewfinderCircleIcon className="w-5 h-5" />
-            </button>
-          </div>
-
           <svg
             viewBox={`${viewBoxMinX} 0  ${viewBoxLength} ${viewBoxHeight}`}
             preserveAspectRatio="xMidYMid meet"
-            ref={svgRef}
-            style={{ border: "1px solid black" }}
+            className="border-2 border-panel"
           >
-            <g id="scale">
+            <g id="variant-position-vertical-line-top">
               <line
-                transform={`scale(${scaleX}, 1)`}
-                x1="0"
-                y1={scalePositionY}
-                x2={displayRegionLength}
-                y2={scalePositionY}
-                stroke="black"
-                strokeWidth="2"
+                x1={viewBoxLength / 2}
+                x2={viewBoxLength / 2}
+                y1={0}
+                y2={sequencePositionY}
+                stroke="#e9d66b"
+                strokeDasharray="40,8"
+                strokeWidth={3}
+                opacity="0.8"
+              />
+            </g>
+            <g id="variant-position-vertical-line-bottom">
+              <line
+                x1={viewBoxLength / 2}
+                x2={viewBoxLength / 2}
+                y1={sequencePositionY}
+                y2={viewBoxHeight}
+                stroke="#e9d66b"
+                strokeDasharray="40,8"
+                strokeWidth={baseWidth}
+                opacity="0.5"
+              />
+            </g>
+            <g id="small-scale">
+              <line
+                x1={viewBoxMinX}
+                y1={smallScalePositionY}
+                x2={viewBoxLength}
+                y2={smallScalePositionY}
+                className="stroke-data-label stroke-2"
               />
               {/* Draw ticks and labels */}
               {Array.from({
-                length: Math.floor((displayRegionLength / tickWidth) * scaleX),
+                length: Math.floor(viewBoxLength / tickWidth + 1),
               }).map((_, index) => {
-                const tickX = (index * tickWidth) / scaleX;
                 return (
                   <g key={index}>
                     <line
-                      x1={index * tickWidth + scaleX / 2}
-                      y1={scalePositionY}
-                      x2={index * tickWidth + scaleX / 2}
-                      y2={scalePositionY - 10}
-                      stroke="black"
-                      strokeWidth="2"
+                      x1={index * tickWidth}
+                      y1={smallScalePositionY}
+                      x2={index * tickWidth}
+                      y2={smallScalePositionY - tickHeight}
+                      className="stroke-data-label stroke-2"
                     />
                     <text
-                      fontSize={fontSize}
-                      x={tickX * scaleX + scaleX / 2}
-                      y={scalePositionY - 20}
+                      className="fill-data-label"
+                      fontSize={fontSizeLarge}
+                      x={index * tickWidth}
+                      y={smallScalePositionY - tickHeight - 5}
                       textAnchor="middle"
                     >
-                      {Math.floor((index * tickWidth) / scaleX + offsetX)}
+                      {Math.floor(
+                        (index * tickWidth) / scaleForGene + offsetXForGene
+                      )}
                     </text>
                   </g>
                 );
-              })}{" "}
+              })}
             </g>
             <g id="genes">
               {genes.map((gene, i) => {
-                const geneStart = (gene.start - offsetX) * scaleX;
-                const viewBoxMaxX = viewBoxMinX + viewBoxLength;
-                // show gene label at the top beginning of the gene
-                let labelX = geneStart;
-                //make sure we show the whole gene label
-                if (
-                  viewBoxMaxX > labelX &&
-                  (viewBoxMaxX - labelX) * scaleX < geneLabelWidth
-                ) {
-                  labelX = viewBoxMaxX - geneLabelWidth;
-                }
-                if (
-                  viewBoxMinX > (gene.start - offsetX) * scaleX &&
-                  viewBoxMinX < (gene.end - offsetX) * scaleX
-                ) {
-                  labelX = viewBoxMinX;
+                let textX =
+                  gene.start < offsetXForGene
+                    ? viewBoxMinX
+                    : (gene.start - offsetXForGene) * scaleForGene;
+                const textLength = textTokenWidth * gene.name.length;
+                if (textX + textLength > viewBoxLength) {
+                  textX = viewBoxLength - textLength;
                 }
                 return (
                   <g key={gene.name}>
                     <rect
-                      transform={`scale(${scaleX}, 1)`}
+                      transform={`scale(${scaleForGene}, 1)`}
                       key={gene.name}
-                      x={gene.start - offsetX}
+                      x={gene.start - offsetXForGene}
                       y={genePositionY + i * geneUnitHeight}
                       width={gene.end - gene.start}
-                      height={20}
+                      height={geneRectHeight}
                       fill={colorGenes[geneTypes[gene.gene_type]]}
                     />
                     <text
-                      fontSize={fontSize}
-                      fill="black"
-                      x={labelX}
+                      className="fill-data-label"
+                      fontSize={fontSizeLarge}
+                      x={textX}
                       y={genePositionY - 6 + i * geneUnitHeight}
+                      textLength={textLength}
                     >
                       {gene.name}
                     </text>
@@ -401,14 +311,14 @@ export default function NearbyDiagram({
                 return (
                   <text
                     key={source}
-                    fontSize={regRegionFontSize}
-                    fill="black"
+                    fontSize={fontSizeSmall}
+                    className="fill-data-label"
                     x={viewBoxMinX}
                     y={
                       regRegionPositionY -
                       5 +
                       regulatoryRegionsBySource[source].index *
-                        (regRegionPositionUnitHeight + labelHeight)
+                        (regRegionPositiontrackHeight + labelHeight)
                     }
                   >
                     regulatory region source: {source}
@@ -424,18 +334,18 @@ export default function NearbyDiagram({
                       return (
                         <rect
                           key={region.name}
-                          x={(region.start - offsetX) * scaleX}
+                          x={(region.start - offsetXForGene) * scaleForGene}
                           y={
                             regRegionPositionY +
                             regulatoryRegionsBySource[source].index *
-                              (regRegionPositionUnitHeight + labelHeight)
+                              (regRegionPositiontrackHeight + labelHeight)
                           }
-                          width={(region.end - region.start) * scaleX}
-                          height={20}
+                          width={(region.end - region.start) * scaleForGene}
+                          height={geneRectHeight}
                           fill={
                             region.biochemical_activity
                               ? colorCCREs[region.biochemical_activity]
-                              : "#06da93"
+                              : colorCCREs.CA
                           }
                           opacity="0.8"
                         />
@@ -445,160 +355,177 @@ export default function NearbyDiagram({
                 );
               })}
             </g>
-            <g id="variant-position-vertical-line">
+            <g id="large-scale">
               <line
-                transform={`translate(${scaleX / 2}) scale(${scaleX}, 1)`}
-                x1={variantPosX}
-                x2={variantPosX}
-                y1={0}
-                y2={viewBoxHeight}
-                stroke="#e9d66b"
-                strokeDasharray="40,8"
-                strokeWidth={scaleX >= 1 ? 1 : 2 / scaleX}
-                opacity="0.3"
+                x1={viewBoxMinX}
+                x2={viewBoxLength}
+                y1={bigScalePositionY}
+                y2={bigScalePositionY}
+                className="stroke-data-label stroke-2"
               />
-            </g>
-            {scaleX >= 2 && (
-              <>
-                <g id="sequence">
-                  <g id="x-axis">
+              {/* Draw ticks and labels */}
+              {Array.from({
+                length: Math.floor(viewBoxLength / tickWidth + 1),
+              }).map((_, index) => {
+                return (
+                  <g key={index}>
                     <line
-                      transform={`scale(${scaleX}, 1)`}
-                      x1={0}
-                      x2={displayRegionLength}
-                      y1={sequencePositionY + baseHeight / 2}
-                      y2={sequencePositionY + baseHeight / 2}
-                      markerEnd="url(#arrow)"
-                      markerStart="url(#arrow)"
-                      stroke="#7F7F7F"
-                      strokeWidth="2"
+                      x1={index * tickWidth}
+                      y1={bigScalePositionY}
+                      x2={index * tickWidth}
+                      y2={bigScalePositionY - tickHeight}
+                      className="stroke-data-label stroke-2"
+                    />
+                    <text
+                      className="fill-data-label"
+                      fontSize={fontSizeLarge}
+                      x={index * tickWidth}
+                      y={bigScalePositionY - tickHeight - 5}
+                      textAnchor="middle"
+                    >
+                      {Math.floor(
+                        (index * tickWidth) / baseWidth + offsetXForVariant
+                      )}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+            <g id="sequence">
+              {data.sequence.sequence.split("").map((base, i) => {
+                return (
+                  <g
+                    key={i}
+                    transform={`translate(${
+                      (data.sequence.start - offsetXForVariant + i) *
+                        baseWidth -
+                      baseWidth / 2
+                    } ${sequencePositionY})`}
+                  >
+                    <Base
+                      xscale={baseWidth / baseMaxWidth}
+                      yscale={0.5}
+                      base={base}
                     />
                   </g>
-                  {data.sequence.sequence.split("").map((base, i) => {
-                    return (
-                      <g
-                        key={i}
-                        transform={`translate(${
-                          (data.sequence.start - offsetX + i) * scaleX
-                        } ${sequencePositionY}) scale(${scaleX}, 1)`}
-                      >
-                        <Base xscale={0.01} yscale={0.5} base={base} />
-                      </g>
-                    );
-                  })}
-                  {variantLD.map((variant) => {
-                    const location = variant.location;
-                    const region = location.split(":")[1];
-                    const start = parseInt(region.split("-")[0]);
-                    return (
-                      <g
-                        key={variant.location + variant.ancestry}
-                        transform={`translate(${
-                          (start - offsetX) * scaleX
-                        } ${sequencePositionY}) scale(${scaleX}, 1)`}
-                      >
-                        <Base xscale={0.01} yscale={0.5} base={variant.ref} />
-                      </g>
-                    );
-                  })}
-                </g>
-                <g id="variants">
-                  {variantLD.map((variant) => {
-                    const location = variant.location;
-                    const region = location.split(":")[1];
-                    const start = parseInt(region.split("-")[0]);
-                    return (
-                      <g key={variant.location + variant.ancestry}>
-                        <g
-                          transform={`translate(${
-                            (start - offsetX) * scaleX
-                          } ${variantPositionY}) scale(${scaleX}, 1)`}
-                        >
-                          <Base xscale={0.01} yscale={0.5} base={variant.alt} />
-                        </g>
-                        <g>
-                          <rect
-                            x={(start - offsetX) * scaleX - 50}
-                            y={variantPositionY + geneUnitHeight + blankHeight}
-                            width={variantLabelWidth}
-                            height={labelHeight}
-                            fill="blue"
-                          />
-                          <text
-                            fontSize={fontSize}
-                            fill="white"
-                            x={(start - offsetX) * scaleX - 40}
-                            y={variantPositionY + 80}
-                          >
-                            {variant.rsid}
-                          </text>
-                        </g>
-                      </g>
-                    );
-                  })}
-                  {targetSnp[0].alt.map((base, i) => {
-                    return (
-                      <g
-                        key={base}
-                        transform={`translate(${
-                          (targetSnp[0].start - offsetX) * scaleX
-                        } ${
-                          variantPositionY - i * DnaBaseHeight
-                        }) scale(${scaleX}, 1)`}
-                      >
-                        <Base xscale={0.01} yscale={0.5} base={base} />
-                      </g>
-                    );
-                  })}
-                  {targetSnp.length > 0 && (
-                    <g id="target-snp-label">
+                );
+              })}
+            </g>
+            <g id="variants">
+              {variantLD.map((variant) => {
+                const location = variant.location;
+                const region = location.split(":")[1];
+                const start = parseInt(region.split("-")[0]);
+                const textLength = variant.rsid.length * textTokenWidth;
+                return (
+                  <g key={variant.location + variant.ancestry}>
+                    <g
+                      transform={`translate(${
+                        (start - offsetXForVariant) * baseWidth - baseWidth / 2
+                      } ${variantPositionY}) `}
+                    >
+                      <Base
+                        xscale={baseWidth / baseMaxWidth}
+                        yscale={0.5}
+                        base={variant.alt}
+                      />
+                    </g>
+                    <g>
                       <rect
-                        x={(targetSnp[0].start - offsetX) * scaleX - 50}
+                        x={
+                          (start - offsetXForVariant + 1) * baseWidth -
+                          textLength / 2 -
+                          2
+                        }
                         y={variantPositionY + geneUnitHeight + blankHeight}
-                        width={variantLabelWidth * targetSnp[0].rsids.length}
+                        width={textLength + 4}
                         height={labelHeight}
-                        fill="red"
+                        fill="blue"
                       />
                       <text
-                        fontSize="20"
+                        fontSize={fontSizeLarge}
                         fill="white"
-                        x={(targetSnp[0].start - offsetX) * scaleX - 40}
+                        x={
+                          (start - offsetXForVariant + 1) * baseWidth -
+                          textLength / 2
+                        }
                         y={variantPositionY + 80}
+                        textLength={textLength}
                       >
-                        {targetSnp[0].rsids.join(", ")}
+                        {variant.rsid}
                       </text>
                     </g>
-                  )}
+                  </g>
+                );
+              })}
+              {targetSnp[0].alt.map((base, i) => {
+                return (
+                  <g
+                    key={base}
+                    transform={`translate(${
+                      (targetSnp[0].start - offsetXForVariant) * baseWidth -
+                      baseWidth / 2
+                    } ${variantPositionY - i * baseHeight}) `}
+                  >
+                    <Base
+                      xscale={baseWidth / baseMaxWidth}
+                      yscale={0.5}
+                      base={base}
+                    />
+                  </g>
+                );
+              })}
+              {targetRsidsTextLength > 0 && (
+                <g id="target-snp-label">
+                  <rect
+                    x={
+                      (targetSnp[0].start - offsetXForVariant + 1) * baseWidth -
+                      targetRsidsTextLength / 2 -
+                      2
+                    }
+                    y={variantPositionY + geneUnitHeight + blankHeight}
+                    width={targetRsidsTextLength + 4}
+                    height={labelHeight}
+                    fill="red"
+                  />
+                  <text
+                    fontSize={fontSizeLarge}
+                    fill="white"
+                    x={
+                      (targetSnp[0].start - offsetXForVariant + 1) * baseWidth -
+                      targetRsidsTextLength / 2
+                    }
+                    y={variantPositionY + 80}
+                    textLength={targetRsidsTextLength}
+                  >
+                    {targetRsids}
+                  </text>
                 </g>
-                <g id="motifs">
-                  {motifsList.map((motif, i) => {
-                    return (
-                      <React.Fragment key={motif.pwm}>
-                        <MotifDnaLogo
-                          pwm={motif.dataMatrix}
-                          strand={motif.strand}
-                          startX={motif.start - offsetX}
-                          startY={motifPositionY + i * 50}
-                          scaleX={scaleX}
-                        />
-                        <text
-                          fontSize={fontSize}
-                          fill="black"
-                          x={viewBoxMinX}
-                          y={
-                            motifPositionY +
-                            i * DnaBaseHeight +
-                            DnaBaseHeight * 0.7
-                          }
-                        >
-                          motif target: {motif.targets}
-                        </text>
-                      </React.Fragment>
-                    );
-                  })}
-                </g>
-              </>
-            )}
+              )}
+            </g>
+            <g id="motifs">
+              {motifsList.map((motif, i) => {
+                return (
+                  <React.Fragment key={motif.pwm}>
+                    <MotifDnaLogo
+                      pwm={motif.dataMatrix}
+                      strand={motif.strand}
+                      startX={motif.start - offsetXForVariant - 0.5}
+                      startY={motifPositionY + i * 50}
+                      scaleX={baseWidth}
+                    />
+                    <text
+                      fontSize={fontSizeLarge}
+                      className="fill-data-label"
+                      x={viewBoxMinX}
+                      y={motifPositionY + i * baseHeight + baseHeight * 0.7}
+                    >
+                      motif target: {motif.targets}
+                    </text>
+                  </React.Fragment>
+                );
+              })}
+            </g>
           </svg>
         </div>
       </DataPanel>
