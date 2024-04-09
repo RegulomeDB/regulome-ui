@@ -114,7 +114,7 @@ const textTokenWidth = 12;
 const labelHeight = 28;
 const fontSizeLarge = 20;
 const fontSizeSmall = 16;
-const smallScalePositionY = 50;
+const scaleForGenePositionY = 50;
 const genePositionY = 80;
 const geneRectHeight = 20;
 const geneUnitHeight = 50;
@@ -124,6 +124,7 @@ const regRegionPositiontrackHeight = 25;
 const baseMaxWidth = 100;
 const baseWidth = 25;
 const baseHeight = 50;
+const zoomInIconHeigt = 100;
 
 /**
  * In this nearby drawing, we show groups of data from top to bottom:
@@ -186,13 +187,13 @@ export default function NearbyDiagram({
       index += 1;
     }
   });
-  const bigScalePositionY =
+  const zoomInIconPosition =
     regRegionPositionY +
     Object.keys(regulatoryRegionsBySource).length *
-      (regRegionPositiontrackHeight + labelHeight) +
-    blankHeight +
-    30;
-  const sequencePositionY = bigScalePositionY + blankHeight;
+      (regRegionPositiontrackHeight + labelHeight);
+  const scaleForSequencePositionY =
+    zoomInIconPosition + zoomInIconHeigt + 30 + blankHeight;
+  const sequencePositionY = scaleForSequencePositionY + blankHeight;
   const altLength = targetSnp[0].alt.length > 0 ? targetSnp[0].alt.length : 1;
   const variantPositionY =
     sequencePositionY + baseHeight * altLength + blankHeight;
@@ -208,7 +209,9 @@ export default function NearbyDiagram({
         <div>
           <NearybyLegend />
           <svg
-            viewBox={`${viewBoxMinX} 0  ${viewBoxLength} ${viewBoxHeight}`}
+            viewBox={`${viewBoxMinX - 60} 0  ${
+              viewBoxLength + 120
+            } ${viewBoxHeight}`}
             preserveAspectRatio="xMidYMid meet"
             className="border-2 border-panel"
           >
@@ -217,7 +220,7 @@ export default function NearbyDiagram({
                 x1={viewBoxLength / 2}
                 x2={viewBoxLength / 2}
                 y1={0}
-                y2={sequencePositionY}
+                y2={zoomInIconPosition}
                 stroke="#e9d66b"
                 strokeDasharray="40,8"
                 strokeWidth={3}
@@ -239,9 +242,9 @@ export default function NearbyDiagram({
             <g id="small-scale">
               <line
                 x1={viewBoxMinX}
-                y1={smallScalePositionY}
+                y1={scaleForGenePositionY}
                 x2={viewBoxLength}
-                y2={smallScalePositionY}
+                y2={scaleForGenePositionY}
                 className="stroke-data-label stroke-2"
               />
               {/* Draw ticks and labels */}
@@ -252,16 +255,16 @@ export default function NearbyDiagram({
                   <g key={index}>
                     <line
                       x1={index * tickWidth}
-                      y1={smallScalePositionY}
+                      y1={scaleForGenePositionY}
                       x2={index * tickWidth}
-                      y2={smallScalePositionY - tickHeight}
+                      y2={scaleForGenePositionY - tickHeight}
                       className="stroke-data-label stroke-2"
                     />
                     <text
                       className="fill-data-label"
                       fontSize={fontSizeLarge}
                       x={index * tickWidth}
-                      y={smallScalePositionY - tickHeight - 5}
+                      y={scaleForGenePositionY - tickHeight - 5}
                       textAnchor="middle"
                     >
                       {Math.floor(
@@ -355,12 +358,79 @@ export default function NearbyDiagram({
                 );
               })}
             </g>
+            <g id="variants-in-ld">
+              {variantLD.map((variant) => {
+                const location = variant.location;
+                const region = location.split(":")[1];
+                const start = parseInt(region.split("-")[0]);
+                const textLength = variant.rsid.length * textTokenWidth;
+                return (
+                  <g key={variant.location + variant.ancestry}>
+                    <g
+                      transform={`translate(${
+                        (start - offsetXForVariant) * baseWidth - baseWidth / 2
+                      } ${variantPositionY}) scale(${scaleForGene}, 1)
+                      `}
+                    >
+                      <Base
+                        xscale={baseWidth / baseMaxWidth}
+                        yscale={0.5}
+                        base={variant.alt}
+                      />
+                    </g>
+                    <g>
+                      <rect
+                        x={
+                          ((start - offsetXForVariant + 1) * baseWidth -
+                            textLength / 2 -
+                            2) *
+                          scaleForGene
+                        }
+                        y={variantPositionY + geneUnitHeight + blankHeight}
+                        width={textLength + 4}
+                        height={labelHeight}
+                        fill="blue"
+                      />
+                      <text
+                        fontSize={fontSizeLarge}
+                        fill="white"
+                        x={
+                          ((start - offsetXForVariant + 1) * baseWidth -
+                            textLength / 2) *
+                          scaleForGene
+                        }
+                        y={variantPositionY + 80}
+                        textLength={textLength}
+                      >
+                        {variant.rsid}
+                      </text>
+                    </g>
+                  </g>
+                );
+              })}
+            </g>
+            <g id="zoom-in-icon">
+              <line
+                x1={viewBoxMinX}
+                x2={viewBoxLength / 2}
+                y1={zoomInIconPosition + 100}
+                y2={zoomInIconPosition}
+                className="stroke-data-label stroke-2"
+              />
+              <line
+                x1={viewBoxLength / 2}
+                x2={viewBoxLength}
+                y1={zoomInIconPosition}
+                y2={zoomInIconPosition + 100}
+                className="stroke-data-label stroke-2"
+              />
+            </g>
             <g id="large-scale">
               <line
                 x1={viewBoxMinX}
                 x2={viewBoxLength}
-                y1={bigScalePositionY}
-                y2={bigScalePositionY}
+                y1={scaleForSequencePositionY}
+                y2={scaleForSequencePositionY}
                 className="stroke-data-label stroke-2"
               />
               {/* Draw ticks and labels */}
@@ -371,16 +441,16 @@ export default function NearbyDiagram({
                   <g key={index}>
                     <line
                       x1={index * tickWidth}
-                      y1={bigScalePositionY}
+                      y1={scaleForSequencePositionY}
                       x2={index * tickWidth}
-                      y2={bigScalePositionY - tickHeight}
+                      y2={scaleForSequencePositionY - tickHeight}
                       className="stroke-data-label stroke-2"
                     />
                     <text
                       className="fill-data-label"
                       fontSize={fontSizeLarge}
                       x={index * tickWidth}
-                      y={bigScalePositionY - tickHeight - 5}
+                      y={scaleForSequencePositionY - tickHeight - 5}
                       textAnchor="middle"
                     >
                       {Math.floor(
@@ -411,53 +481,7 @@ export default function NearbyDiagram({
                 );
               })}
             </g>
-            <g id="variants">
-              {variantLD.map((variant) => {
-                const location = variant.location;
-                const region = location.split(":")[1];
-                const start = parseInt(region.split("-")[0]);
-                const textLength = variant.rsid.length * textTokenWidth;
-                return (
-                  <g key={variant.location + variant.ancestry}>
-                    <g
-                      transform={`translate(${
-                        (start - offsetXForVariant) * baseWidth - baseWidth / 2
-                      } ${variantPositionY}) `}
-                    >
-                      <Base
-                        xscale={baseWidth / baseMaxWidth}
-                        yscale={0.5}
-                        base={variant.alt}
-                      />
-                    </g>
-                    <g>
-                      <rect
-                        x={
-                          (start - offsetXForVariant + 1) * baseWidth -
-                          textLength / 2 -
-                          2
-                        }
-                        y={variantPositionY + geneUnitHeight + blankHeight}
-                        width={textLength + 4}
-                        height={labelHeight}
-                        fill="blue"
-                      />
-                      <text
-                        fontSize={fontSizeLarge}
-                        fill="white"
-                        x={
-                          (start - offsetXForVariant + 1) * baseWidth -
-                          textLength / 2
-                        }
-                        y={variantPositionY + 80}
-                        textLength={textLength}
-                      >
-                        {variant.rsid}
-                      </text>
-                    </g>
-                  </g>
-                );
-              })}
+            <g id="tartget-variant">
               {targetSnp[0].alt.map((base, i) => {
                 return (
                   <g
