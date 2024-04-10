@@ -204,7 +204,7 @@ export default function NearbyDiagram({
   let needNewScale = false;
   let scaleForVariantInLd = null;
   let offsetForVariantInLd = null;
-  let VariantsInLdPositionY = null;
+  let variantsInLdPositionY = null;
   let zoomInIconPositionForVariantsInLd = null;
   let scaleForVariantsInLdPositionY = null;
   if (uniqueVariantLD.length > 0) {
@@ -232,18 +232,18 @@ export default function NearbyDiagram({
           (regRegionPositiontrackHeight + labelHeight);
       scaleForVariantsInLdPositionY =
         zoomInIconPositionForVariantsInLd + zoomInIconHeigt + 30 + blankHeight;
-      VariantsInLdPositionY = scaleForVariantsInLdPositionY + blankHeight;
+      variantsInLdPositionY = scaleForVariantsInLdPositionY + blankHeight;
     } else {
       scaleForVariantInLd = scaleForGene;
       offsetForVariantInLd = offsetXForGene;
-      VariantsInLdPositionY =
+      variantsInLdPositionY =
         regRegionPositionY +
         Object.keys(regulatoryRegionsBySource).length *
           (regRegionPositiontrackHeight + labelHeight);
     }
   }
-  const zoomInIconPositionForSequence = VariantsInLdPositionY
-    ? VariantsInLdPositionY + variatInLdHeight + labelHeight + blankHeight
+  const zoomInIconPositionForSequence = variantsInLdPositionY
+    ? variantsInLdPositionY + variatInLdHeight + labelHeight + blankHeight
     : regRegionPositionY +
       Object.keys(regulatoryRegionsBySource).length *
         (regRegionPositiontrackHeight + labelHeight);
@@ -276,11 +276,7 @@ export default function NearbyDiagram({
     let rectY = highestLabelY;
     if (preLabelInfo) {
       const pre = preLabelInfo.find((item) => item < rectX);
-      if (pre) {
-        indexY = preLabelInfo.indexOf(pre);
-      } else {
-        indexY = preLabelInfo.length;
-      }
+      indexY = pre ? preLabelInfo.indexOf(pre) : preLabelInfo.length;
       rectY = highestLabelY + indexY * (labelHeight + blankHeight);
     }
     preLabelInfo[indexY] = rectX + rectWidth;
@@ -538,7 +534,7 @@ export default function NearbyDiagram({
                     fontSize={fontSizeSmall}
                     className="fill-data-label"
                     x={viewBoxMinX}
-                    y={VariantsInLdPositionY + 22}
+                    y={variantsInLdPositionY + 22}
                   >
                     variants in LD
                   </text>
@@ -558,9 +554,9 @@ export default function NearbyDiagram({
                               (start - offsetForVariantInLd + 1) *
                               scaleForVariantInLd
                             }
-                            y1={VariantsInLdPositionY + labelHeight}
+                            y1={variantsInLdPositionY + labelHeight}
                             y2={
-                              VariantsInLdPositionY +
+                              variantsInLdPositionY +
                               labelHeight +
                               variatInLdHeight
                             }
