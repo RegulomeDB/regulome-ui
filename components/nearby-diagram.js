@@ -122,9 +122,10 @@ const viewBoxMinX = 0;
 const viewBoxLength = 2000;
 const regRegionPositiontrackHeight = 25;
 const baseMaxWidth = 100;
-const baseWidth = 25;
+const baseWidth = 35;
 const baseHeight = 50;
 const zoomInIconHeigt = 100;
+const variatInLdHeight = 40;
 
 /**
  * In this nearby drawing, we show groups of data from top to bottom:
@@ -141,16 +142,26 @@ export default function NearbyDiagram({
   data,
   motifsList,
   nearbyData,
-  targetSnp,
   variantLD,
 }) {
+  const uniqueVariantLD = variantLD.filter(
+    (variant, index) =>
+      variantLD.findIndex((item) => item.location === variant.location) ===
+      index
+  );
   const genes = nearbyData.genes;
-  const regulatoryRegions = nearbyData.regulatoryRegions;
-  const targetRsids = targetSnp[0].rsids.join(", ");
-  const targetRsidsTextLength = textTokenWidth * targetRsids.length;
+  const regulatoryRegions = nearbyData.regulatoryRegions.filter(
+    (region) => region.source === "ENCODE_SCREEN (ccREs)"
+  );
   const targetCoordinatesStart = +data.query_coordinates[0]
     .split(":")[1]
     .split("-")[0];
+  const nearyBySnps = data.nearby_snps.filter(
+    (snp) =>
+      snp.variation_type === "SNV" &&
+      snp.coordinates.gte >= data.sequence.start &&
+      snp.coordinates.gte <= data.sequence.end
+  );
   const offsetXForVariant =
     targetCoordinatesStart - viewBoxLength / (2 * baseWidth);
   const displayRegionToken = nearbyData.displayRegion.split(":")[1];
@@ -187,18 +198,101 @@ export default function NearbyDiagram({
       index += 1;
     }
   });
-  const zoomInIconPosition =
-    regRegionPositionY +
-    Object.keys(regulatoryRegionsBySource).length *
-      (regRegionPositiontrackHeight + labelHeight);
+  let scaleForVariantInLd = null;
+  let offsetForVariantInLd = null;
+  let VariantsInLdPositionY = null;
+  let zoomInIconPositionForVariantsInLd = null;
+  let scaleForVariantsInLdPositionY = null;
+  if (uniqueVariantLD.length > 0) {
+    const variantsInLdRegionStart = uniqueVariantLD[0].start;
+    const variantsInLdRegionEnd =
+      uniqueVariantLD[uniqueVariantLD.length - 1].start;
+    const variantsInLdRegionMid =
+      (variantsInLdRegionEnd + variantsInLdRegionStart) / 2;
+    scaleForVariantInLd =
+      variantsInLdRegionMid > targetCoordinatesStart
+        ? viewBoxLength / 2 / (variantsInLdRegionEnd - targetCoordinatesStart)
+        : viewBoxLength /
+          2 /
+          (targetCoordinatesStart - variantsInLdRegionStart);
+    offsetForVariantInLd =
+      variantsInLdRegionMid < targetCoordinatesStart
+        ? variantsInLdRegionStart
+        : targetCoordinatesStart -
+          (variantsInLdRegionEnd - targetCoordinatesStart);
+    zoomInIconPositionForVariantsInLd =
+      regRegionPositionY +
+      Object.keys(regulatoryRegionsBySource).length *
+        (regRegionPositiontrackHeight + labelHeight);
+    scaleForVariantsInLdPositionY =
+      zoomInIconPositionForVariantsInLd + zoomInIconHeigt + 30 + blankHeight;
+    VariantsInLdPositionY = scaleForVariantsInLdPositionY + blankHeight;
+  }
+  const zoomInIconPositionForSequence = VariantsInLdPositionY
+    ? VariantsInLdPositionY + variatInLdHeight + labelHeight + blankHeight
+    : regRegionPositionY +
+      Object.keys(regulatoryRegionsBySource).length *
+        (regRegionPositiontrackHeight + labelHeight);
   const scaleForSequencePositionY =
-    zoomInIconPosition + zoomInIconHeigt + 30 + blankHeight;
+    zoomInIconPositionForSequence + zoomInIconHeigt + 30 + blankHeight;
   const sequencePositionY = scaleForSequencePositionY + blankHeight;
-  const altLength = targetSnp[0].alt.length > 0 ? targetSnp[0].alt.length : 1;
+  const altLength = getAltMaxNum(nearyBySnps);
   const variantPositionY =
     sequencePositionY + baseHeight * altLength + blankHeight;
-  const motifPositionY =
-    variantPositionY + baseHeight + blankHeight + labelHeight + blankHeight * 2;
+
+  let preRectX2 = 0;
+  let preRectY = 0;
+  const highestLabelY = variantPositionY + geneUnitHeight + blankHeight;
+  let lowestLabelY = highestLabelY;
+  const nearbySnpsData = nearyBySnps.map((variant) => {
+    const start = variant.coordinates.gte;
+    const textLength = variant.rsid.length * textTokenWidth;
+    // need to show all alts
+    const bases = Object.keys(variant.alt_allele_freq);
+    const basesData = bases.map((base, i) => {
+      return {
+        base,
+        transform: `translate(${
+          (start - offsetXForVariant) * baseWidth - baseWidth / 2
+        } ${variantPositionY - i * baseHeight}) `,
+      };
+    });
+    const rectX = (start - offsetXForVariant) * baseWidth - textLength / 2 - 2;
+    let rectY = highestLabelY;
+    if (preRectX2 >= rectX) {
+      rectY = preRectY + labelHeight + blankHeight;
+    }
+    const rectWidth = textLength + 4;
+    const textX = (start - offsetXForVariant) * baseWidth - textLength / 2;
+    const textY = rectY + 20;
+    const rsid = variant.rsid;
+    const fill = start === targetCoordinatesStart ? "red" : "blue";
+    const lineX = rectX + textLength / 2;
+    const lineY1 = highestLabelY - 10;
+    const lineY2 = rectY + labelHeight;
+    preRectX2 = rectX + rectWidth;
+    preRectY = rectY;
+    if (rectY > lowestLabelY) {
+      lowestLabelY = rectY;
+    }
+
+    return {
+      textLength,
+      basesData,
+      rectX,
+      rectY,
+      rectWidth,
+      textX,
+      textY,
+      lineX,
+      lineY1,
+      lineY2,
+      rsid,
+      fill,
+    };
+  });
+
+  const motifPositionY = lowestLabelY + labelHeight + blankHeight * 2;
   const viewBoxHeight =
     motifPositionY + motifsList.length * geneUnitHeight + blankHeight * 2;
 
@@ -220,7 +314,7 @@ export default function NearbyDiagram({
                 x1={viewBoxLength / 2}
                 x2={viewBoxLength / 2}
                 y1={0}
-                y2={zoomInIconPosition}
+                y2={zoomInIconPositionForSequence}
                 stroke="#e9d66b"
                 strokeDasharray="40,8"
                 strokeWidth={3}
@@ -358,70 +452,115 @@ export default function NearbyDiagram({
                 );
               })}
             </g>
-            <g id="variants-in-ld">
-              {variantLD.map((variant) => {
-                const location = variant.location;
-                const region = location.split(":")[1];
-                const start = parseInt(region.split("-")[0]);
-                const textLength = variant.rsid.length * textTokenWidth;
-                return (
-                  <g key={variant.location + variant.ancestry}>
-                    <g
-                      transform={`translate(${
-                        (start - offsetXForVariant) * baseWidth - baseWidth / 2
-                      } ${variantPositionY}) scale(${scaleForGene}, 1)
-                      `}
-                    >
-                      <Base
-                        xscale={baseWidth / baseMaxWidth}
-                        yscale={0.5}
-                        base={variant.alt}
-                      />
-                    </g>
-                    <g>
-                      <rect
-                        x={
-                          ((start - offsetXForVariant + 1) * baseWidth -
-                            textLength / 2 -
-                            2) *
-                          scaleForGene
-                        }
-                        y={variantPositionY + geneUnitHeight + blankHeight}
-                        width={textLength + 4}
-                        height={labelHeight}
-                        fill="blue"
-                      />
-                      <text
-                        fontSize={fontSizeLarge}
-                        fill="white"
-                        x={
-                          ((start - offsetXForVariant + 1) * baseWidth -
-                            textLength / 2) *
-                          scaleForGene
-                        }
-                        y={variantPositionY + 80}
-                        textLength={textLength}
-                      >
-                        {variant.rsid}
-                      </text>
-                    </g>
-                  </g>
-                );
-              })}
-            </g>
+            {uniqueVariantLD.length > 0 && (
+              <>
+                <g id="zoom-in-icon-for-variants-in-ld">
+                  <line
+                    x1={viewBoxMinX}
+                    x2={viewBoxLength / 2}
+                    y1={zoomInIconPositionForVariantsInLd + 100}
+                    y2={zoomInIconPositionForVariantsInLd}
+                    className="stroke-data-label stroke-2"
+                  />
+                  <line
+                    x1={viewBoxLength / 2}
+                    x2={viewBoxLength}
+                    y1={zoomInIconPositionForVariantsInLd}
+                    y2={zoomInIconPositionForVariantsInLd + 100}
+                    className="stroke-data-label stroke-2"
+                  />
+                </g>
+                <g id="scale-for-variants-in-ld">
+                  <line
+                    x1={viewBoxMinX}
+                    x2={viewBoxLength}
+                    y1={scaleForVariantsInLdPositionY}
+                    y2={scaleForVariantsInLdPositionY}
+                    className="stroke-data-label stroke-2"
+                  />
+                  {/* Draw ticks and labels */}
+                  {Array.from({
+                    length: Math.floor(viewBoxLength / tickWidth + 1),
+                  }).map((_, index) => {
+                    return (
+                      <g key={index}>
+                        <line
+                          x1={index * tickWidth}
+                          y1={scaleForVariantsInLdPositionY}
+                          x2={index * tickWidth}
+                          y2={scaleForVariantsInLdPositionY - tickHeight}
+                          className="stroke-data-label stroke-2"
+                        />
+                        <text
+                          className="fill-data-label"
+                          fontSize={fontSizeLarge}
+                          x={index * tickWidth}
+                          y={scaleForVariantsInLdPositionY - tickHeight - 5}
+                          textAnchor="middle"
+                        >
+                          {Math.floor(
+                            (index * tickWidth) / scaleForVariantInLd +
+                              offsetForVariantInLd
+                          )}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+                <g id="variants-in-ld">
+                  <text
+                    id="variants-in-ld-track-label"
+                    fontSize={fontSizeSmall}
+                    className="fill-data-label"
+                    x={viewBoxMinX}
+                    y={scaleForVariantsInLdPositionY + labelHeight}
+                  >
+                    variants in LD
+                  </text>
+                  {uniqueVariantLD.map((variant) => {
+                    const location = variant.location;
+                    const region = location.split(":")[1];
+                    const start = parseInt(region.split("-")[0]);
+                    return (
+                      <g key={variant.location}>
+                        <g>
+                          <line
+                            x1={
+                              (start - offsetForVariantInLd + 1) *
+                              scaleForVariantInLd
+                            }
+                            x2={
+                              (start - offsetForVariantInLd + 1) *
+                              scaleForVariantInLd
+                            }
+                            y1={VariantsInLdPositionY + labelHeight}
+                            y2={
+                              VariantsInLdPositionY +
+                              labelHeight +
+                              variatInLdHeight
+                            }
+                            className="stroke-brand stroke-2"
+                          />
+                        </g>
+                      </g>
+                    );
+                  })}
+                </g>
+              </>
+            )}
             <g id="zoom-in-icon">
               <line
                 x1={viewBoxMinX}
                 x2={viewBoxLength / 2}
-                y1={zoomInIconPosition + 100}
-                y2={zoomInIconPosition}
+                y1={zoomInIconPositionForSequence + 100}
+                y2={zoomInIconPositionForSequence}
                 className="stroke-data-label stroke-2"
               />
               <line
                 x1={viewBoxLength / 2}
                 x2={viewBoxLength}
-                y1={zoomInIconPosition}
-                y2={zoomInIconPosition + 100}
+                y1={zoomInIconPositionForSequence}
+                y2={zoomInIconPositionForSequence + 100}
                 className="stroke-data-label stroke-2"
               />
             </g>
@@ -481,51 +620,56 @@ export default function NearbyDiagram({
                 );
               })}
             </g>
-            <g id="tartget-variant">
-              {targetSnp[0].alt.map((base, i) => {
+            <g id="nearby-snps-label-tick">
+              {nearbySnpsData.map((variant) => {
                 return (
-                  <g
-                    key={base}
-                    transform={`translate(${
-                      (targetSnp[0].start - offsetXForVariant) * baseWidth -
-                      baseWidth / 2
-                    } ${variantPositionY - i * baseHeight}) `}
-                  >
-                    <Base
-                      xscale={baseWidth / baseMaxWidth}
-                      yscale={0.5}
-                      base={base}
-                    />
+                  <line
+                    key={variant.rsid}
+                    x1={variant.lineX}
+                    y1={variant.lineY1}
+                    x2={variant.lineX}
+                    y2={variant.lineY2}
+                    className="stroke-data-label stroke-2"
+                  />
+                );
+              })}
+            </g>
+            <g id="nearby-snps">
+              {nearbySnpsData.map((variant) => {
+                return (
+                  <g key={variant.rsid}>
+                    {variant.basesData.map((base) => {
+                      return (
+                        <g key={base.base} transform={base.transform}>
+                          <Base
+                            xscale={baseWidth / baseMaxWidth}
+                            yscale={0.5}
+                            base={base.base}
+                          />
+                        </g>
+                      );
+                    })}
+                    <g>
+                      <rect
+                        x={variant.rectX}
+                        y={variant.rectY}
+                        width={variant.rectWidth}
+                        height={labelHeight}
+                        fill={variant.fill}
+                      />
+                      <text
+                        fontSize={fontSizeLarge}
+                        fill="white"
+                        x={variant.textX}
+                        y={variant.textY}
+                        textLength={variant.textLength}
+                      >
+                        {variant.rsid}
+                      </text>
+                    </g>
                   </g>
                 );
               })}
-              {targetRsidsTextLength > 0 && (
-                <g id="target-snp-label">
-                  <rect
-                    x={
-                      (targetSnp[0].start - offsetXForVariant + 1) * baseWidth -
-                      targetRsidsTextLength / 2 -
-                      2
-                    }
-                    y={variantPositionY + geneUnitHeight + blankHeight}
-                    width={targetRsidsTextLength + 4}
-                    height={labelHeight}
-                    fill="red"
-                  />
-                  <text
-                    fontSize={fontSizeLarge}
-                    fill="white"
-                    x={
-                      (targetSnp[0].start - offsetXForVariant + 1) * baseWidth -
-                      targetRsidsTextLength / 2
-                    }
-                    y={variantPositionY + 80}
-                    textLength={targetRsidsTextLength}
-                  >
-                    {targetRsids}
-                  </text>
-                </g>
-              )}
             </g>
             <g id="motifs">
               {motifsList.map((motif, i) => {
@@ -560,7 +704,6 @@ NearbyDiagram.propTypes = {
   data: PropTypes.object.isRequired,
   nearbyData: PropTypes.object.isRequired,
   variantLD: PropTypes.array.isRequired,
-  targetSnp: PropTypes.array.isRequired,
   motifsList: PropTypes.array.isRequired,
 };
 
@@ -648,4 +791,15 @@ export function NearybyLegend() {
       </Tooltip>
     </div>
   );
+}
+
+function getAltMaxNum(nearbySnps) {
+  let max = 1;
+  for (let i = 0; i < nearbySnps.length; i++) {
+    const altNum = Object.keys(nearbySnps[i].alt_allele_freq).length;
+    if (altNum > max) {
+      max = altNum;
+    }
+  }
+  return max;
 }
