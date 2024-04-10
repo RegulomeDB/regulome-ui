@@ -201,35 +201,46 @@ export default function NearbyDiagram({
       index += 1;
     }
   });
+  let needNewScale = false;
   let scaleForVariantInLd = null;
   let offsetForVariantInLd = null;
   let VariantsInLdPositionY = null;
   let zoomInIconPositionForVariantsInLd = null;
   let scaleForVariantsInLdPositionY = null;
   if (uniqueVariantLD.length > 0) {
-    const variantsInLdRegionStart = uniqueVariantLD[0].start;
-    const variantsInLdRegionEnd =
-      uniqueVariantLD[uniqueVariantLD.length - 1].start;
-    const variantsInLdRegionMid =
-      (variantsInLdRegionEnd + variantsInLdRegionStart) / 2;
-    scaleForVariantInLd =
-      variantsInLdRegionMid > targetCoordinatesStart
-        ? viewBoxLength / 2 / (variantsInLdRegionEnd - targetCoordinatesStart)
-        : viewBoxLength /
-          2 /
-          (targetCoordinatesStart - variantsInLdRegionStart);
-    offsetForVariantInLd =
-      variantsInLdRegionMid < targetCoordinatesStart
-        ? variantsInLdRegionStart
-        : targetCoordinatesStart -
-          (variantsInLdRegionEnd - targetCoordinatesStart);
-    zoomInIconPositionForVariantsInLd =
-      regRegionPositionY +
-      Object.keys(regulatoryRegionsBySource).length *
-        (regRegionPositiontrackHeight + labelHeight);
-    scaleForVariantsInLdPositionY =
-      zoomInIconPositionForVariantsInLd + zoomInIconHeigt + 30 + blankHeight;
-    VariantsInLdPositionY = scaleForVariantsInLdPositionY + blankHeight;
+    needNewScale = needScaleForVariantLd(uniqueVariantLD, scaleForGene);
+    if (needNewScale) {
+      const variantsInLdRegionStart = uniqueVariantLD[0].start;
+      const variantsInLdRegionEnd =
+        uniqueVariantLD[uniqueVariantLD.length - 1].start;
+      const variantsInLdRegionMid =
+        (variantsInLdRegionEnd + variantsInLdRegionStart) / 2;
+      scaleForVariantInLd =
+        variantsInLdRegionMid > targetCoordinatesStart
+          ? viewBoxLength / 2 / (variantsInLdRegionEnd - targetCoordinatesStart)
+          : viewBoxLength /
+            2 /
+            (targetCoordinatesStart - variantsInLdRegionStart);
+      offsetForVariantInLd =
+        variantsInLdRegionMid < targetCoordinatesStart
+          ? variantsInLdRegionStart
+          : targetCoordinatesStart -
+            (variantsInLdRegionEnd - targetCoordinatesStart);
+      zoomInIconPositionForVariantsInLd =
+        regRegionPositionY +
+        Object.keys(regulatoryRegionsBySource).length *
+          (regRegionPositiontrackHeight + labelHeight);
+      scaleForVariantsInLdPositionY =
+        zoomInIconPositionForVariantsInLd + zoomInIconHeigt + 30 + blankHeight;
+      VariantsInLdPositionY = scaleForVariantsInLdPositionY + blankHeight;
+    } else {
+      scaleForVariantInLd = scaleForGene;
+      offsetForVariantInLd = offsetXForGene;
+      VariantsInLdPositionY =
+        regRegionPositionY +
+        Object.keys(regulatoryRegionsBySource).length *
+          (regRegionPositiontrackHeight + labelHeight);
+    }
   }
   const zoomInIconPositionForSequence = VariantsInLdPositionY
     ? VariantsInLdPositionY + variatInLdHeight + labelHeight + blankHeight
@@ -242,9 +253,8 @@ export default function NearbyDiagram({
   const altLength = getAltMaxNum(nearyBySnps);
   const variantPositionY =
     sequencePositionY + baseHeight * altLength + blankHeight;
-
-  let preRectX2 = 0;
-  let preRectY = 0;
+  //find the best location for label based on previous label info
+  const preLabelInfo = [];
   const highestLabelY = variantPositionY + geneUnitHeight + blankHeight;
   let lowestLabelY = highestLabelY;
   const nearbySnpsData = nearyBySnps.map((variant) => {
@@ -261,11 +271,20 @@ export default function NearbyDiagram({
       };
     });
     const rectX = (start - offsetXForVariant) * baseWidth - textLength / 2 - 2;
-    let rectY = highestLabelY;
-    if (preRectX2 >= rectX) {
-      rectY = preRectY + labelHeight + blankHeight;
-    }
     const rectWidth = textLength + 4;
+    let indexY = 0;
+    let rectY = highestLabelY;
+    if (preLabelInfo) {
+      const pre = preLabelInfo.find((item) => item < rectX);
+      if (pre) {
+        indexY = preLabelInfo.indexOf(pre);
+      } else {
+        indexY = preLabelInfo.length;
+      }
+      rectY = highestLabelY + indexY * (labelHeight + blankHeight);
+    }
+    preLabelInfo[indexY] = rectX + rectWidth;
+
     const textX = (start - offsetXForVariant) * baseWidth - textLength / 2;
     const textY = rectY + 20;
     const rsid = variant.rsid;
@@ -273,8 +292,7 @@ export default function NearbyDiagram({
     const lineX = rectX + textLength / 2;
     const lineY1 = highestLabelY - 10;
     const lineY2 = rectY + labelHeight;
-    preRectX2 = rectX + rectWidth;
-    preRectY = rectY;
+
     if (rectY > lowestLabelY) {
       lowestLabelY = rectY;
     }
@@ -457,66 +475,70 @@ export default function NearbyDiagram({
             </g>
             {uniqueVariantLD.length > 0 && (
               <>
-                <g id="zoom-in-icon-for-variants-in-ld">
-                  <line
-                    x1={viewBoxMinX}
-                    x2={viewBoxLength / 2}
-                    y1={zoomInIconPositionForVariantsInLd + 100}
-                    y2={zoomInIconPositionForVariantsInLd}
-                    className="stroke-data-label stroke-2"
-                  />
-                  <line
-                    x1={viewBoxLength / 2}
-                    x2={viewBoxLength}
-                    y1={zoomInIconPositionForVariantsInLd}
-                    y2={zoomInIconPositionForVariantsInLd + 100}
-                    className="stroke-data-label stroke-2"
-                  />
-                </g>
-                <g id="scale-for-variants-in-ld">
-                  <line
-                    x1={viewBoxMinX}
-                    x2={viewBoxLength}
-                    y1={scaleForVariantsInLdPositionY}
-                    y2={scaleForVariantsInLdPositionY}
-                    className="stroke-data-label stroke-2"
-                  />
-                  {/* Draw ticks and labels */}
-                  {Array.from({
-                    length: Math.floor(viewBoxLength / tickWidth + 1),
-                  }).map((_, index) => {
-                    return (
-                      <g key={index}>
-                        <line
-                          x1={index * tickWidth}
-                          y1={scaleForVariantsInLdPositionY}
-                          x2={index * tickWidth}
-                          y2={scaleForVariantsInLdPositionY - tickHeight}
-                          className="stroke-data-label stroke-2"
-                        />
-                        <text
-                          className="fill-data-label"
-                          fontSize={fontSizeLarge}
-                          x={index * tickWidth}
-                          y={scaleForVariantsInLdPositionY - tickHeight - 5}
-                          textAnchor="middle"
-                        >
-                          {Math.floor(
-                            (index * tickWidth) / scaleForVariantInLd +
-                              offsetForVariantInLd
-                          )}
-                        </text>
-                      </g>
-                    );
-                  })}
-                </g>
+                {needNewScale && (
+                  <>
+                    <g id="zoom-in-icon-for-variants-in-ld">
+                      <line
+                        x1={viewBoxMinX}
+                        x2={viewBoxLength / 2}
+                        y1={zoomInIconPositionForVariantsInLd + 100}
+                        y2={zoomInIconPositionForVariantsInLd}
+                        className="stroke-data-label stroke-2"
+                      />
+                      <line
+                        x1={viewBoxLength / 2}
+                        x2={viewBoxLength}
+                        y1={zoomInIconPositionForVariantsInLd}
+                        y2={zoomInIconPositionForVariantsInLd + 100}
+                        className="stroke-data-label stroke-2"
+                      />
+                    </g>
+                    <g id="scale-for-variants-in-ld">
+                      <line
+                        x1={viewBoxMinX}
+                        x2={viewBoxLength}
+                        y1={scaleForVariantsInLdPositionY}
+                        y2={scaleForVariantsInLdPositionY}
+                        className="stroke-data-label stroke-2"
+                      />
+                      {/* Draw ticks and labels */}
+                      {Array.from({
+                        length: Math.floor(viewBoxLength / tickWidth + 1),
+                      }).map((_, index) => {
+                        return (
+                          <g key={index}>
+                            <line
+                              x1={index * tickWidth}
+                              y1={scaleForVariantsInLdPositionY}
+                              x2={index * tickWidth}
+                              y2={scaleForVariantsInLdPositionY - tickHeight}
+                              className="stroke-data-label stroke-2"
+                            />
+                            <text
+                              className="fill-data-label"
+                              fontSize={fontSizeLarge}
+                              x={index * tickWidth}
+                              y={scaleForVariantsInLdPositionY - tickHeight - 5}
+                              textAnchor="middle"
+                            >
+                              {Math.floor(
+                                (index * tickWidth) / scaleForVariantInLd +
+                                  offsetForVariantInLd
+                              )}
+                            </text>
+                          </g>
+                        );
+                      })}
+                    </g>
+                  </>
+                )}
                 <g id="variants-in-ld">
                   <text
                     id="variants-in-ld-track-label"
                     fontSize={fontSizeSmall}
                     className="fill-data-label"
                     x={viewBoxMinX}
-                    y={scaleForVariantsInLdPositionY + labelHeight}
+                    y={VariantsInLdPositionY + 22}
                   >
                     variants in LD
                   </text>
@@ -809,4 +831,14 @@ function getAltMaxNum(nearbySnps) {
     }
   }
   return max;
+}
+
+function needScaleForVariantLd(variantLD, scaleForGene) {
+  for (let i = 1; i < variantLD.length; i++) {
+    const distance = variantLD[i].start - variantLD[i - 1].start;
+    if (distance * scaleForGene < 1) {
+      return true;
+    }
+  }
+  return false;
 }
