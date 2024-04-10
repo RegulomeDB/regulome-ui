@@ -131,12 +131,15 @@ const variatInLdHeight = 40;
  * In this nearby drawing, we show groups of data from top to bottom:
  * The nearest genes with their gene names as labels
  * The regulatory regions separated into trackes by sources, labeled by the source
+ * The variants in LD
  * The sequence near the coordinateds
- * The variant got hit labeled by rsid
- * The variants in LD labeled by rsid
+ * The SNP got hit and the SNPs nearby labeled by rsid
  * The motifs labeled by the targets
- * This svg use two different scales to draw all the elements.
- * Genes, and regulatory regions use the same smaller scale. Sequence, variants and motifs use the same larger scale.
+ * This svg use three different scales to draw all the elements.
+ * From the smallest to the biggest scale,
+ * Genes, and regulatory regions use the same smallest scale.
+ * Variants in LD use the same scale
+ * Sequence, variants and motifs use the same largest scale.
  */
 export default function NearbyDiagram({
   data,
@@ -333,7 +336,7 @@ export default function NearbyDiagram({
                 opacity="0.5"
               />
             </g>
-            <g id="small-scale">
+            <g id="scale-for-gene">
               <line
                 x1={viewBoxMinX}
                 y1={scaleForGenePositionY}
@@ -548,7 +551,7 @@ export default function NearbyDiagram({
                 </g>
               </>
             )}
-            <g id="zoom-in-icon">
+            <g id="zoom-in-icon-for-sequence">
               <line
                 x1={viewBoxMinX}
                 x2={viewBoxLength / 2}
@@ -564,7 +567,7 @@ export default function NearbyDiagram({
                 className="stroke-data-label stroke-2"
               />
             </g>
-            <g id="large-scale">
+            <g id="scale-for-sequence">
               <line
                 x1={viewBoxMinX}
                 x2={viewBoxLength}
@@ -792,7 +795,11 @@ export function NearybyLegend() {
     </div>
   );
 }
-
+/**
+ * The function returns the max number of alts a SNP has in the list of nearby SNPs.
+ * @param {*} nearbySnps a list of nearby SNPs
+ * @returns The max number of alts a SNP has in the list
+ */
 function getAltMaxNum(nearbySnps) {
   let max = 1;
   for (let i = 0; i < nearbySnps.length; i++) {
