@@ -138,7 +138,7 @@ const variatInLdHeight = 40;
  * This svg use three different scales to draw all the elements.
  * From the smallest to the biggest scale,
  * Genes, and regulatory regions use the same smallest scale.
- * Variants in LD use the same scale
+ * Variants in LD use a new scale if the scale for gene is not a good fit
  * Sequence, variants and motifs use the same largest scale.
  */
 export default function NearbyDiagram({
@@ -832,7 +832,11 @@ function getAltMaxNum(nearbySnps) {
   }
   return max;
 }
-
+/**
+ * @param {*} variantLD a list of variant for checking
+ * @param {*} scaleForGene the scale used to draw gene
+ * @returns whether we need new scale to draw variants in LD
+ */
 function needScaleForVariantLd(variantLD, scaleForGene) {
   for (let i = 1; i < variantLD.length; i++) {
     const distance = variantLD[i].start - variantLD[i - 1].start;
