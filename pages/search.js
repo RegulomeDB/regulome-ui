@@ -71,10 +71,22 @@ export default function Search({
     );
     const allData = getDataWithTissueScore(data, normalizedTissueSpecificScore);
     const filteredData = getFilteredData(allData, organFilters);
-    const filesForGenomeBrowser = getFilesForGenomeBrowser(filteredData);
-    const accessibilityDatasets = getAccessibilityDatasets(filteredData);
-    const chipDatasets = getChipDatasets(filteredData);
-    const qtlDatasets = getQtlDatasets(filteredData);
+    const filesForGenomeBrowser =
+      data.assembly === "GRCh38"
+        ? getFilesForGenomeBrowser(filteredData)
+        : getFilesForGenomeBrowser(allData);
+    const accessibilityDatasets =
+      data.assembly === "GRCh38"
+        ? getAccessibilityDatasets(filteredData)
+        : getAccessibilityDatasets(allData);
+    const chipDatasets =
+      data.assembly === "GRCh38"
+        ? getChipDatasets(filteredData)
+        : getChipDatasets(allData);
+    const qtlDatasets =
+      data.assembly === "GRCh38"
+        ? getQtlDatasets(filteredData)
+        : getQtlDatasets(allData);
     const chromatinDatasets =
       data.assembly === "GRCh38"
         ? getChromatinData(filteredData)
