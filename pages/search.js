@@ -75,7 +75,10 @@ export default function Search({
     const accessibilityDatasets = getAccessibilityDatasets(filteredData);
     const chipDatasets = getChipDatasets(filteredData);
     const qtlDatasets = getQtlDatasets(filteredData);
-    const chromatinDatasets = getChromatinData(filteredData);
+    const chromatinDatasets =
+      data.assembly === "GRCh38"
+        ? getChromatinData(filteredData)
+        : getChromatinData(allData);
     const chromatinData = getChromatinData(allData);
 
     return (

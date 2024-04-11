@@ -39,7 +39,7 @@ export default function SearchPageHeader({
   }, [router]);
 
   return (
-    <div className="mb-1 flex flex-wrap gap-4	justify-center">
+    <div className="mb-1 flex flex-wrap gap-4 justify-center">
       <HeaderButton
         queryString={queryString}
         buttonInFocus={buttonInFocus}
