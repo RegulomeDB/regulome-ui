@@ -7,7 +7,15 @@ import { ButtonLink } from "./form-elements";
  * Display the header above the data areas of a search page. This generally comprises controls on
  * the left and right side of the header to show different components.
  */
-export default function SearchPageHeader({ queryString }) {
+export default function SearchPageHeader({
+  queryString,
+  motifDocListNum,
+  chipDatasetsNum,
+  accessibilityDatasetsNum,
+  qtlDatasetsNum,
+  filesForGenomeBrowserNum,
+  chromatinDatasetsNum,
+}) {
   const [buttonInFocus, setButtonInFocus] = useState("summary");
   const router = useRouter();
 
@@ -31,63 +39,79 @@ export default function SearchPageHeader({ queryString }) {
   }, [router]);
 
   return (
-    <>
-      <div className="mb-1 flex flex-wrap gap-1">
-        <HeaderButton
-          queryString={queryString}
-          buttonInFocus={buttonInFocus}
-          buttonType="summary"
-          buttonText="Summary"
-        />
-        <HeaderButton
-          queryString={queryString}
-          buttonInFocus={buttonInFocus}
-          buttonType="chip"
-          buttonText="ChIP Data"
-          suffix
-        />
-        <HeaderButton
-          queryString={queryString}
-          buttonInFocus={buttonInFocus}
-          buttonType="accessibility"
-          buttonText="Accessibility Data"
-          suffix
-        />
-        <HeaderButton
-          queryString={queryString}
-          buttonInFocus={buttonInFocus}
-          buttonType="qtl"
-          buttonText="QTL Data"
-          suffix
-        />
-        <HeaderButton
-          queryString={queryString}
-          buttonInFocus={buttonInFocus}
-          buttonType="motifs"
-          buttonText="Motifs"
-          suffix
-        />
-        <HeaderButton
-          queryString={queryString}
-          buttonInFocus={buttonInFocus}
-          buttonType="chromatin"
-          buttonText="Chromatin State"
-          suffix
-        />
-        <HeaderButton
-          queryString={queryString}
-          buttonInFocus={buttonInFocus}
-          buttonType="browser"
-          buttonText="Genome Browser"
-          suffix
-        />
-      </div>
-    </>
+    <div className="mb-1 flex flex-wrap gap-4	justify-center">
+      <HeaderButton
+        queryString={queryString}
+        buttonInFocus={buttonInFocus}
+        buttonType="summary"
+        buttonText="Summary"
+      />
+      <HeaderButton
+        queryString={queryString}
+        buttonInFocus={buttonInFocus}
+        buttonType="chip"
+        buttonText="ChIP Data"
+        value={chipDatasetsNum}
+        suffix
+      />
+      <HeaderButton
+        queryString={queryString}
+        buttonInFocus={buttonInFocus}
+        buttonType="accessibility"
+        buttonText="Accessibility Data"
+        value={accessibilityDatasetsNum}
+        suffix
+      />
+      <HeaderButton
+        queryString={queryString}
+        buttonInFocus={buttonInFocus}
+        buttonType="qtl"
+        buttonText="QTL Data"
+        value={qtlDatasetsNum}
+        suffix
+      />
+      <HeaderButton
+        queryString={queryString}
+        buttonInFocus={buttonInFocus}
+        buttonType="motifs"
+        buttonText="Motifs"
+        value={motifDocListNum}
+        suffix
+      />
+      <HeaderButton
+        queryString={queryString}
+        buttonInFocus={buttonInFocus}
+        buttonType="chromatin"
+        buttonText="Chromatin State"
+        value={chromatinDatasetsNum}
+        suffix
+      />
+      <HeaderButton
+        queryString={queryString}
+        buttonInFocus={buttonInFocus}
+        buttonType="browser"
+        buttonText="Genome Browser"
+        value={filesForGenomeBrowserNum}
+        suffix
+      />
+    </div>
   );
 }
 
 SearchPageHeader.propTypes = {
   queryString: PropTypes.string.isRequired,
+  // the number of motif docs
+  motifDocListNum: PropTypes.number.isRequired,
+  // the number of chip datasets
+  chipDatasetsNum: PropTypes.number.isRequired,
+  // the number of accessibility datasets
+  accessibilityDatasetsNum: PropTypes.number.isRequired,
+  // the number of qtl datasets
+  qtlDatasetsNum: PropTypes.number.isRequired,
+  // the number of files for genome browser
+  filesForGenomeBrowserNum: PropTypes.number.isRequired,
+  // the number of chromatin state datasets
+  chromatinDatasetsNum: PropTypes.number.isRequired,
 };
 
 function HeaderButton({
@@ -95,6 +119,7 @@ function HeaderButton({
   buttonInFocus,
   buttonType,
   buttonText,
+  value,
   suffix,
 }) {
   const path = suffix
@@ -114,7 +139,10 @@ function HeaderButton({
         size="sm"
         hasIconOnly
       >
-        {buttonText}
+        <div className="shrink">
+          <div>{buttonText}</div>
+          <div className="text-4xl font-light">{value}</div>
+        </div>
       </ButtonLink>
     </div>
   );
@@ -130,4 +158,6 @@ HeaderButton.propTypes = {
   buttonText: PropTypes.string.isRequired,
   // whether the url path need to add button type as suffix
   suffix: PropTypes.bool,
+  // the number of datasets
+  value: PropTypes.number.isRequired,
 };

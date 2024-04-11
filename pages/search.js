@@ -14,21 +14,23 @@ import { getChromatinData } from "../lib/chromatin-data";
 import errorObjectToProps from "../lib/errors";
 import fetchMotifDoc from "../lib/fetch-motif-doc";
 import FetchRequest from "../lib/fetch-request";
-import filterOverlappingPeaks from "../lib/filter-overlapping-peaks";
 import getSnpsInfo from "../lib/get-snps-info";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
 import { GenomeBrowserView } from "../components/genome-browser-view";
 import fetchVariantLD from "../lib/fetch_variant_ld";
 import {
   getDataWithTissueScore,
+  getFilteredData,
   getNormalizedTissueSpecificScore,
 } from "../lib/tissue-specific-score";
 import VariantSummary from "../components/variant-summary";
 import SearchPageHeader from "../components/search-page-header";
 import { useRouter } from "next/router";
 import {
+  getAccessibilityDatasets,
   getChipDatasets,
   getFilesForGenomeBrowser,
+  getQtlDatasets,
 } from "../lib/datasets-processing";
 import fetchNearby from "../lib/fetch-nearby";
 
@@ -41,6 +43,9 @@ export default function Search({
 }) {
   const [view, setView] = useState("summary");
   const router = useRouter();
+  const [organFilters, setOrganFilters] = useState([]);
+  const [stateFilters, setStateFilters] = useState([]);
+  const [biosampleFilters, setBiosampleFilters] = useState([]);
 
   useEffect(() => {
     if (router.asPath.includes(`#!accessibility`)) {
@@ -65,20 +70,13 @@ export default function Search({
       data.regulome_score.tissue_specific_scores
     );
     const allData = getDataWithTissueScore(data, normalizedTissueSpecificScore);
-    const QTLData = allData.filter(
-      (d) => d.method && d.method.indexOf("QTL") !== -1
-    );
+    const filteredData = getFilteredData(allData, organFilters);
+    const filesForGenomeBrowser = getFilesForGenomeBrowser(filteredData);
+    const accessibilityDatasets = getAccessibilityDatasets(filteredData);
+    const chipDatasets = getChipDatasets(filteredData);
+    const qtlDatasets = getQtlDatasets(filteredData);
+    const chromatinDatasets = getChromatinData(filteredData);
     const chromatinData = getChromatinData(allData);
-    const chipData = getChipDatasets(allData);
-    const accessibilityData = filterOverlappingPeaks(
-      allData.filter(
-        (d) =>
-          d.method === "FAIRE-seq" ||
-          d.method === "DNase-seq" ||
-          d.method === "ATAC-seq"
-      )
-    );
-    const filesForGenomeBrowser = getFilesForGenomeBrowser(data["@graph"]);
 
     return (
       <>
@@ -86,7 +84,15 @@ export default function Search({
         <Navigation />
         <Breadcrumbs />
         <PagePreamble />
-        <SearchPageHeader queryString={queryString} />
+        <SearchPageHeader
+          queryString={queryString}
+          motifDocListNum={motifDocList.length}
+          chipDatasetsNum={chipDatasets.length}
+          accessibilityDatasetsNum={accessibilityDatasets.length}
+          qtlDatasetsNum={qtlDatasets.length}
+          filesForGenomeBrowserNum={filesForGenomeBrowser.length}
+          chromatinDatasetsNum={chromatinDatasets.length}
+        />
         {view === "summary" && (
           <VariantSummary
             data={data}
@@ -96,21 +102,35 @@ export default function Search({
             variantLD={variantLD}
             normalizedTissueSpecificScore={normalizedTissueSpecificScore}
             queryString={queryString}
+            organFilters={organFilters}
+            setOrganFilters={setOrganFilters}
+            filteredData={filteredData}
+            filesForGenomeBrowser={filesForGenomeBrowser}
+            accessibilityDatasets={accessibilityDatasets}
+            chipDatasets={chipDatasets}
+            qtlDatasets={qtlDatasets}
+            chromatinDatasets={chromatinDatasets}
           />
         )}
-        {view === "chip" && <ChipDataView chipData={chipData}></ChipDataView>}
+        {view === "chip" && (
+          <ChipDataView chipData={chipDatasets}></ChipDataView>
+        )}
         {view === "accessibility" && (
           <AccessibilityDataView
-            data={accessibilityData}
+            data={accessibilityDatasets}
             normalizedTissueSpecificScore={normalizedTissueSpecificScore}
             assembly={data.assembly}
+            organFilters={organFilters}
+            setOrganFilters={setOrganFilters}
           ></AccessibilityDataView>
         )}
         {view === "qtl" && (
           <QTLDataView
-            data={QTLData}
+            data={qtlDatasets}
             normalizedTissueSpecificScore={normalizedTissueSpecificScore}
             assembly={data.assembly}
+            organFilters={organFilters}
+            setOrganFilters={setOrganFilters}
           ></QTLDataView>
         )}
         {view === "motifs" && (
@@ -126,6 +146,12 @@ export default function Search({
             data={chromatinData}
             normalizedTissueSpecificScore={normalizedTissueSpecificScore}
             assembly={data.assembly}
+            organFilters={organFilters}
+            setOrganFilters={setOrganFilters}
+            stateFilters={stateFilters}
+            setStateFilters={setStateFilters}
+            biosampleFilters={biosampleFilters}
+            setBiosampleFilters={setBiosampleFilters}
           />
         )}
         {view === "browser" && (

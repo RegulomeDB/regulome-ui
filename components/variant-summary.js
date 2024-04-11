@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { XCircleIcon } from "@heroicons/react/20/solid";
-import Image from "next/image";
 
 import {
   DataArea,
@@ -15,21 +15,13 @@ import { Button } from "./form-elements";
 import SnpsDiagram from "./snps-diagram";
 import VariantLDTable from "./variant-ld-table";
 import {
-  getFilteredData,
   getOrganFacetsForTissueScore,
   getOrganFilter,
 } from "../lib/tissue-specific-score";
 import { BodyMapThumbnailAndModal } from "./body-map";
 import { TissueScoreBar } from "./tissue-score-bar";
-import {
-  getAccessibilityDatasets,
-  getChipDatasets,
-  getFilesForGenomeBrowser,
-  getQtlDatasets,
-} from "../lib/datasets-processing";
 import { Card } from "./card";
 import Motifs from "./motifs-view";
-import { getChromatinData } from "../lib/chromatin-data";
 import ChromatinBarChart from "./chromatin-bar-chart";
 import Sparkline from "./sparkline";
 
@@ -76,7 +68,6 @@ Selections.propTypes = {
   filters: PropTypes.array.isRequired,
   clearFilterFunc: PropTypes.func.isRequired,
 };
-
 export default function VariantSummary({
   data,
   hitSnps,
@@ -85,15 +76,15 @@ export default function VariantSummary({
   variantLD,
   normalizedTissueSpecificScore,
   queryString,
+  organFilters,
+  setOrganFilters,
+  filesForGenomeBrowser,
+  accessibilityDatasets,
+  chipDatasets,
+  qtlDatasets,
+  chromatinDatasets,
 }) {
   const [showMoreFreqs, setShowMoreFreqs] = useState(false);
-  const [organFilters, setOrganFilters] = useState([]);
-  const filteredData = getFilteredData(data["@graph"], organFilters);
-  const filesForGenomeBrowser = getFilesForGenomeBrowser(filteredData);
-  const accessibilityDatasets = getAccessibilityDatasets(filteredData);
-  const chipDatasets = getChipDatasets(filteredData);
-  const qtlDatasets = getQtlDatasets(filteredData);
-  const chromatinDatasets = getChromatinData(filteredData);
   function handleClickOrgan(organ, organList, enabledOrganList) {
     const filters = getOrganFilter(
       organFilters,
@@ -388,4 +379,13 @@ VariantSummary.propTypes = {
   motifDocList: PropTypes.array.isRequired,
   normalizedTissueSpecificScore: PropTypes.object.isRequired,
   queryString: PropTypes.string.isRequired,
+  // selected organs in a list
+  organFilters: PropTypes.array.isRequired,
+  // function to set organFilters
+  setOrganFilters: PropTypes.func.isRequired,
+  filesForGenomeBrowser: PropTypes.array.isRequired,
+  chipDatasets: PropTypes.array.isRequired,
+  accessibilityDatasets: PropTypes.array.isRequired,
+  qtlDatasets: PropTypes.array.isRequired,
+  chromatinDatasets: PropTypes.array.isRequired,
 };

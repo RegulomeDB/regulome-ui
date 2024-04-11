@@ -5,12 +5,10 @@ import AccessibilityDataTable from "./accessibility-table";
 import { BodyMapThumbnailAndModal } from "./body-map";
 import { DataAreaTitle, DataPanel } from "./data-area";
 import {
-  getFilteredData,
   getOrganFacetsForTissueScore,
   getOrganFilter,
 } from "../lib/tissue-specific-score";
 import { TissueScoreBar } from "./tissue-score-bar";
-import { useState } from "react";
 
 // To dynamically load component AccessibilityChart on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
@@ -53,10 +51,9 @@ export function AccessibilityDataView({
   data,
   normalizedTissueSpecificScore,
   assembly,
+  organFilters,
+  setOrganFilters,
 }) {
-  const [organFilters, setOrganFilters] = useState([]);
-  const filteredData = getFilteredData(data, organFilters);
-
   function handleClickOrgan(organ, organList, enabledOrganList) {
     const filters = getOrganFilter(
       organFilters,
@@ -113,7 +110,7 @@ export function AccessibilityDataView({
                       Grouped by biosamples
                     </div>
                     <div className="h-80 border-2 border-panel p-1">
-                      <AccessibilityChart accessibilityData={filteredData} />
+                      <AccessibilityChart accessibilityData={data} />
                     </div>
                   </div>
                 </div>
@@ -121,12 +118,12 @@ export function AccessibilityDataView({
             </DataPanel>
           ) : (
             <DataPanel>
-              <AccessibilityChart accessibilityData={filteredData} />
+              <AccessibilityChart accessibilityData={data} />
             </DataPanel>
           )}
           <DataAreaTitle>Datasets Table</DataAreaTitle>
           <DataPanel>
-            <AccessibilityDataTable data={filteredData} />
+            <AccessibilityDataTable data={data} />
           </DataPanel>
         </>
       ) : (
@@ -145,4 +142,8 @@ AccessibilityDataView.propTypes = {
   data: PropTypes.array.isRequired,
   normalizedTissueSpecificScore: PropTypes.object.isRequired,
   assembly: PropTypes.string.isRequired,
+  // selected organs in a list
+  organFilters: PropTypes.array.isRequired,
+  // function to set organFilters
+  setOrganFilters: PropTypes.func.isRequired,
 };
