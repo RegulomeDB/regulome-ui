@@ -253,7 +253,6 @@ export default function VariantSummary({
       {data.assembly === "GRCh38" ? (
         <NearbyDiagram
           data={data}
-          targetSnp={data.variants}
           nearbyData={nearbyData}
           variantLD={variantLD}
           motifsList={motifDocList}
