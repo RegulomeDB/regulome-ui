@@ -54,10 +54,13 @@ export function ChromatinView({
   data,
   assembly,
   normalizedTissueSpecificScore,
+  organFilters,
+  setOrganFilters,
+  stateFilters,
+  setStateFilters,
+  biosampleFilters,
+  setBiosampleFilters,
 }) {
-  const [organFilters, setOrganFilters] = useState([]);
-  const [stateFilters, setStateFilters] = useState([]);
-  const [biosampleFilters, setBiosampleFilters] = useState([]);
   const [isColorByChromatinState, setIsColorByChromatinState] = useState(true);
   const filteredData = getFilteredChromatinData(
     data,
@@ -268,4 +271,16 @@ ChromatinView.propTypes = {
   data: PropTypes.array.isRequired,
   assembly: PropTypes.string.isRequired,
   normalizedTissueSpecificScore: PropTypes.object.isRequired,
+  // selected organs in a list
+  organFilters: PropTypes.array.isRequired,
+  // function to set organFilters
+  setOrganFilters: PropTypes.func.isRequired,
+  // selected biosamples in a list
+  biosampleFilters: PropTypes.array.isRequired,
+  // function to set biosampleFilters
+  setBiosampleFilters: PropTypes.func.isRequired,
+  // selected states in a list
+  stateFilters: PropTypes.array.isRequired,
+  // function to set stateFilters
+  setStateFilters: PropTypes.func.isRequired,
 };

@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { useState } from "react";
 import PropTypes from "prop-types";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import { BodyMapThumbnailAndModal } from "./body-map";
@@ -8,7 +7,6 @@ import { DataAreaTitle, DataPanel } from "./data-area";
 import EQTLDataTable from "./eqtl-table";
 import { TissueScoreBar } from "./tissue-score-bar";
 import {
-  getFilteredData,
   getOrganFacetsForTissueScore,
   getOrganFilter,
 } from "../lib/tissue-specific-score";
@@ -50,11 +48,15 @@ Selections.propTypes = {
 /**
  * This is the view for display QTL data for a variant.
  */
-export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
-  const [organFilters, setOrganFilters] = useState([]);
-  const filteredData = getFilteredData(data, organFilters);
-  const eQTLData = filteredData.filter((d) => d.method === "eQTLs");
-  const caQTLData = filteredData.filter((d) => d.method === "caQTLs");
+export function QTLDataView({
+  data,
+  normalizedTissueSpecificScore,
+  assembly,
+  organFilters,
+  setOrganFilters,
+}) {
+  const eQTLData = data.filter((d) => d.method === "eQTLs");
+  const caQTLData = data.filter((d) => d.method === "caQTLs");
 
   function handleClickOrgan(organ, organList, enabledOrganList) {
     const filters = getOrganFilter(
@@ -112,7 +114,7 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
                       Grouped by biosamples
                     </div>
                     <div className="h-80 border-2 border-panel p-1">
-                      <QTLChart qtlData={filteredData} />
+                      <QTLChart qtlData={data} />
                     </div>
                   </div>
                 </div>
@@ -120,7 +122,7 @@ export function QTLDataView({ data, normalizedTissueSpecificScore, assembly }) {
             </DataPanel>
           ) : (
             <DataPanel>
-              <QTLChart qtlData={filteredData} />
+              <QTLChart qtlData={data} />
             </DataPanel>
           )}
           {caQTLData.length > 0 && (
@@ -155,4 +157,8 @@ QTLDataView.propTypes = {
   data: PropTypes.array.isRequired,
   normalizedTissueSpecificScore: PropTypes.object.isRequired,
   assembly: PropTypes.string.isRequired,
+  // selected organs in a list
+  organFilters: PropTypes.array.isRequired,
+  // function to set organFilters
+  setOrganFilters: PropTypes.func.isRequired,
 };
