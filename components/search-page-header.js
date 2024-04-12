@@ -39,7 +39,7 @@ export default function SearchPageHeader({
   }, [router]);
 
   return (
-    <div className="mb-1 flex flex-wrap gap-4 justify-center">
+    <div className="mb-1 flex flex-wrap gap-2 justify-center">
       <HeaderButton
         queryString={queryString}
         buttonInFocus={buttonInFocus}
@@ -141,7 +141,7 @@ function HeaderButton({
       >
         <div className="shrink">
           <div>{buttonText}</div>
-          <div className="text-4xl font-light">{value}</div>
+          <div className="text-xl font-light">{value}</div>
         </div>
       </ButtonLink>
     </div>

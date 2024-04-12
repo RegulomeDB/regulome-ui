@@ -8,6 +8,7 @@ import {
   DataPanel,
 } from "./data-area";
 import { DnaLogo } from "./dna-logo/dna-logo";
+import { ButtonLink } from "./form-elements";
 
 /**
  * Display information for a sigle motif. Each motif contains info about targets, strand, pwms and footprints, and a svg for DNA logo
@@ -286,7 +287,17 @@ export default function Motifs({
       ) : (
         <DataPanel>
           <DataAreaTitle>
-            No motifs data available to display, please choose a different SNP.
+            <div className=" space-x-2 mb-4 flex">
+              <div>No motifs data available to display, please</div>
+              <ButtonLink
+                label="query link"
+                href="/query"
+                type="secondary"
+                size="lg"
+              >
+                choose a different SNP.
+              </ButtonLink>
+            </div>
           </DataAreaTitle>
         </DataPanel>
       )}

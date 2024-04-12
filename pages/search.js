@@ -79,10 +79,8 @@ export default function Search({
       data.assembly === "GRCh38"
         ? getAccessibilityDatasets(filteredData)
         : getAccessibilityDatasets(allData);
-    const chipDatasets =
-      data.assembly === "GRCh38"
-        ? getChipDatasets(filteredData)
-        : getChipDatasets(allData);
+    // we don't track change for chip data for now
+    const chipDatasets = getChipDatasets(allData);
     const qtlDatasets =
       data.assembly === "GRCh38"
         ? getQtlDatasets(filteredData)
@@ -174,6 +172,7 @@ export default function Search({
             files={filesForGenomeBrowser}
             assembly={data.assembly}
             coordinates={data.query_coordinates[0]}
+            setOrganFilters={setOrganFilters}
           />
         )}
       </>

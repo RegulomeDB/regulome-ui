@@ -13,6 +13,7 @@ import {
   filterByAllSelectedFilters,
 } from "./genome-browser-facets";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import { Button, ButtonLink } from "./form-elements";
 
 // number of files to display on genome browser
 const NUMBER_OF_FILES_FOR_DISPLAY = 20;
@@ -21,7 +22,12 @@ const NUMBER_OF_FILES_FOR_DISPLAY = 20;
  * This is the view for display data genome browser for a variant.
  * It contains facets for filter the files, genome browser to display the files and pagination if needed.
  */
-export function GenomeBrowserView({ files, assembly, coordinates }) {
+export function GenomeBrowserView({
+  files,
+  assembly,
+  coordinates,
+  setOrganFilters,
+}) {
   const [filteredFiles, setFilteredFiles] = useState(files);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [totalPage, setTotalPage] = useState(
@@ -121,8 +127,27 @@ export function GenomeBrowserView({ files, assembly, coordinates }) {
       ) : (
         <DataPanel>
           <DataAreaTitle>
-            No genome browser data available to display, please choose a
-            different SNP.
+            <div className=" space-x-2 mb-4 flex">
+              <div>No genome browser data available to display, please</div>
+              <Button
+                label="filter reset"
+                type="secondary"
+                size="lg"
+                onClick={() => setOrganFilters([])}
+              >
+                reset the tissue filter on the body map
+              </Button>
+              <div>or</div>
+
+              <ButtonLink
+                label="query link"
+                href="/query"
+                type="secondary"
+                size="lg"
+              >
+                choose a different SNP.
+              </ButtonLink>
+            </div>
           </DataAreaTitle>
         </DataPanel>
       )}
@@ -134,4 +159,5 @@ GenomeBrowserView.propTypes = {
   files: PropTypes.array.isRequired,
   assembly: PropTypes.string.isRequired,
   coordinates: PropTypes.string.isRequired,
+  setOrganFilters: PropTypes.func.isRequired,
 };
