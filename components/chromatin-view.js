@@ -13,7 +13,7 @@ import ChromatinTable from "./chromatin-table";
 import ChromatinStateFacets from "./chromatin-state-facets";
 import ChromatinBiosampleFacets from "./chromatin-biosample-facets";
 import { DataAreaTitle, DataPanel } from "./data-area";
-import { Button } from "./form-elements";
+import { Button, ButtonLink } from "./form-elements";
 import ToggleSwitch from "./toggle-switch";
 import { TissueScoreBar } from "./tissue-score-bar";
 
@@ -258,8 +258,27 @@ export function ChromatinView({
       ) : (
         <DataPanel>
           <DataAreaTitle>
-            No chromatin state data available to display, please choose a
-            different SNP.
+            <div className=" space-x-2 mb-4 flex">
+              <div>No chromatin state data available to display, please</div>
+              <Button
+                label="filter reset"
+                type="secondary"
+                size="lg"
+                onClick={() => setOrganFilters([])}
+              >
+                reset the tissue filter on the body map
+              </Button>
+              <div>or</div>
+
+              <ButtonLink
+                label="query link"
+                href="/query"
+                type="secondary"
+                size="lg"
+              >
+                choose a different SNP.
+              </ButtonLink>
+            </div>
           </DataAreaTitle>
         </DataPanel>
       )}
