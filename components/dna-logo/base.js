@@ -4,7 +4,7 @@ function A() {
   return (
     <g>
       <path
-        fill="red"
+        className="fill-red-600"
         d="M 0 100 L 33 0 L 66 0 L 100 100 L 75 100 L 66 75 L 33 75 L 25 100 L 0 100"
       />
       <path
@@ -18,7 +18,7 @@ function A() {
 function T() {
   return (
     <path
-      fill="#228b22"
+      className="fill-green-700"
       d="M 0 0 L 0 20 L 35 20 L 35 100
     L 65 100 L 65 20 L 100 20
     L 100 0 L 0 0"
@@ -29,7 +29,7 @@ function T() {
 function C() {
   return (
     <path
-      fill="blue"
+      className="fill-blue-700"
       d="M 100 28 C 100 -13 0 -13 0 50
     C 0 113 100 113 100 72 L 75 72
     C 75 90 30 90 30 50 C 30 10 75 10 75 28
@@ -41,7 +41,7 @@ function C() {
 function G() {
   return (
     <path
-      fill="orange"
+      className="fill-amber-500"
       d="M 100 28 C 100 -13 0 -13 0 50 C 0 113 100 113 100 72
     L 100 48 L 55 48 L 55 72 L 75 72 C 75 90 30 90 30 50
     C 30 10 75 5 75 28 L 100 28"

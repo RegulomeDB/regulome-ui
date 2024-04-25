@@ -13,15 +13,13 @@ function HumanBodyDiagram({
   enabledBodyMapFilters,
   highlightedOrgans,
   highlightOrgans,
-  getFillColorHex,
+  getFillColor,
 }) {
-  const opacity = 0.4;
+  const opacity = "opacity-40";
   return (
     <svg
-      fill="white"
-      stroke="#545659"
+      className="fill-white stroke-gray-600"
       id="BodyMap"
-      className="human-map"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 607 768"
@@ -56,105 +54,120 @@ function HumanBodyDiagram({
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"skin of body"}
       />
       <HumanBodyParts.ArterialBloodVessel
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"arterial blood vessel"}
       />
       <HumanBodyParts.Limb
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"limb"}
       />
       <HumanBodyParts.Stomach
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"stomach"}
       />
       <HumanBodyParts.Vein
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"vein"}
       />
       <HumanBodyParts.Nerve
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"nerve"}
       />
       <HumanBodyParts.Pancreas
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"pancreas"}
       />
       <HumanBodyParts.MusculatureOfBody
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"musculature of body"}
       />
       <HumanBodyParts.Lung
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"lung"}
       />
       <HumanBodyParts.Bronchus
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"bronchus"}
       />
       <HumanBodyParts.SmallIntestine
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"small intestine"}
       />
       <HumanBodyParts.LargeIntestine
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"large intestine"}
       />
       <HumanBodyParts.Liver
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"liver"}
       />
       <HumanBodyParts.Kidney
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"kidney"}
       />
       <HumanBodyParts.AdrenalGland
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"adrenal gland"}
       />
 
       <HumanBodyParts.Esophagus
@@ -162,154 +175,176 @@ function HumanBodyDiagram({
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"esophagus"}
       />
       <HumanBodyParts.Mouth
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"mouth"}
       />
       <HumanBodyParts.Nose
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"nose"}
       />
       <HumanBodyParts.ThyroidGland
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"thyroid gland"}
       />
       <HumanBodyParts.Thymus
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"thymus"}
       />
       <HumanBodyParts.Heart
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"heart"}
       />
       <HumanBodyParts.Testis
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"testis"}
       />
       <HumanBodyParts.Ureter
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"ureter"}
       />
       <HumanBodyParts.Uterus
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"uterus"}
       />
       <HumanBodyParts.UrinaryBladder
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"urinary bladder"}
       />
       <HumanBodyParts.Ovary
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"ovary"}
       />
       <HumanBodyParts.Penis
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"penis"}
       />
       <HumanBodyParts.SpinalCord
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"spinal cord"}
       />
       <HumanBodyParts.Brain
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"brain"}
       />
       <HumanBodyParts.Eye
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"eye"}
       />
       <HumanBodyParts.Breast
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"breast"}
       />
       <HumanBodyParts.MammaryGland
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"mammary gland"}
       />
       <HumanBodyParts.Tongue
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"tongue"}
       />
       <HumanBodyParts.BoneElement
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"bone element"}
       />
       <HumanBodyParts.ProstateGland
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"prostate gland"}
       />
       <HumanBodyParts.Spleen
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"spleen"}
       />
       <HumanBodyParts.Vagina
         facets={facets}
         opacity={opacity}
         organFilters={organFilters}
         highlightedOrgans={highlightedOrgans}
-        getFillColorHex={getFillColorHex}
+        getFillColor={getFillColor}
+        organName={"vagina"}
       />
     </svg>
   );
@@ -323,7 +358,7 @@ HumanBodyDiagram.propTypes = {
   enabledBodyMapFilters: PropTypes.array.isRequired,
   highlightedOrgans: PropTypes.array,
   highlightOrgans: PropTypes.func,
-  getFillColorHex: PropTypes.func.isRequired,
+  getFillColor: PropTypes.func.isRequired,
 };
 
 export default HumanBodyDiagram;

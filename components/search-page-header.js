@@ -159,5 +159,5 @@ HeaderButton.propTypes = {
   // whether the url path need to add button type as suffix
   suffix: PropTypes.bool,
   // the number of datasets
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number,
 };

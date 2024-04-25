@@ -54,7 +54,9 @@ export default function SnpsDiagram({ data }) {
         y1: isEven
           ? TICK_STARTING_Y_EVEN - yOffsets[snpIndex][1]
           : TICK_STARTING_Y_ODD - yOffsets[snpIndex][1],
-        stroke: isHitSnp ? "#c13b42" : "#7F7F7F",
+        className: `stroke-2 ${
+          isHitSnp ? "stroke-rose-600" : "stroke-gray-500"
+        }`,
       },
       rect: {
         x: textX - 2,
@@ -62,8 +64,9 @@ export default function SnpsDiagram({ data }) {
           ? TICK_STARTING_Y_EVEN - LABEL_HEIGHT - yOffsets[snpIndex][1]
           : TICK_STARTING_Y_ODD - yOffsets[snpIndex][1],
         width: labelWidth,
-        fill: isHitSnp ? "#c13b42" : "white",
-        opacity: isHitSnp ? "1.0" : "0.6",
+        className: isHitSnp
+          ? "fill-rose-600 opacity-100"
+          : "fill-white opacity-60",
       },
       text: {
         x: textX,
@@ -111,14 +114,13 @@ export default function SnpsDiagram({ data }) {
           </defs>
           <g id="x-axis">
             <line
+              className="stroke-2 stroke-gray-500"
               x1={LINE_STARTING_X}
               x2={LINE_ENDING_X}
               y1={LINE_Y}
               y2={LINE_Y}
               markerEnd="url(#arrow)"
               markerStart="url(#arrow)"
-              stroke="#7F7F7F"
-              strokeWidth="2"
             />
           </g>
           <g className="text-sm">
@@ -131,17 +133,16 @@ export default function SnpsDiagram({ data }) {
                     x2={item.line.x2}
                     y1={item.line.y1}
                     y2={LINE_Y}
-                    stroke={item.line.stroke}
-                    strokeWidth="2"
+                    className={item.line.className}
                   />
                   <rect
+                    className={item.rect.className}
                     id="lable-background-color"
                     x={item.rect.x}
                     y={item.rect.y}
                     height={LABEL_HEIGHT}
                     width={item.rect.width}
-                    fill={item.rect.fill}
-                    opacity={item.rect.opacity}
+                    // opacity={item.rect.opacity}
                     rx="2px"
                   />
                   <text
