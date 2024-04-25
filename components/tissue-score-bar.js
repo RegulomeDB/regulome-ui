@@ -10,7 +10,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import Datalabels from "chartjs-plugin-datalabels";
-import { TissueScoreHexColor } from "../lib/tissue-specific-score";
+import { TissueScoreBarColor } from "../lib/tissue-specific-score";
 
 ChartJS.register(
   CategoryScale,
@@ -33,7 +33,7 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
     }
   });
   const unitValue = (MAX_SCORE - MIN_SCORE) / 10;
-  const datasets = TissueScoreHexColor.map((color, i) => {
+  const datasets = TissueScoreBarColor.map((color, i) => {
     return {
       data: [i],
       backgroundColor: color,

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import zoomPlugin from "chartjs-plugin-zoom";
+import colors from "tailwindcss/colors";
 
 import {
   Chart as ChartJS,
@@ -63,7 +64,7 @@ export default function AccessibilityChart({
       {
         label: "Number of accessibility datasets",
         data: groupCounts,
-        backgroundColor: "#276A8E",
+        backgroundColor: colors.cyan[700],
         maxBarThickness: 50,
       },
     ],
