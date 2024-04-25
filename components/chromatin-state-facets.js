@@ -42,7 +42,7 @@ export default function ChromatinStateFacets({
                 {d}
               </button>
               <span
-                className={`box-content h-3 w-3 p-1 ${ChromatinStateColor[d].tailwind}`}
+                className={`box-content h-3 w-3 p-1 ${ChromatinStateColor[d].background}`}
               ></span>
             </div>
           );

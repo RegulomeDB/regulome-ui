@@ -43,8 +43,7 @@ export default function BiosampleStateBar({ states }) {
                 x={rect.x}
                 height={BAR_HEIGHT}
                 width={rect.width}
-                className={rect.fill}
-                opacity="0.8"
+                className={`${rect.fill} opacity-80`}
               />
             </g>
           );

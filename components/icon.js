@@ -289,8 +289,9 @@ const Icon = {
   Twitter: ({ className = null, testid = "icon-twitter" }) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`fill-blue-500 ${className}`}
+      className={className}
       viewBox="0 0 20 20"
+      fill="#1DA1F2"
       data-testid={testid}
     >
       <path
