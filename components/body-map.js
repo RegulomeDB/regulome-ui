@@ -14,12 +14,12 @@ import {
   COMPLETE_CELLS_LIST_HG19,
   COMPLETE_ORGAN_LIST_GRCH38,
   COMPLETE_ORGAN_LIST_HG19,
-  getFillColorHexChromatin,
-  getFillColorTailwindChromatin,
+  getBackgroundColorChromatin,
+  getFillColorChromatin,
 } from "../lib/chromatin-data";
 import {
-  getFillColorHexTissueScore,
-  getFillColorTailwindTissueScore,
+  getBackgroundColorTissueScore,
+  getFillColorTissueScore,
 } from "../lib/tissue-specific-score";
 
 /**
@@ -37,7 +37,7 @@ function HumanCells({
   handleClickOrgan,
   highlightedOrgans,
   highlightOrgans,
-  getFillColorTailwind,
+  getBackgroundColor,
 }) {
   return (
     <>
@@ -45,7 +45,7 @@ function HumanCells({
         const src = ["lymph node", "lymphatic vessel"].includes(cell)
           ? `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.png`
           : `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.svg`;
-        const color = getFillColorTailwind(facets, cell);
+        const color = getBackgroundColor(facets, cell);
         const opacity =
           organFilters.includes(cell) | highlightedOrgans.includes(cell)
             ? "opacity-60"
@@ -86,14 +86,14 @@ HumanCells.propTypes = {
   enabledBodyMapFilters: PropTypes.array,
   highlightedOrgans: PropTypes.array.isRequired,
   highlightOrgans: PropTypes.func.isRequired,
-  getFillColorTailwind: PropTypes.func.isRequired,
+  getBackgroundColor: PropTypes.func.isRequired,
 };
 
 function HumanCellsThumbnail({
   facets,
   cellList,
   organFilters,
-  getFillColorTailwind,
+  getBackgroundColor,
 }) {
   return (
     <ul className="flex">
@@ -101,7 +101,7 @@ function HumanCellsThumbnail({
         const src = ["lymph node", "lymphatic vessel"].includes(cell)
           ? `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.png`
           : `/bodyMap/insetSVGs/${cell.replace(" ", "_")}.svg`;
-        const color = getFillColorTailwind(facets, cell);
+        const color = getBackgroundColor(facets, cell);
         const opacity = organFilters.includes(cell)
           ? "opacity-60"
           : "opacity-30";
@@ -130,7 +130,7 @@ HumanCellsThumbnail.propTypes = {
   facets: PropTypes.object.isRequired,
   cellList: PropTypes.array.isRequired,
   organFilters: PropTypes.array.isRequired,
-  getFillColorTailwind: PropTypes.func.isRequired,
+  getBackgroundColor: PropTypes.func.isRequired,
 };
 
 /**
@@ -194,10 +194,10 @@ function BodyMap({
                 handleClickOrgan={handleClickOrgan}
                 highlightedOrgans={highlightedOrgans}
                 highlightOrgans={highlightOrgans}
-                getFillColorHex={
+                getFillColor={
                   isColorByChromatinState
-                    ? getFillColorHexChromatin
-                    : getFillColorHexTissueScore
+                    ? getFillColorChromatin
+                    : getFillColorTissueScore
                 }
               />
             </div>
@@ -247,10 +247,10 @@ function BodyMap({
                 enabledBodyMapFilters={enabledBodyMapFilters}
                 highlightedOrgans={highlightedOrgans}
                 highlightOrgans={highlightOrgans}
-                getFillColorTailwind={
+                getBackgroundColor={
                   isColorByChromatinState
-                    ? getFillColorTailwindChromatin
-                    : getFillColorTailwindTissueScore
+                    ? getBackgroundColorChromatin
+                    : getBackgroundColorTissueScore
                 }
               />
             </div>
@@ -351,10 +351,10 @@ function BodyMapThumbnail({
             facetsTissueScore={facetsTissueScore}
             organFilters={organFilters}
             enabledBodyMapFilters={enabledBodyMapFilters}
-            getFillColorHex={
+            getFillColor={
               isColorByChromatinState
-                ? getFillColorHexChromatin
-                : getFillColorHexTissueScore
+                ? getFillColorChromatin
+                : getFillColorTissueScore
             }
           />
           <ArrowsPointingOutIcon className="absolute inset-0 h-6" />
@@ -364,10 +364,10 @@ function BodyMapThumbnail({
           facets={isColorByChromatinState ? facetsChromatin : facetsTissueScore}
           cellList={cellList}
           organFilters={organFilters}
-          getFillColorTailwind={
+          getBackgroundColor={
             isColorByChromatinState
-              ? getFillColorTailwindChromatin
-              : getFillColorTailwindTissueScore
+              ? getBackgroundColorChromatin
+              : getBackgroundColorTissueScore
           }
         />
       </div>

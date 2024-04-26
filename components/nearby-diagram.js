@@ -6,10 +6,10 @@ import Base from "./dna-logo/base";
 import { MotifDnaLogo } from "./dna-logo/motif";
 
 const colorGenome = {
-  "Nucleobase A": "red",
-  "Nucleobase T": "#228b22",
-  "Nucleobase G": "orange",
-  "Nucleobase C": "blue",
+  "Nucleobase A": "bg-red-600",
+  "Nucleobase T": "bg-green-700",
+  "Nucleobase G": "bg-amber-500",
+  "Nucleobase C": "bg-blue-700",
 };
 
 const geneTypes = {
@@ -741,10 +741,7 @@ export function NearybyLegend() {
               <strong>Genome</strong>
               {Object.keys(colorGenome).map((nucleobase) => (
                 <div className="flex space-x-1" key={nucleobase}>
-                  <div
-                    className="h-5 w-5"
-                    style={{ background: `${colorGenome[nucleobase]}` }}
-                  />
+                  <div className={`h-5 w-5 ${colorGenome[nucleobase]}`} />
                   <div className="legend-label">{nucleobase}</div>
                 </div>
               ))}
@@ -785,25 +782,13 @@ export function NearybyLegend() {
           <div className="flex space-x-2">
             <div className="grid row-2 space-y-1">
               <div className="flex space-x-1">
-                <div
-                  className="h-3 w-3"
-                  style={{ background: `${colorGenome["Nucleobase A"]}` }}
-                />
-                <div
-                  className="h-3 w-3"
-                  style={{ background: `${colorGenome["Nucleobase T"]}` }}
-                />
+                <div className={`h-3 w-3 ${colorGenome["Nucleobase A"]}`} />
+                <div className={`h-3 w-3 ${colorGenome["Nucleobase T"]}`} />
               </div>
 
               <div className="flex space-x-1">
-                <div
-                  className="h-3 w-3"
-                  style={{ background: `${colorGenome["Nucleobase C"]}` }}
-                />
-                <div
-                  className="h-3 w-3"
-                  style={{ background: `${colorGenome["Nucleobase G"]}` }}
-                />
+                <div className={`h-3 w-3 ${colorGenome["Nucleobase C"]}`} />
+                <div className={`h-3 w-3 ${colorGenome["Nucleobase G"]}`} />
               </div>
             </div>
             <div>Legend</div>

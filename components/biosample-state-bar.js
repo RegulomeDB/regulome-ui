@@ -20,7 +20,7 @@ export default function BiosampleStateBar({ states }) {
   const rectsData = [];
   let startX = 0;
   Object.keys(states).forEach((state) => {
-    const fill = ChromatinStateColor[state].hex;
+    const fill = ChromatinStateColor[state].fill;
     const x = startX;
     const width = WIDTH_PER_DATASET * states[state];
     const key = state;
@@ -43,16 +43,14 @@ export default function BiosampleStateBar({ states }) {
                 x={rect.x}
                 height={BAR_HEIGHT}
                 width={rect.width}
-                fill={rect.fill}
-                opacity="0.8"
+                className={`${rect.fill} opacity-80`}
               />
             </g>
           );
         })}
         <text
+          className="fill-blue-500 text-sm"
           id="total-count"
-          className="text-sm"
-          fill="#0074d9"
           x={TEXT_X}
           y={TEXT_Y}
         >

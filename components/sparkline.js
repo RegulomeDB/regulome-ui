@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import colors from "tailwindcss/colors";
 
 import {
   Chart as ChartJS,
@@ -103,7 +104,7 @@ function getSparklineData(scores, maxBarThickness) {
       {
         label: "Score",
         data,
-        backgroundColor: "#276A8E",
+        backgroundColor: colors.cyan[700],
         maxBarThickness,
       },
     ],

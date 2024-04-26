@@ -32,7 +32,7 @@ export default function ToggleSwitch({
         >
           {leftOption}
         </span>
-        <span className="mx-4 flex h-8 w-[60px] items-center rounded-full p-1 duration-200 bg-[#CCCCCE]">
+        <span className="mx-4 flex h-8 w-[60px] items-center rounded-full p-1 duration-200 bg-gray-300">
           <span
             className={`h-6 w-6 rounded-full bg-brand duration-200 ${
               isLeftOption ? "" : "translate-x-[28px]"
