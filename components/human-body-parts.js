@@ -9,7 +9,7 @@ export function SkinOfBody({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -82,7 +82,7 @@ export function Limb({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -120,7 +120,7 @@ export function Spleen({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -159,7 +159,7 @@ export function Stomach({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -198,7 +198,7 @@ export function ArterialBloodVessel({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -246,7 +246,7 @@ export function Vein({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -285,11 +285,11 @@ export function Nerve({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-3"
       : "stroke-1"
   }`;
@@ -389,11 +389,11 @@ export function Pancreas({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -601,7 +601,7 @@ export function Lung({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -639,11 +639,11 @@ export function Bronchus({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -679,7 +679,7 @@ export function UrinaryBladder({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -713,7 +713,7 @@ export function SmallIntestine({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -775,7 +775,7 @@ export function LargeIntestine({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -819,7 +819,7 @@ export function Gallbladder({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -843,7 +843,7 @@ export function Liver({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -878,7 +878,7 @@ export function Kidney({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -914,7 +914,7 @@ export function AdrenalGland({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -952,11 +952,11 @@ export function Esophagus({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-3"
       : "stroke-1"
   }`;
@@ -1003,7 +1003,7 @@ export function Trachea({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1039,7 +1039,7 @@ export function Mouth({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1092,7 +1092,7 @@ export function Nose({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1131,11 +1131,11 @@ export function ThyroidGland({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -1221,11 +1221,11 @@ export function Thymus({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -1345,7 +1345,7 @@ export function Heart({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1403,7 +1403,7 @@ export function Pericardium({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1435,11 +1435,11 @@ export function Testis({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -1475,11 +1475,11 @@ export function ProstateGland({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -1518,7 +1518,7 @@ export function Urethra({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1547,11 +1547,11 @@ export function Ureter({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -1586,7 +1586,7 @@ export function Penis({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1625,7 +1625,7 @@ export function Uterus({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1679,11 +1679,11 @@ export function Vagina({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -1718,7 +1718,7 @@ export function Ovary({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1757,7 +1757,7 @@ export function SpinalCord({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1794,7 +1794,7 @@ export function Brain({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1922,7 +1922,7 @@ export function Epiglottis({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -1951,11 +1951,11 @@ export function Eye({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -2022,7 +2022,7 @@ export function MusculatureOfBody({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -2148,7 +2148,7 @@ export function BoneElement({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -2216,7 +2216,7 @@ export function Breast({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -2454,7 +2454,7 @@ export function BoneMarrow({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   }`;
@@ -2524,11 +2524,11 @@ export function MammaryGland({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;
@@ -2702,11 +2702,11 @@ export function Tongue({
   organName,
 }) {
   const className = `${getFillColor(facets, organName)} ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "opacity-80"
       : opacity
   } ${
-    organFilters.includes(organName) | highlightedOrgans?.includes(organName)
+    organFilters.includes(organName) || highlightedOrgans?.includes(organName)
       ? "stroke-2"
       : "stroke-1"
   }`;

@@ -142,7 +142,6 @@ export default function SnpsDiagram({ data }) {
                     y={item.rect.y}
                     height={LABEL_HEIGHT}
                     width={item.rect.width}
-                    // opacity={item.rect.opacity}
                     rx="2px"
                   />
                   <text
