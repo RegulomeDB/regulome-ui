@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
-
+import colors from "tailwindcss/colors";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +11,6 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,6 +24,11 @@ import {
   SORTED_CHROMATIN_STATES_GRCH38,
   ChromatinStateColor,
 } from "../lib/chromatin-data";
+import GlobalContext from "./global-context";
+import {
+  getBarChartOptions,
+  getBarChartThumbnailOptions,
+} from "../lib/chart-options";
 
 export default function ChromatinBarChart({
   chromatinData,
@@ -32,6 +36,9 @@ export default function ChromatinBarChart({
   height = 600,
   thumbnail,
 }) {
+  const { darkMode } = useContext(GlobalContext);
+  const labelColor = darkMode.enabled ? colors.white : colors.gray[800];
+  const gridColor = darkMode.enabled ? colors.gray[700] : colors.gray[200];
   /**
    * Group datasets by dataset.chromatin_state and get a count for each group.
    * the counts looks like this:
@@ -70,82 +77,32 @@ export default function ChromatinBarChart({
     groupCounts = groupCounts.slice(0, 7);
     sortedStates = sortedStates.slice(0, 7);
   }
-  const colors = sortedStates.map((state) => ChromatinStateColor[state].hex);
+  const colorsForDatasets = sortedStates.map(
+    (state) => ChromatinStateColor[state].color
+  );
   const data = {
     labels: sortedStates,
     datasets: [
       {
         label: "Number of chromatin state datasets",
         data: groupCounts,
-        backgroundColor: colors,
+        backgroundColor: colorsForDatasets,
         maxBarThickness: 50,
       },
     ],
   };
-  // Check here for options setting detail: https://react-chartjs-2.js.org/components/bar
-  const options = {
-    // Resizes the chart canvas when its container does
-    maintainAspectRatio: false,
-    responsive: true,
-    scales: {
-      y: {
-        // only display tick when it is a integer
-        ticks: {
-          callback: (val) => {
-            return Number.isInteger(val) ? val : "";
-          },
-        },
-      },
-      x: {
-        ticks: {
-          //autoSkip to prevent over crowded ticks
-          autoSkip: true,
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        //put legend on top
-        position: "top",
-      },
-    },
-  };
-  const optionForThumbnail = {
-    // Resizes the chart canvas when its container does
-    maintainAspectRatio: false,
-    responsive: true,
-    scales: {
-      y: {
-        // only display tick when it is a integer
-        ticks: {
-          callback: (val) => {
-            return Number.isInteger(val) ? val : "";
-          },
-        },
-      },
-      x: {
-        ticks: {
-          //autoSkip to prevent over crowded ticks
-          autoSkip: true,
-
-          maxRotation: 90,
-          minRotation: 90,
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: false,
-      },
-    },
-  };
   return thumbnail ? (
-    <Bar options={optionForThumbnail} data={data} height={height} />
+    <Bar
+      options={getBarChartThumbnailOptions(labelColor, gridColor)}
+      data={data}
+      height={height}
+    />
   ) : (
-    <Bar options={options} data={data} height={height} />
+    <Bar
+      options={getBarChartOptions(labelColor, gridColor)}
+      data={data}
+      height={height}
+    />
   );
 }
 

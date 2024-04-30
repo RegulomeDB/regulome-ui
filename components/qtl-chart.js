@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import zoomPlugin from "chartjs-plugin-zoom";
 import colors from "tailwindcss/colors";
+import GlobalContext from "./global-context";
 
 import {
   Chart as ChartJS,
@@ -13,6 +14,10 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import {
+  getBarChartOptions,
+  getBarChartThumbnailOptions,
+} from "../lib/chart-options";
 
 ChartJS.register(
   CategoryScale,
@@ -24,6 +29,9 @@ ChartJS.register(
 );
 
 export default function QTLChart({ qtlData, height = 600, thumbnail }) {
+  const { darkMode } = useContext(GlobalContext);
+  const labelColor = darkMode.enabled ? colors.white : colors.gray[800];
+  const gridColor = darkMode.enabled ? colors.gray[700] : colors.gray[200];
   /**
    * Group datasets by dataset.biosample_ontology.term_name and get a count for each group.
    * the counts looks like this:
@@ -65,82 +73,19 @@ export default function QTLChart({ qtlData, height = 600, thumbnail }) {
       },
     ],
   };
-  // Check here for options setting detail: https://react-chartjs-2.js.org/components/bar
-  const options = {
-    // Resizes the chart canvas when its container does
-    maintainAspectRatio: false,
-    responsive: true,
-    scales: {
-      y: {
-        // only display tick when it is a integer
-        ticks: {
-          callback: (val) => {
-            return Number.isInteger(val) ? val : "";
-          },
-        },
-      },
-      x: {
-        ticks: {
-          //autoSkip to prevent over crowded ticks
-          autoSkip: true,
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        //put legend on top
-        position: "top",
-      },
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: "x",
-        },
-        zoom: {
-          pinch: {
-            enabled: true, // Enable pinch zooming
-          },
-          wheel: {
-            enabled: true, // Enable wheel zooming
-          },
-          mode: "x",
-        },
-      },
-    },
-  };
-  const optionsThumbnail = {
-    // Resizes the chart canvas when its container does
-    maintainAspectRatio: false,
-    responsive: true,
-    scales: {
-      y: {
-        // only display tick when it is a integer
-        ticks: {
-          callback: (val) => {
-            return Number.isInteger(val) ? val : "";
-          },
-        },
-      },
-      x: {
-        ticks: {
-          //autoSkip to prevent over crowded ticks
-          autoSkip: true,
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: false,
-      },
-    },
-  };
   return thumbnail ? (
-    <Bar options={optionsThumbnail} data={data} height={height} />
+    <Bar
+      options={getBarChartThumbnailOptions(labelColor, gridColor)}
+      data={data}
+      height={height}
+    />
   ) : (
-    <Bar options={options} data={data} plugins={[zoomPlugin]} height={height} />
+    <Bar
+      options={getBarChartOptions(labelColor, gridColor)}
+      data={data}
+      plugins={[zoomPlugin]}
+      height={height}
+    />
   );
 }
 

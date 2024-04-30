@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import colors from "tailwindcss/colors";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +12,8 @@ import {
 import { Bar } from "react-chartjs-2";
 import Datalabels from "chartjs-plugin-datalabels";
 import { TissueScoreBarColor } from "../lib/tissue-specific-score";
+import { useContext } from "react";
+import GlobalContext from "./global-context";
 
 ChartJS.register(
   CategoryScale,
@@ -22,6 +25,8 @@ ChartJS.register(
 );
 
 export function TissueScoreBar({ normalizedTissueSpecificScore }) {
+  const { darkMode } = useContext(GlobalContext);
+  const labelColor = darkMode.enabled ? colors.white : colors.gray[800];
   const organs = Object.keys(normalizedTissueSpecificScore);
   let MIN_SCORE = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
   let MAX_SCORE = parseFloat(normalizedTissueSpecificScore[organs[0]][0]);
@@ -79,6 +84,9 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
       x: {
         display: true,
         stacked: true,
+        ticks: {
+          color: labelColor,
+        },
         grid: {
           display: false,
         },
@@ -104,6 +112,7 @@ export function TissueScoreBar({ normalizedTissueSpecificScore }) {
         anchor: "end",
         offset: 6,
         align: "right",
+        color: labelColor,
         formatter: (value) => {
           if (value % 2 === 0) {
             const label = value * unitValue + MIN_SCORE;

@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import { Tooltip, Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ArrowUturnLeftIcon } from "@heroicons/react/20/solid";
 import { BrowserFeat } from "./browserfeat";
+import GlobalContext from "./global-context";
+import { DataItemValue } from "./data-area";
 
 const colorCCREs = {
   "Promoter-like": "#ff0000",
@@ -33,11 +35,10 @@ const PINNED_FILES_GRCH38 = [
     file_format: "vdna-dir",
     href: "https://encoded-build.s3.amazonaws.com/browser/GRCh38/GRCh38.vdna-dir",
   },
-  // genes track file source: https://data.igvf.org/reference-files/IGVFFI7217ZMJZ/
   {
     file_format: "vgenes-dir",
-    href: "https://encoded-build.s3.amazonaws.com/browser/GRCh38/GRCh38.v43.vgenes-dir",
-    title: "GENCODE V43",
+    href: "https://encoded-build.s3.amazonaws.com/browser/GRCh38/GRCh38.vgenes-dir",
+    title: "GENCODE V29",
   },
   {
     title: "dbSNP (153)",
@@ -52,7 +53,7 @@ const PINNED_FILES_GRCH38 = [
   },
   {
     file_format: "bigBed",
-    path: "https://encode-public.s3.amazonaws.com/2023/02/27/aef7a676-0233-4ada-9992-6746f77e209e/ENCFF217ARC.bigBed",
+    path: "https://encode-public.s3.amazonaws.com/2021/09/08/67d00c9a-6924-4a86-a592-7bfab4ecb2ad/ENCFF081NFZ.bigBed",
     dataset: "/annotations/ENCSR487PRC/",
     title: "cCRE, all",
   },
@@ -327,13 +328,14 @@ function filesToTracks(files, assembly) {
 }
 
 export default function GenomeBrowser({ files, assembly, coordinates }) {
+  const { darkMode } = useContext(GlobalContext);
   const disableBrowserForIE = BrowserFeat.getBrowserCaps("uaTrident")
     ? true
     : false;
 
   function ResetButton() {
     return (
-      <button className="reset-browser-button">
+      <button className="reset-browser-button bg-background">
         <ArrowUturnLeftIcon className="h-5" />
         <span>Reset to query variant label</span>
       </button>
@@ -373,6 +375,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
         ],
         tracks,
       });
+      GenomeVisualizer.setTheme(darkMode.enabled ? "dark" : "light");
       visualizer.render(
         {
           width: document.getElementById("browser").clientWidth,
@@ -394,11 +397,11 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
       function ResetButton() {
         return (
           <button
-            className="reset-browser-button"
+            className="reset-browser-button bg-background rounded dark:rounded-lg"
             onClick={() => visualizer.setLocation({ contig: chr, x0, x1 })}
           >
-            <ArrowUturnLeftIcon className="h-5 px-2" />
-            <span>Reset to query variant</span>
+            <ArrowUturnLeftIcon className="h-5 px-2 fill-data-value" />
+            <span className="text-data-value">Reset to query variant</span>
           </button>
         );
       }
@@ -406,7 +409,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
     }
 
     load();
-  }, [files, assembly, coordinates]);
+  }, [files, assembly, coordinates, darkMode.enabled]);
 
   return (
     <div>
@@ -417,10 +420,10 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
           <div id="browser" className="valis-browser" />
         </div>
       ) : (
-        <div className="browser-error valis-browser">
+        <DataItemValue>
           The genome browser does not support Internet Explorer. Please upgrade
-          your browser to Edge to visualize files on ENCODE.
-        </div>
+          your browser to visualize files on RegulomeDB.
+        </DataItemValue>
       )}
     </div>
   );

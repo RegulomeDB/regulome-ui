@@ -30,6 +30,10 @@
   .form-element-height-lg {
     min-height: 2.5rem;
   }
+
+  .valis-browser .hpgv_track {
+    background-color: var(--color-background);
+  }
   .valis-browser .hpgv_track-sequence {
     --nucleobase-a: #489655;
     --nucleobase-t: #c13b42;
@@ -61,12 +65,6 @@
     --signal-color: #2a6496;
   }
 
-  .valis-browser .valis-genome-visualizer.react-object-container div {
-    background-color: white !important;
-    color: #333;
-    font-family: Khula, sans-serif;
-  }
-
   .valis-browser .hpgv_track-reorder-button {
     height: 8px;
     opacity: 0.8;
@@ -74,24 +72,12 @@
     cursor: pointer;
   }
 
+  .valis-browser .hpgv_track-expander {
+    stroke: var(--color-data-value);
+  }
+
   .valis-browser .hpgv_track-reorder-button svg {
     display: none;
-  }
-
-  .valis-browser .hpgv_track-reorder-button.move-up {
-    background: linear-gradient(#a2a2a2, 30%, #f2f2f2);
-  }
-
-  .valis-browser .hpgv_track-reorder-button.move-up:hover {
-    background: linear-gradient(#f1c428, #fff0c1);
-  }
-
-  .valis-browser .hpgv_track-reorder-button.move-down {
-    background: linear-gradient(#f2f2f2, 70%, #a2a2a2);
-  }
-
-  .valis-browser .hpgv_track-reorder-button.move-down:hover {
-    background: linear-gradient(#fff0c1, #f1c428);
   }
 
   .valis-browser .hpgv_track-reorder-container {
@@ -99,39 +85,25 @@
     left: 0;
     pointer-events: none;
   }
-
   .reset-browser-button {
     position: absolute;
     z-index: 9;
     line-height: 1;
     left: 20px;
     text-align: left;
-    background-color: #f2f2f2;
-    color: #364565;
     border: 1px solid #bfbfbf;
     padding: 7px 20px;
     height: 50px;
     width: 170px;
     font-size: 14px;
-    border-radius: 4px;
     display: flex;
     margin-top: 5px;
     margin: 0 auto;
   }
 
-  .valis-browser.browser-error {
-    margin: 30px auto;
-    background: #f2f2f2;
-    border-radius: 5px;
-    padding: 20px;
-    font-size: 1.3rem;
-    border: 1px solid #ddd;
-    min-height: 450px;
-  }
-
   .valis-browser .hpgv_ui-block {
-    color: #364565;
-    background-color: #f2f2f2;
+    color: var(--color-data-value);
+    background-color: var(--color-background);
     font-size: 16px;
     box-shadow: none;
     font-family: "Khula", sans-serif;
@@ -310,11 +282,11 @@
   --color-button-audit-level-detail: #111827;
 
   --color-tab-group-border: #4e5b75;
-  --color-tab-selected-border: #1d4ed8;
+  --color-tab-selected-border: #36582e;
   --color-tab-unselected-border: transparent;
   --color-tab-disabled-border: transparent;
-  --color-tab-hover-border: #1e3a8a;
-  --color-tab-title-selected-text: #2563eb;
+  --color-tab-hover-border: #24391e;
+  --color-tab-title-selected-text: #36582e;
   --color-tab-title-unselected-text: #cbd5e1;
   --color-tab-title-disabled-text: #374151;
   --color-tab-title-hover-text: #cbd5e1;
