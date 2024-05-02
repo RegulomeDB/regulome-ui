@@ -57,7 +57,7 @@ const summaryColumnsGRCh38 = [
         <div className="h-12">
           <Tooltip
             content={
-              <div className="w-[600px] h-72 bg-gray-100">
+              <div className="w-[600px] h-72 bg-gray-100 dark:bg-black">
                 <Sparkline
                   scores={source.tissue_specific_scores}
                   maxBarThickness={10}

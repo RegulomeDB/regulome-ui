@@ -30,6 +30,7 @@
   .form-element-height-lg {
     min-height: 2.5rem;
   }
+
   .valis-browser .hpgv_track-sequence {
     --nucleobase-a: #489655;
     --nucleobase-t: #c13b42;
@@ -38,10 +39,10 @@
     --gc-banding-low: #efb549;
     --gc-banding-high: #c13b42;
     --text-color: rgba(255, 255, 255, 0.7);
-    --text-additive-blending: 0; /* set to 0.0 for dark text colors */
+    --text-additive-blending: 0;
   }
 
-  /* styles for bigBed files annotation files */
+  /* gencode track */
   .valis-browser .hpgv_track-annotation {
     --transcript-arrow: rgba(0, 0, 0, 1);
     --transcript: #bdc5c0;
@@ -52,18 +53,17 @@
     --coding-max-score: #575f5a;
     --non-coding-max-score: #575f5a;
 
-    /* if we want to hide all of the annotations
-    color: rgba(0, 0, 0, 0); */
+    color: var(--color-data-value);
   }
 
-  /* styles for signal track */
+  /* bigwig file track */
   .valis-browser .hpgv_track-signal {
-    --signal-color: #2a6496;
+    --signal-color: var(--color-track-signal);
+    color: var(--color-data-value);
   }
 
   .valis-browser .valis-genome-visualizer.react-object-container div {
     background-color: white !important;
-    color: #333;
     font-family: Khula, sans-serif;
   }
 
@@ -74,8 +74,18 @@
     cursor: pointer;
   }
 
+  .valis-browser .hpgv_track-expander {
+    stroke: var(--color-data-value);
+  }
+
   .valis-browser .hpgv_track-reorder-button svg {
     display: none;
+  }
+
+  .valis-browser .hpgv_track-reorder-container {
+    top: 0;
+    left: 0;
+    pointer-events: none;
   }
 
   .valis-browser .hpgv_track-reorder-button.move-up {
@@ -94,51 +104,39 @@
     background: linear-gradient(#fff0c1, #f1c428);
   }
 
-  .valis-browser .hpgv_track-reorder-container {
-    top: 0;
-    left: 0;
-    pointer-events: none;
-  }
-
   .reset-browser-button {
     position: absolute;
     z-index: 9;
     line-height: 1;
     left: 20px;
     text-align: left;
-    background-color: #f2f2f2;
-    color: #364565;
     border: 1px solid #bfbfbf;
     padding: 7px 20px;
     height: 50px;
     width: 170px;
     font-size: 14px;
-    border-radius: 4px;
     display: flex;
     margin-top: 5px;
     margin: 0 auto;
-  }
-
-  .valis-browser.browser-error {
-    margin: 30px auto;
-    background: #f2f2f2;
-    border-radius: 5px;
-    padding: 20px;
-    font-size: 1.3rem;
-    border: 1px solid #ddd;
-    min-height: 450px;
+    background-color: var(--color-genome-browser-background);
   }
 
   .valis-browser .hpgv_ui-block {
-    color: #364565;
-    background-color: #f2f2f2;
+    background-color: var(--color-genome-browser-background);
     font-size: 16px;
     box-shadow: none;
     font-family: "Khula", sans-serif;
     border: 1px solid #bfbfbf;
   }
 
+  .valis-browser .hpgv_ui-block.hpgv_panel-header input {
+    color: black;
+  }
+
+  /* dataset label at the left panel */
   .valis-browser .hpgv_ui-block.hpgv_track-header {
+    color: var(--color-data-value);
+    background-color: var(--color-genome-browser-background);
     font-size: 14px;
     line-height: 1.2;
     padding: 7px 5px;
@@ -206,6 +204,8 @@
   --color-tab-title-disabled-text: #d1d5db;
   --color-tab-title-hover-text: #1f2937;
 
+  --color-track-signal: #2a6496;
+
   --color-facet-group-button-background: #f0e7ca;
   --color-facet-group-button-selected-background: #bfa678;
   --color-facet-group-button-border: #998868;
@@ -228,6 +228,8 @@
   --color-form-element-label-disabled: #a0a0a0;
 
   --color-data-header-background: #e0e0e0;
+
+  --color-genome-browser-background: #f2f2f2;
 
   --color-highlight: #c0c0c0;
   --color-highlight-border: #a0a0a0;
@@ -303,6 +305,8 @@
   --color-facet-group-button-text: #ffffff;
   --color-facet-group-button-selected-text: #ffffff;
 
+  --color-genome-browser-background: #2e2e2e;
+
   --color-button-audit-open-background: #384977;
   --color-button-audit-border: #8facff;
   --color-button-audit-level: #4e5b75;
@@ -310,14 +314,16 @@
   --color-button-audit-level-detail: #111827;
 
   --color-tab-group-border: #4e5b75;
-  --color-tab-selected-border: #1d4ed8;
+  --color-tab-selected-border: #36582e;
   --color-tab-unselected-border: transparent;
   --color-tab-disabled-border: transparent;
-  --color-tab-hover-border: #1e3a8a;
-  --color-tab-title-selected-text: #2563eb;
+  --color-tab-hover-border: #24391e;
+  --color-tab-title-selected-text: #36582e;
   --color-tab-title-unselected-text: #cbd5e1;
   --color-tab-title-disabled-text: #374151;
   --color-tab-title-hover-text: #cbd5e1;
+
+  --color-track-signal: #3b87c8;
 
   --color-facet-title-background: #536167;
   --color-facet-title-text: #ffffff;
@@ -404,4 +410,28 @@ a {
 
 .dark #graph .node > rect {
   fill: #fff !important;
+}
+
+.dark .valis-browser .hpgv_track-reorder-button.move-up {
+  background: linear-gradient(
+    var(--color-background),
+    30%,
+    var(--color-genome-browser-background)
+  );
+}
+
+.dark .valis-browser .hpgv_track-reorder-button.move-down {
+  background: linear-gradient(
+    var(--color-genome-browser-background),
+    70%,
+    var(--color-background)
+  );
+}
+
+.dark .valis-browser .hpgv_track-reorder-button.move-up:hover {
+  background: linear-gradient(#5b4a0e, #67604d);
+}
+
+.dark .valis-browser .hpgv_track-reorder-button.move-down:hover {
+  background: linear-gradient(#67604d, #5b4a0e);
 }

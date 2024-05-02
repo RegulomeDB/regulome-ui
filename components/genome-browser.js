@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import { Tooltip, Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ArrowUturnLeftIcon } from "@heroicons/react/20/solid";
 import { BrowserFeat } from "./browserfeat";
+import GlobalContext from "./global-context";
+import { DataItemValue } from "./data-area";
 
 const colorCCREs = {
   "Promoter-like": "#ff0000",
@@ -327,13 +329,14 @@ function filesToTracks(files, assembly) {
 }
 
 export default function GenomeBrowser({ files, assembly, coordinates }) {
+  const { darkMode } = useContext(GlobalContext);
   const disableBrowserForIE = BrowserFeat.getBrowserCaps("uaTrident")
     ? true
     : false;
 
   function ResetButton() {
     return (
-      <button className="reset-browser-button">
+      <button className="reset-browser-button rounded dark:rounded-lg">
         <ArrowUturnLeftIcon className="h-5" />
         <span>Reset to query variant label</span>
       </button>
@@ -373,6 +376,8 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
         ],
         tracks,
       });
+      GenomeVisualizer.setTheme(darkMode.enabled ? "dark" : "light");
+      // GenomeVisualizer.setTheme("light");
       visualizer.render(
         {
           width: document.getElementById("browser").clientWidth,
@@ -394,11 +399,11 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
       function ResetButton() {
         return (
           <button
-            className="reset-browser-button"
+            className="reset-browser-button rounded dark:rounded-lg"
             onClick={() => visualizer.setLocation({ contig: chr, x0, x1 })}
           >
-            <ArrowUturnLeftIcon className="h-5 px-2" />
-            <span>Reset to query variant</span>
+            <ArrowUturnLeftIcon className="h-5 px-2 fill-data-value" />
+            <span className="text-data-value">Reset to query variant</span>
           </button>
         );
       }
@@ -406,7 +411,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
     }
 
     load();
-  }, [files, assembly, coordinates]);
+  }, [files, assembly, coordinates, darkMode.enabled]);
 
   return (
     <div>
@@ -414,13 +419,13 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
         <div className="tall-browser-container">
           <GenomeLegend />
           <>{func}</>
-          <div id="browser" className="valis-browser" />
+          <div id="browser" className="valis-browser text-black" />
         </div>
       ) : (
-        <div className="browser-error valis-browser">
+        <DataItemValue>
           The genome browser does not support Internet Explorer. Please upgrade
-          your browser to Edge to visualize files on ENCODE.
-        </div>
+          your browser to visualize files on RegulomeDB.
+        </DataItemValue>
       )}
     </div>
   );

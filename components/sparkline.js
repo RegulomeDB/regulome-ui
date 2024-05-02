@@ -12,6 +12,9 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
+import GlobalContext from "./global-context";
+import { useContext } from "react";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,75 +23,6 @@ ChartJS.register(
   ChartTooltip,
   Legend
 );
-
-// options for tissue specific scores sparkline
-const optionsThumbnail = {
-  // Resizes the chart canvas when its container does
-  maintainAspectRatio: false,
-  responsive: true,
-  scales: {
-    y: {
-      grid: {
-        display: true,
-      },
-      border: {
-        display: false,
-      },
-      ticks: {
-        stepSize: 1,
-        display: true,
-      },
-    },
-    x: {
-      display: false,
-      grid: {
-        display: false,
-      },
-      border: {
-        display: false,
-      },
-    },
-  },
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-};
-
-const options = {
-  // Resizes the chart canvas when its container does
-  maintainAspectRatio: false,
-  responsive: true,
-  scales: {
-    y: {
-      grid: {
-        display: true,
-      },
-      border: {
-        display: false,
-      },
-      ticks: {
-        stepSize: 0.2,
-        display: true,
-      },
-    },
-    x: {
-      display: true,
-      grid: {
-        display: false,
-      },
-      border: {
-        display: true,
-      },
-    },
-  },
-  plugins: {
-    legend: {
-      display: true,
-    },
-  },
-};
 
 /**
  * @param {object} scores to generate data for chart
@@ -117,6 +51,87 @@ export default function Sparkline({
   max,
   thumbnail,
 }) {
+  const { darkMode } = useContext(GlobalContext);
+  const labelColor = darkMode.enabled ? colors.white : colors.gray[800];
+  const gridColor = darkMode.enabled ? colors.gray[700] : colors.gray[200];
+  // options for tissue specific scores sparkline
+  const optionsThumbnail = {
+    // Resizes the chart canvas when its container does
+    maintainAspectRatio: false,
+    responsive: true,
+    scales: {
+      y: {
+        grid: {
+          display: true,
+          color: gridColor,
+        },
+        border: {
+          display: false,
+        },
+        ticks: {
+          stepSize: 1,
+          display: true,
+          color: labelColor,
+        },
+      },
+      x: {
+        display: false,
+        grid: {
+          display: false,
+        },
+        border: {
+          display: false,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
+
+  const options = {
+    // Resizes the chart canvas when its container does
+    maintainAspectRatio: false,
+    responsive: true,
+    scales: {
+      y: {
+        grid: {
+          display: true,
+          color: gridColor,
+        },
+        border: {
+          display: false,
+        },
+        ticks: {
+          stepSize: 0.2,
+          display: true,
+          color: labelColor,
+        },
+      },
+      x: {
+        display: true,
+        ticks: {
+          color: labelColor,
+        },
+        grid: {
+          display: false,
+        },
+        border: {
+          display: true,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          color: labelColor,
+        },
+      },
+    },
+  };
   const appliedOptions = thumbnail ? optionsThumbnail : options;
   if ((min || min === 0) && max) {
     appliedOptions.scales.y.min = min;
