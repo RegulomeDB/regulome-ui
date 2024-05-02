@@ -207,15 +207,6 @@ export default function RegulomeVersionTag({ version = "2.2" }) {
   return (
     <div className="flex justify-center mb-10">
       <Link href="/">
-        {/* <Image
-          src="/RegulomeLogoFinal.gif"
-          alt="clickable image"
-          width="0"
-          height="0"
-          sizes="100vw"
-          className="w-full h-auto"
-          priority
-        /> */}
         <Logo />
         <span className="sr-only">Home</span>
       </Link>
