@@ -37,8 +37,8 @@ const PINNED_FILES_GRCH38 = [
   },
   {
     file_format: "vgenes-dir",
-    href: "https://encoded-build.s3.amazonaws.com/browser/GRCh38/GRCh38.vgenes-dir",
-    title: "GENCODE V29",
+    href: "https://encoded-build.s3.amazonaws.com/browser/GRCh38/GRCh38.v43.vgenes-dir",
+    title: "GENCODE V43",
   },
   {
     title: "dbSNP (153)",
@@ -53,7 +53,7 @@ const PINNED_FILES_GRCH38 = [
   },
   {
     file_format: "bigBed",
-    path: "https://encode-public.s3.amazonaws.com/2021/09/08/67d00c9a-6924-4a86-a592-7bfab4ecb2ad/ENCFF081NFZ.bigBed",
+    path: "https://encode-public.s3.amazonaws.com/2023/02/27/aef7a676-0233-4ada-9992-6746f77e209e/ENCFF217ARC.bigBed",
     dataset: "/annotations/ENCSR487PRC/",
     title: "cCRE, all",
   },
