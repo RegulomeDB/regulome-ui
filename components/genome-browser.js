@@ -35,6 +35,7 @@ const PINNED_FILES_GRCH38 = [
     file_format: "vdna-dir",
     href: "https://encoded-build.s3.amazonaws.com/browser/GRCh38/GRCh38.vdna-dir",
   },
+  // genes track file source: https://data.igvf.org/reference-files/IGVFFI7217ZMJZ/
   {
     file_format: "vgenes-dir",
     href: "https://encoded-build.s3.amazonaws.com/browser/GRCh38/GRCh38.v43.vgenes-dir",
