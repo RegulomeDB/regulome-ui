@@ -335,7 +335,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
 
   function ResetButton() {
     return (
-      <button className="reset-browser-button bg-background">
+      <button className="reset-browser-button rounded dark:rounded-lg">
         <ArrowUturnLeftIcon className="h-5" />
         <span>Reset to query variant label</span>
       </button>
@@ -376,6 +376,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
         tracks,
       });
       GenomeVisualizer.setTheme(darkMode.enabled ? "dark" : "light");
+      // GenomeVisualizer.setTheme("light");
       visualizer.render(
         {
           width: document.getElementById("browser").clientWidth,
@@ -397,7 +398,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
       function ResetButton() {
         return (
           <button
-            className="reset-browser-button bg-background rounded dark:rounded-lg"
+            className="reset-browser-button rounded dark:rounded-lg"
             onClick={() => visualizer.setLocation({ contig: chr, x0, x1 })}
           >
             <ArrowUturnLeftIcon className="h-5 px-2 fill-data-value" />
@@ -417,7 +418,7 @@ export default function GenomeBrowser({ files, assembly, coordinates }) {
         <div className="tall-browser-container">
           <GenomeLegend />
           <>{func}</>
-          <div id="browser" className="valis-browser" />
+          <div id="browser" className="valis-browser text-black" />
         </div>
       ) : (
         <DataItemValue>

@@ -170,7 +170,7 @@ export class GenomeBrowserFacets extends React.Component {
           <span>Refine your search</span>
         </Button>
         {this.state.facetDisplay ? (
-          <div className="grid grid-cols-5 border bg-gray-100 rounded-md gap-2 mb-4">
+          <div className="grid grid-cols-5 border bg-background rounded-md gap-2 mb-4">
             {facetParameters.map((facet, facetIndex) => {
               if (facet.typeahead) {
                 return (
@@ -299,16 +299,11 @@ export function Facet(props) {
     <div className="ml-2">
       <h4 className="text-left underline">{facetTitle}</h4>
       {typeahead ? (
-        <div className="flex" role="search">
+        <div className="flex py-2" role="search">
           <MagnifyingGlassIcon className="h-5 w-5" />
           <div>
             <input
-              style={{
-                "border-radius": "5px",
-                padding: "6px 2px 2px",
-                width: "100%",
-                "font-size": "0.9rem",
-              }}
+              className="rounded text-black font-sm px-2 w-full"
               type="search"
               aria-label={`Search to filter list of terms for ${facetName} facet`}
               placeholder="Search"
@@ -370,7 +365,7 @@ class FacetButton extends React.Component {
       buttonLabel.indexOf("(0)") > -1 &&
       !selectedFacets.includes(`${buttonName}AND${facetLabel}`);
     const isSelected = selectedFacets.includes(`${buttonName}AND${facetLabel}`);
-    const textColor = isDisabled ? "text-gray-400" : "hover:bg-gray-200";
+    const textColor = isDisabled ? "text-gray-400" : "hover:bg-nav-highlight";
     const borderStyle = isSelected ? "border-solid border-2 border-brand" : "";
     return (
       <button
