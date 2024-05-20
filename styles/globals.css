@@ -271,6 +271,7 @@
  */
 .dark {
   --color-background: #111827;
+  --color-brand: #69ab5a;
   --color-brand-accent: #444444;
   --color-brand-highlight: #860f2d;
   --color-data-background: #0b0f19;
@@ -288,7 +289,7 @@
   --color-button-secondary-border: #36582e;
   --color-button-selected-border: #36582e;
   --color-button-warning-border: #c93638;
-  --color-button-secondary-label: #36582e;
+  --color-button-secondary-label: #69ab5a;
 
   --color-button-primary-background-disabled: #3e4864;
   --color-button-warning-background-disabled: #6b2f30;

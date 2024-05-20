@@ -333,7 +333,6 @@ export default function NearbyDiagram({
                 y1={0}
                 y2={zoomInIconPositionForSequence}
                 stroke="#e9d66b"
-                strokeDasharray="40,8"
                 strokeWidth={3}
                 opacity="0.8"
               />
@@ -345,7 +344,6 @@ export default function NearbyDiagram({
                 y1={sequencePositionY}
                 y2={viewBoxHeight}
                 stroke="#e9d66b"
-                strokeDasharray="40,8"
                 strokeWidth={baseWidth}
                 opacity="0.5"
               />
