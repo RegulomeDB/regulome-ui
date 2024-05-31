@@ -67,29 +67,6 @@ export default function BarChart({
         organs[0] && GtexColor[organs[0]]
           ? GtexColor[organs[0]].hex
           : "#808080";
-      const organsScore = organs.map((organ) =>
-        GtexColor[organ] ? GtexColor[organ].priority : 99
-      );
-      const organsColor = organs.map((organ) =>
-        GtexColor[organ] ? GtexColor[organ].hex : "#808080"
-      );
-      // We elimited all the cases that has duplicated lowest priority.
-      // But I just keep the code here to check duplication in case
-      // especially if we have more data in the future.
-      if (organs.length >= 2 && organsScore[0] === organsScore[1]) {
-        const lastIndexPriority = organsScore.lastIndexOf(organsScore[0]);
-        const firstColor = organsColor[0];
-        const organsColorSub = organsColor.slice(0, lastIndexPriority + 1);
-        if (organsColorSub.some((x) => x !== firstColor)) {
-          console.log(
-            biosample,
-            ":",
-            organs.join(", "),
-            organsScore.join(", "),
-            organsColor.join(", ")
-          );
-        }
-      }
     }
     return groupCountByBiosample;
   }, {});
