@@ -14,7 +14,7 @@ import { Button, ButtonLink } from "./form-elements";
 
 // To dynamically load component QTLChart on the client side,
 // use the ssr option to disable server-rendering since QTLChart relies on browser APIs like window.
-const QTLChart = dynamic(() => import("./qtl-chart"), {
+const QTLChart = dynamic(() => import("./bar-chart"), {
   ssr: false,
 });
 
@@ -115,7 +115,10 @@ export function QTLDataView({
                       Grouped by biosamples
                     </div>
                     <div className="h-80 border-2 border-panel p-1">
-                      <QTLChart qtlData={data} />
+                      <QTLChart
+                        data={data}
+                        datasetsLabel="Number of QTL datasets"
+                      />
                     </div>
                   </div>
                 </div>
@@ -123,7 +126,7 @@ export function QTLDataView({
             </DataPanel>
           ) : (
             <DataPanel>
-              <QTLChart qtlData={data} />
+              <QTLChart data={data} datasetsLabel="Number of QTL datasets" />
             </DataPanel>
           )}
           {caQTLData.length > 0 && (

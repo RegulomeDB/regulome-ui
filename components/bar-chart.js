@@ -29,8 +29,9 @@ ChartJS.register(
   Legend
 );
 
-export default function AccessibilityChart({
-  accessibilityData,
+export default function BarChart({
+  data,
+  datasetsLabel,
   height = 600,
   thumbnail,
 }) {
@@ -38,22 +39,21 @@ export default function AccessibilityChart({
   const labelColor = darkMode.enabled ? colors.white : colors.gray[800];
   const gridColor = darkMode.enabled ? colors.gray[700] : colors.gray[200];
   /**
-   * Group datasets by dataset.biosample_ontology.term_name and get a count for each group.
-   * the counts looks like this:
+   * Group datasets by dataset.biosample_ontology.term_name and get a count and color for each group.
+   * the returned data looks like this:
    * {
-   *   spleen: 4,
-   *   ovary: 1,
-   *   pancreas: 1,
+   *     HG03575: {count: 1, color: '#FF00BB'},
+   *     NCI-H929: {count: 1, color: '#C18D8D'}
    * }
-   *
    **/
-  const counts = accessibilityData.reduce((groupCountByBiosample, dataset) => {
+  const counts = data.reduce((groupCountByBiosample, dataset) => {
     const biosample = dataset.biosample_ontology.term_name;
     if (biosample in groupCountByBiosample) {
       groupCountByBiosample[biosample].count += 1;
     } else {
       groupCountByBiosample[biosample] = {};
       groupCountByBiosample[biosample].count = 1;
+      // find the organ with lowest priority for the biosample
       const organs = dataset.biosample_ontology.organ_slims;
       organs.sort((a, b) => {
         const scoreA = GtexColor[a] ? GtexColor[a].priority : 99;
@@ -67,8 +67,24 @@ export default function AccessibilityChart({
       const organsScore = organs.map((organ) =>
         GtexColor[organ] ? GtexColor[organ].priority : 99
       );
+      const organsColor = organs.map((organ) =>
+        GtexColor[organ] ? GtexColor[organ].hex : "#808080"
+      );
+      // We should elimited all the cases that has duplicated lowest priority.
+      // But I just keep the code here to check duplication in case
       if (organs.length >= 2 && organsScore[0] === organsScore[1]) {
-        console.log(organs.join(", "), organsScore.join(", "));
+        const lastIndexPriority = organsScore.lastIndexOf(organsScore[0]);
+        const firstColor = organsColor[0];
+        const organsColorSub = organsColor.slice(0, lastIndexPriority + 1);
+        if (organsColorSub.some((x) => x !== firstColor)) {
+          console.log(
+            biosample,
+            ":",
+            organs.join(", "),
+            organsScore.join(", "),
+            organsColor.join(", ")
+          );
+        }
       }
     }
     return groupCountByBiosample;
@@ -88,11 +104,11 @@ export default function AccessibilityChart({
     biosamples = biosamples.slice(0, 10);
     organColors = organColors.slice(0, 10);
   }
-  const data = {
+  const chartData = {
     labels: biosamples,
     datasets: [
       {
-        label: "Number of accessibility datasets",
+        label: datasetsLabel,
         data: groupCounts,
         backgroundColor: organColors,
         maxBarThickness: 50,
@@ -102,21 +118,23 @@ export default function AccessibilityChart({
   return thumbnail ? (
     <Bar
       options={getBarChartThumbnailOptions(labelColor, gridColor)}
-      data={data}
+      data={chartData}
       height={height}
     />
   ) : (
     <Bar
       options={getBarChartOptions(labelColor, gridColor)}
-      data={data}
+      data={chartData}
       plugins={[zoomPlugin]}
       height={height}
     />
   );
 }
 
-AccessibilityChart.propTypes = {
-  accessibilityData: PropTypes.array.isRequired,
+BarChart.propTypes = {
+  data: PropTypes.array.isRequired,
+  // the label for datasets shown on chart
+  datasetsLabel: PropTypes.string.isRequired,
   // the height of the chart
   height: PropTypes.number,
   // whether this chart is a small thumbnail

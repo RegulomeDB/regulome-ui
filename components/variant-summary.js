@@ -27,13 +27,10 @@ import Sparkline from "./sparkline";
 
 // To dynamically load those components on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
-const AccessibilityChart = dynamic(() => import("./accessibility-chart"), {
+const BarChart = dynamic(() => import("./bar-chart"), {
   ssr: false,
 });
 const ChipDataBarChart = dynamic(() => import("./chip-data-bar-chart"), {
-  ssr: false,
-});
-const QTLChart = dynamic(() => import("./qtl-chart"), {
   ssr: false,
 });
 
@@ -300,8 +297,9 @@ export default function VariantSummary({
               datasets={accessibilityDatasets}
             >
               {accessibilityDatasets.length > 0 && (
-                <AccessibilityChart
-                  accessibilityData={accessibilityDatasets}
+                <BarChart
+                  data={accessibilityDatasets}
+                  datasetsLabel="Number of accessibility datasets"
                   height={500}
                   thumbnail
                 />
@@ -315,7 +313,12 @@ export default function VariantSummary({
               datasets={qtlDatasets}
             >
               {qtlDatasets.length > 0 && (
-                <QTLChart qtlData={qtlDatasets} height={500} thumbnail />
+                <BarChart
+                  data={qtlDatasets}
+                  datasetsLabel="Number of QTL datasets"
+                  height={500}
+                  thumbnail
+                />
               )}
             </Card>
             <Card
