@@ -28,7 +28,10 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
+/**
+ * BarChart is used for both accessibility bar chart and qtl bar chart.
+ * The data is grouped by biosamples and the bar is colored by organ with lowest priority in the organ slims
+ */
 export default function BarChart({
   data,
   datasetsLabel,
@@ -40,7 +43,7 @@ export default function BarChart({
   const gridColor = darkMode.enabled ? colors.gray[700] : colors.gray[200];
   /**
    * Group datasets by dataset.biosample_ontology.term_name and get a count and color for each group.
-   * the returned data looks like this:
+   * the data looks like this:
    * {
    *     HG03575: {count: 1, color: '#FF00BB'},
    *     NCI-H929: {count: 1, color: '#C18D8D'}
@@ -70,8 +73,9 @@ export default function BarChart({
       const organsColor = organs.map((organ) =>
         GtexColor[organ] ? GtexColor[organ].hex : "#808080"
       );
-      // We should elimited all the cases that has duplicated lowest priority.
+      // We elimited all the cases that has duplicated lowest priority.
       // But I just keep the code here to check duplication in case
+      // especially if we have more data in the future.
       if (organs.length >= 2 && organsScore[0] === organsScore[1]) {
         const lastIndexPriority = organsScore.lastIndexOf(organsScore[0]);
         const firstColor = organsColor[0];
