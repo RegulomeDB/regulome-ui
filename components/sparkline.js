@@ -14,6 +14,7 @@ import { Bar } from "react-chartjs-2";
 
 import GlobalContext from "./global-context";
 import { useContext } from "react";
+import { GtexColor } from "../lib/tissue-specific-score";
 
 ChartJS.register(
   CategoryScale,
@@ -31,6 +32,7 @@ ChartJS.register(
  */
 function getSparklineData(scores, maxBarThickness) {
   const labels = Object.keys(scores);
+  const colorsForOrgans = labels.map((label) => GtexColor[label].hex);
   const data = Object.values(scores).map((score) => parseFloat(score));
   return {
     labels,
@@ -38,7 +40,7 @@ function getSparklineData(scores, maxBarThickness) {
       {
         label: "Score",
         data,
-        backgroundColor: colors.cyan[700],
+        backgroundColor: colorsForOrgans,
         maxBarThickness,
       },
     ],

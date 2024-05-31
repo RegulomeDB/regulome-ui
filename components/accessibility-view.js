@@ -13,7 +13,7 @@ import { Button, ButtonLink } from "./form-elements";
 
 // To dynamically load component AccessibilityChart on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
-const AccessibilityChart = dynamic(() => import("./accessibility-chart"), {
+const AccessibilityChart = dynamic(() => import("./bar-chart"), {
   ssr: false,
 });
 
@@ -111,7 +111,10 @@ export function AccessibilityDataView({
                       Grouped by biosamples
                     </div>
                     <div className="h-80 border-2 border-panel p-1">
-                      <AccessibilityChart accessibilityData={data} />
+                      <AccessibilityChart
+                        data={data}
+                        datasetsLabel="Number of accessibility datasets"
+                      />
                     </div>
                   </div>
                 </div>
@@ -119,7 +122,10 @@ export function AccessibilityDataView({
             </DataPanel>
           ) : (
             <DataPanel>
-              <AccessibilityChart accessibilityData={data} />
+              <AccessibilityChart
+                data={data}
+                datasetsLabel="Number of accessibility datasets"
+              />
             </DataPanel>
           )}
           <DataAreaTitle>Datasets Table</DataAreaTitle>
