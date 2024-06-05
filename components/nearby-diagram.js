@@ -176,10 +176,11 @@ export default function NearbyDiagram({
     displayRegionMid > targetCoordinatesStart
       ? viewBoxLength / 2 / (displayRegionEnd - targetCoordinatesStart)
       : viewBoxLength / 2 / (targetCoordinatesStart - displayRegionStart);
-  const offsetXForGene =
+  const geneScaleStartTick =
     displayRegionMid < targetCoordinatesStart
       ? displayRegionStart
       : targetCoordinatesStart - (displayRegionEnd - targetCoordinatesStart);
+  const geneScaleEndTick = geneScaleStartTick + viewBoxLength / scaleForGene;
   const regRegionPositionY =
     genePositionY + geneUnitHeight * nearbyData.genes.length + blankHeight;
   const regulatoryRegionsBySource = regulatoryRegions.reduce(
@@ -208,7 +209,12 @@ export default function NearbyDiagram({
   let zoomInIconPositionForVariantsInLd = null;
   let scaleForVariantsInLdPositionY = null;
   if (uniqueVariantLD.length > 0) {
-    needNewScale = needScaleForVariantLd(uniqueVariantLD, scaleForGene);
+    needNewScale = needScaleForVariantLd(
+      uniqueVariantLD,
+      scaleForGene,
+      geneScaleStartTick,
+      geneScaleEndTick
+    );
     if (needNewScale) {
       const variantsInLdRegionStart = uniqueVariantLD[0].start;
       const variantsInLdRegionEnd =
@@ -235,7 +241,7 @@ export default function NearbyDiagram({
       variantsInLdPositionY = scaleForVariantsInLdPositionY + blankHeight;
     } else {
       scaleForVariantInLd = scaleForGene;
-      offsetForVariantInLd = offsetXForGene;
+      offsetForVariantInLd = geneScaleStartTick;
       variantsInLdPositionY =
         regRegionPositionY +
         Object.keys(regulatoryRegionsBySource).length *
@@ -377,7 +383,7 @@ export default function NearbyDiagram({
                       textAnchor="middle"
                     >
                       {Math.floor(
-                        (index * tickWidth) / scaleForGene + offsetXForGene
+                        (index * tickWidth) / scaleForGene + geneScaleStartTick
                       )}
                     </text>
                   </g>
@@ -387,9 +393,9 @@ export default function NearbyDiagram({
             <g id="genes">
               {genes.map((gene, i) => {
                 let textX =
-                  gene.start < offsetXForGene
+                  gene.start < geneScaleStartTick
                     ? viewBoxMinX
-                    : (gene.start - offsetXForGene) * scaleForGene;
+                    : (gene.start - geneScaleStartTick) * scaleForGene;
                 const textLength = textTokenWidth * gene.name.length;
                 if (textX + textLength > viewBoxLength) {
                   textX = viewBoxLength - textLength;
@@ -399,7 +405,7 @@ export default function NearbyDiagram({
                     <rect
                       transform={`scale(${scaleForGene}, 1)`}
                       key={gene.name}
-                      x={gene.start - offsetXForGene}
+                      x={gene.start - geneScaleStartTick}
                       y={genePositionY + i * geneUnitHeight}
                       width={gene.end - gene.start}
                       height={geneRectHeight}
@@ -446,7 +452,7 @@ export default function NearbyDiagram({
                       return (
                         <rect
                           key={region.name}
-                          x={(region.start - offsetXForGene) * scaleForGene}
+                          x={(region.start - geneScaleStartTick) * scaleForGene}
                           y={
                             regRegionPositionY +
                             regulatoryRegionsBySource[source].index *
@@ -812,15 +818,33 @@ function getAltMaxNum(nearbySnps) {
   return max;
 }
 /**
+ * This function check whether a new scale is needed for displaying variants in LD.
+ * The new scale is needed only if the first variant is at the right of 1/4 viewbox,
+ * and the last variant is at the left of 3/4 viewbox,
+ * and there are two variants that are so close to each other that they are overlapping.
  * @param {*} variantLD a list of variant for checking
  * @param {*} scaleForGene the scale used to draw gene
  * @returns whether we need new scale to draw variants in LD
  */
-function needScaleForVariantLd(variantLD, scaleForGene) {
-  for (let i = 1; i < variantLD.length; i++) {
-    const distance = variantLD[i].start - variantLD[i - 1].start;
-    if (distance * scaleForGene < 1) {
-      return true;
+function needScaleForVariantLd(
+  variantLD,
+  scaleForGene,
+  geneScaleStartTick,
+  geneScaleEndTick
+) {
+  if (variantLD.length >= 2) {
+    const start = variantLD[0].start;
+    const end = variantLD[variantLD.length - 1].start;
+    if (
+      (start - geneScaleStartTick) * scaleForGene >= viewBoxLength / 4 &&
+      geneScaleEndTick - end >= viewBoxLength / 4
+    ) {
+      for (let i = 1; i < variantLD.length; i++) {
+        const distance = variantLD[i].start - variantLD[i - 1].start;
+        if (distance * scaleForGene < 1) {
+          return true;
+        }
+      }
     }
   }
   return false;
