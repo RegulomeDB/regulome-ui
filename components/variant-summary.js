@@ -134,6 +134,30 @@ export default function VariantSummary({
               <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
               <DataItemLabel>Global Score</DataItemLabel>
               <DataItemValue>{data.regulome_score.probability}</DataItemValue>
+              {data.variants[0].spdi && (
+                <>
+                  <DataItemLabel>SPDI</DataItemLabel>
+                  <DataItemValue>{data.variants[0].spdi}</DataItemValue>
+                  <DataItemLabel>Ref</DataItemLabel>
+                  <DataItemValue>{data.variants[0].ref}</DataItemValue>
+                  <DataItemLabel>Alt</DataItemLabel>
+                  <DataItemValue>{data.variants[0].alt}</DataItemValue>
+                </>
+              )}
+              {data.variants[0].rsids.length > 0 && (
+                <>
+                  <DataItemLabel>rsID</DataItemLabel>
+                  <DataItemValue>{data.variants[0].rsids}</DataItemValue>
+                </>
+              )}
+              {data.variants[0].gencode_category && (
+                <>
+                  <DataItemLabel>GENCODE Category</DataItemLabel>
+                  <DataItemValue>
+                    {data.variants[0].gencode_category}
+                  </DataItemValue>
+                </>
+              )}
               <DataItemLabel>Tissue Specific Scores</DataItemLabel>
               <div className="w-11/12">
                 <Sparkline
@@ -143,36 +167,44 @@ export default function VariantSummary({
                 />
               </div>
 
-              {Object.keys(hitSnps).length > 0 && (
+              {data.variants[0].freq && (
                 <>
                   {Object.keys(hitSnps).map((rsid) => (
                     <React.Fragment key={rsid}>
-                      <DataItemLabel>{rsid}</DataItemLabel>
+                      <DataItemLabel>Frequency</DataItemLabel>
                       <DataItemValue>
                         <div>
-                          {hitSnps[rsid].slice(0, 3).map((populationInfo) => (
-                            <div
-                              key={populationInfo.population}
-                            >{`${populationInfo.info} (${populationInfo.population})`}</div>
-                          ))}
+                          {Object.keys(data.variants[0].freq)
+                            .slice(0, 3)
+                            .map((key) => (
+                              <div
+                                key={key}
+                              >{`${key} (${data.variants[0].freq[key]})`}</div>
+                            ))}
                         </div>
-                        {hitSnps[rsid].length > 3 && showMoreFreqs ? (
+                        {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT &&
+                        showMoreFreqs ? (
                           <div>
-                            {hitSnps[rsid]
-                              .slice(3, hitSnps[rsid].length)
-                              .map((populationInfo) => (
+                            {Object.keys(data.variants[0].freq)
+                              .slice(
+                                DEFAULT_DISPLAY_COUNT,
+                                Object.keys(data.variants[0].freq).length
+                              )
+                              .map((key) => (
                                 <div
-                                  key={populationInfo.population}
-                                >{`${populationInfo.info} (${populationInfo.population})`}</div>
+                                  key={key}
+                                >{`${key} (${data.variants[0].freq[key]})`}</div>
                               ))}
                           </div>
                         ) : null}
-                        {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT ? (
+                        {Object.keys(data.variants[0].freq).length >
+                        DEFAULT_DISPLAY_COUNT ? (
                           <Button
                             type="secondary"
                             onClick={() => setShowMoreFreqs(!showMoreFreqs)}
                           >
-                            {hitSnps[rsid].length - 3}{" "}
+                            {Object.keys(data.variants[0].freq).length -
+                              DEFAULT_DISPLAY_COUNT}{" "}
                             {showMoreFreqs ? "fewer" : "more"}
                           </Button>
                         ) : null}

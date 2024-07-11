@@ -12,7 +12,7 @@ import errorObjectToProps from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
 
-export default function Summary({ data, queryString }) {
+export default function Summary({ data, queryString, ldQuery }) {
   const total = data.total || 0;
   const variants = [];
   const assembly = data.assembly;
@@ -23,6 +23,8 @@ export default function Summary({ data, queryString }) {
       variant.ref = data.variants[i].ref;
       variant.alt = data.variants[i].alt;
       variant.rsids = data.variants[i].rsids;
+      variant.spdi = data.variants[i].spdi;
+      variant.hgvs = data.variants[i].hgvs;
       variant.rank = data.variants[i].regulome_score.ranking;
       variant.score = parseFloat(data.variants[i].regulome_score.probability);
       variant.tissue_specific_scores =
@@ -71,7 +73,11 @@ export default function Summary({ data, queryString }) {
                 Download TSV
               </ButtonLink>
             </div>
-            <SummaryTable data={variants} assembly={assembly} />
+            <SummaryTable
+              data={variants}
+              assembly={assembly}
+              ldQuery={ldQuery}
+            />
           </>
         )}
       </DataPanel>
@@ -85,10 +91,16 @@ export default function Summary({ data, queryString }) {
 Summary.propTypes = {
   data: PropTypes.object.isRequired,
   queryString: PropTypes.string.isRequired,
+  ldQuery: PropTypes.string.isRequired,
 };
 
 export async function getServerSideProps({ query }) {
   const queryString = getQueryStringFromServerQuery(query);
+  const ldQuery = query.ld
+    ? query.ancestry
+      ? `&r2=${query.r2}&ancestry=${query.ancestry}&ld=true`
+      : `&r2=${query.r2}&ld=true`
+    : "";
   const request = new FetchRequest();
   const data = await request.getObject(`/summary?${queryString}`);
   if (FetchRequest.isResponseSuccess(data)) {
@@ -114,6 +126,7 @@ export async function getServerSideProps({ query }) {
         breadcrumbs,
         pageContext: { title: "Summary" },
         queryString,
+        ldQuery,
       },
     };
   }

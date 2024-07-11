@@ -16,25 +16,37 @@ const summaryColumnsGRCh38 = [
   {
     id: "chrom_location",
     title: "Chromosome location",
-    display: ({ source }) => {
-      const url = `/search?regions=${source.chrom_location}&genome=${source.assembly}&r2=0.8&ld=true`;
+    display: ({ source, meta }) => {
+      const url = source.spdi
+        ? `/search?regions=${source.spdi}&genome=${source.assembly}${meta.ldQuery}`
+        : `/search?regions=${source.chrom_location}&genome=${source.assembly}${meta.ldQuery}`;
       return <Link href={url}>{source.chrom_location}</Link>;
     },
   },
   {
     id: "ref",
     title: "Ref",
-    display: ({ source }) => `${source.ref.join(", ")}`,
+    display: ({ source }) =>
+      `${Array.isArray(source.ref) ? source.ref.join(", ") : source.ref}`,
   },
   {
     id: "alt",
     title: "Alt",
-    display: ({ source }) => `${source.alt.join(", ")}`,
+    display: ({ source }) =>
+      `${Array.isArray(source.alt) ? source.alt.join(", ") : source.alt}`,
   },
   {
     id: "rsids",
     title: "dbSNP IDs",
     display: ({ source }) => `${source.rsids.join(", ")}`,
+  },
+  {
+    id: "spdi",
+    title: "SPDI",
+  },
+  {
+    id: "hgvs",
+    title: "HGVS",
   },
   {
     id: "rank",
@@ -87,7 +99,7 @@ const summaryColumnsHg19 = [
     id: "chrom_location",
     title: "Chromosome location",
     display: ({ source }) => {
-      const url = `/search?regions=${source.chrom_location}&genome=${source.assembly}&r2=0.8&ld=true`;
+      const url = `/search?regions=${source.chrom_location}&genome=${source.assembly}`;
       return <Link href={url}>{source.chrom_location}</Link>;
     },
   },
@@ -118,15 +130,15 @@ const summaryColumnsHg19 = [
 
 /**
  * Display a sortable table of the given data.
- */ export default function SummaryTable({ data, assembly }) {
+ */ export default function SummaryTable({ data, assembly, ldQuery }) {
   const columns =
     assembly === "GRCh38" ? summaryColumnsGRCh38 : summaryColumnsHg19;
   return (
     <SortableGrid
       data={data}
       columns={columns}
-      keyProp="chrom_location"
       initialSort={initialSort}
+      meta={{ ldQuery }}
       pager={{}}
     />
   );
@@ -136,4 +148,6 @@ SummaryTable.propTypes = {
   // data to display
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   assembly: PropTypes.string.isRequired,
+  // query string for LD data
+  ldQuery: PropTypes.string.isRequired,
 };

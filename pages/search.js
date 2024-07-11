@@ -202,6 +202,14 @@ export async function getServerSideProps({ query }) {
   const request = new FetchRequest();
   const data = await request.getObject(`/search?${queryString}`);
   if (FetchRequest.isResponseSuccess(data)) {
+    if (data["@type"][0] === "summary") {
+      return {
+        redirect: {
+          destination: `/summary?${queryString}`,
+          permanent: true,
+        },
+      };
+    }
     let motifDocList = [];
     let variantLD = [];
     let nearbyData = {};
