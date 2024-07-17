@@ -24,15 +24,15 @@ const exampleCoordinate = "chr9:4575119-4575120";
 const exampleSpdi = "NC_000009.12:4575119:G:A";
 const exampleHgvs = "NC_000009.12:g.4575120G>A";
 
+const MAF_VALUE = 0.01;
+const MAF_SOURCE = "bravo_af";
+
 export default function Query() {
   const [isOpen, setIsOpen] = useState(false);
-  const [maf, setMaf] = useState("0.01");
   const [ancestry, setAncestry] = useState("");
   const [r2, setR2] = useState("0.8");
   const [textInput, setTextInput] = useState("");
   const [includeVariantsInLD, setIncludeVariantsInLD] = useState(true);
-  const [modifyMaf, setModifyMaf] = useState(false);
-  const [source, setSource] = useState("bravo_af");
   const [ldFieldsHidden, setLdFieldsHidden] = useState(false);
   const [isGrch38, setIsGrch38] = useState(true);
 
@@ -54,8 +54,8 @@ export default function Query() {
         const query = {
           regions,
           genome: assembly,
-          source,
-          maf,
+          source: MAF_SOURCE,
+          maf: MAF_VALUE,
         };
         if (includeVariantsInLD) {
           query.r2 = r2;
@@ -177,81 +177,6 @@ export default function Query() {
                 placeholder="Enter a value between 0.80  and 0.99, default to 0.8"
                 onChange={(e) => setR2(e.target.value)}
               ></textarea>
-            </div>
-          </div>
-
-          <div className="flex items-center mb-6">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="include">Modify MAF Score</DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <input
-                className="mr-1"
-                name="modify"
-                type="checkbox"
-                checked={modifyMaf}
-                onChange={(e) => {
-                  setModifyMaf(e.target.checked);
-                }}
-              />
-            </div>
-          </div>
-          <div
-            className={`flex items-center mb-6 ${modifyMaf ? "" : "hidden"}`}
-          >
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="source">MAF Source</DataItemLabel>
-            </div>
-            <div className="w-2/3 relative">
-              <select
-                className={inputClassName}
-                name="source"
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-              >
-                <option value="bravo_af">bravo_af</option>
-                <option value="gnomad_af_total">gnomad_af_total</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
-                <svg
-                  className="fill-current h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className={`flex items-center mb-6 ${modifyMaf ? "" : "hidden"}`}
-          >
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="maf">MAF Score</DataItemLabel>
-            </div>
-            <div className="w-2/3 relative">
-              <select
-                className={inputClassName}
-                name="maf"
-                value={maf}
-                onChange={(e) => setMaf(e.target.value)}
-              >
-                <option value="0.01" defaultValue>
-                  0.01
-                </option>
-                <option value="0.02">0.02</option>
-                <option value="0.05">0.05</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
-                <svg
-                  className="fill-current h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
-              </div>
             </div>
           </div>
 

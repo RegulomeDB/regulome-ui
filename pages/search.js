@@ -248,10 +248,9 @@ export async function getServerSideProps({ query }) {
         variantLD,
         breadcrumbs,
         pageContext: {
-          title:
-            data.query_coordinates.length < 1
-              ? "Search"
-              : `${data.query_coordinates[0]} (${data.regulome_score.probability})`,
+          title: data.variants[0].spdi
+            ? `${data.variants[0].spdi} (${data.regulome_score.probability})`
+            : `${data.query_coordinates[0]} (${data.regulome_score.probability})`,
         },
         queryString,
       },

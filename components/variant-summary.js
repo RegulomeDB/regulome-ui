@@ -96,77 +96,89 @@ export default function VariantSummary({
     <>
       <DataAreaTitle>Scores</DataAreaTitle>
       {data.assembly === "GRCh38" ? (
-        <div className="grid grid-cols-1 lg:space-x-4 lg:grid-cols-3">
-          <DataPanel className="grid place-items-center">
-            <div className="relative w-64">
-              <div>
-                <BodyMapThumbnailAndModal
-                  data={data["@graph"]}
-                  assembly={data.assembly}
-                  organFilters={organFilters}
-                  handleClickOrgan={handleClickOrgan}
-                  getOrganFacetsForTissue={getOrganFacetsForTissueScore}
-                  normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-                  colorBy={"Colored by tissue specific score"}
-                  width={"w-10/12"}
-                />
-                {organFilters.length > 0 && (
-                  <Selections
-                    filters={organFilters}
-                    clearFilterFunc={handleClickOrgan}
+        <>
+          <div className="grid grid-cols-1 lg:space-x-4 lg:grid-cols-3">
+            <DataPanel className="grid place-items-center">
+              <div className="relative w-64">
+                <div>
+                  <BodyMapThumbnailAndModal
+                    data={data["@graph"]}
+                    assembly={data.assembly}
+                    organFilters={organFilters}
+                    handleClickOrgan={handleClickOrgan}
+                    getOrganFacetsForTissue={getOrganFacetsForTissueScore}
+                    normalizedTissueSpecificScore={
+                      normalizedTissueSpecificScore
+                    }
+                    colorBy={"Colored by tissue specific score"}
+                    width={"w-10/12"}
                   />
+                  {organFilters.length > 0 && (
+                    <Selections
+                      filters={organFilters}
+                      clearFilterFunc={handleClickOrgan}
+                    />
+                  )}
+                </div>
+                <div className="absolute top-12 right-6 h-48">
+                  <TissueScoreBar
+                    normalizedTissueSpecificScore={
+                      normalizedTissueSpecificScore
+                    }
+                  />
+                </div>
+              </div>
+            </DataPanel>
+            <DataPanel className="col-span-2">
+              <DataArea>
+                <DataItemLabel>Searched Coordinates</DataItemLabel>
+                <DataItemValue>{data.query_coordinates[0]}</DataItemValue>
+                <DataItemLabel>Genome Assembly</DataItemLabel>
+                <DataItemValue>{data.assembly}</DataItemValue>
+                <DataItemLabel>Global Rank</DataItemLabel>
+                <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
+                <DataItemLabel>Global Score</DataItemLabel>
+                <DataItemValue>{data.regulome_score.probability}</DataItemValue>
+                <DataItemLabel>Tissue Specific Scores</DataItemLabel>
+                <div className="w-11/12">
+                  <Sparkline
+                    scores={data.regulome_score.tissue_specific_scores}
+                    maxBarThickness={8}
+                    thumbnail
+                  />
+                </div>
+                {data.variants[0].spdi && (
+                  <>
+                    <DataItemLabel>SPDI</DataItemLabel>
+                    <DataItemValue>{data.variants[0].spdi}</DataItemValue>
+                    <DataItemLabel>HGVS</DataItemLabel>
+                    <DataItemValue>{data.variants[0].hgvs}</DataItemValue>
+                    <DataItemLabel>Ref</DataItemLabel>
+                    <DataItemValue>{data.variants[0].ref}</DataItemValue>
+                    <DataItemLabel>Alt</DataItemLabel>
+                    <DataItemValue>{data.variants[0].alt}</DataItemValue>
+                  </>
                 )}
-              </div>
-              <div className="absolute top-12 right-6 h-48">
-                <TissueScoreBar
-                  normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-                />
-              </div>
-            </div>
-          </DataPanel>
-          <DataPanel className="col-span-2">
+                {data.variants[0].rsids.length > 0 && (
+                  <>
+                    <DataItemLabel>rsID</DataItemLabel>
+                    <DataItemValue>{data.variants[0].rsids}</DataItemValue>
+                  </>
+                )}
+                {data.variants[0].gencode_category && (
+                  <>
+                    <DataItemLabel>GENCODE Category</DataItemLabel>
+                    <DataItemValue>
+                      {data.variants[0].gencode_category}
+                    </DataItemValue>
+                  </>
+                )}
+              </DataArea>
+            </DataPanel>
+          </div>
+          <DataAreaTitle>Variant Frequencies</DataAreaTitle>
+          <DataPanel>
             <DataArea>
-              <DataItemLabel>Searched Coordinates</DataItemLabel>
-              <DataItemValue>{data.query_coordinates[0]}</DataItemValue>
-              <DataItemLabel>Genome Assembly</DataItemLabel>
-              <DataItemValue>{data.assembly}</DataItemValue>
-              <DataItemLabel>Global Rank</DataItemLabel>
-              <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
-              <DataItemLabel>Global Score</DataItemLabel>
-              <DataItemValue>{data.regulome_score.probability}</DataItemValue>
-              {data.variants[0].spdi && (
-                <>
-                  <DataItemLabel>SPDI</DataItemLabel>
-                  <DataItemValue>{data.variants[0].spdi}</DataItemValue>
-                  <DataItemLabel>Ref</DataItemLabel>
-                  <DataItemValue>{data.variants[0].ref}</DataItemValue>
-                  <DataItemLabel>Alt</DataItemLabel>
-                  <DataItemValue>{data.variants[0].alt}</DataItemValue>
-                </>
-              )}
-              {data.variants[0].rsids.length > 0 && (
-                <>
-                  <DataItemLabel>rsID</DataItemLabel>
-                  <DataItemValue>{data.variants[0].rsids}</DataItemValue>
-                </>
-              )}
-              {data.variants[0].gencode_category && (
-                <>
-                  <DataItemLabel>GENCODE Category</DataItemLabel>
-                  <DataItemValue>
-                    {data.variants[0].gencode_category}
-                  </DataItemValue>
-                </>
-              )}
-              <DataItemLabel>Tissue Specific Scores</DataItemLabel>
-              <div className="w-11/12">
-                <Sparkline
-                  scores={data.regulome_score.tissue_specific_scores}
-                  maxBarThickness={8}
-                  thumbnail
-                />
-              </div>
-
               {data.variants[0].freq && (
                 <>
                   {Object.keys(hitSnps).map((rsid) => (
@@ -215,7 +227,7 @@ export default function VariantSummary({
               )}
             </DataArea>
           </DataPanel>
-        </div>
+        </>
       ) : (
         <DataPanel>
           <DataArea>

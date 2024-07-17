@@ -1,6 +1,12 @@
 import PropTypes from "prop-types";
 import Breadcrumbs from "../components/breadcrumbs";
-import { DataPanel, DataAreaTitle } from "../components/data-area";
+import {
+  DataPanel,
+  DataAreaTitle,
+  DataArea,
+  DataItemLabel,
+  DataItemValue,
+} from "../components/data-area";
 import { ButtonLink } from "../components/form-elements";
 import Navigation from "../components/navigation";
 import Notifications from "../components/notifications";
@@ -47,6 +53,14 @@ export default function Summary({ data, queryString, ldQuery }) {
       <Navigation />
       <Breadcrumbs />
       <PagePreamble />
+      <DataAreaTitle>Query</DataAreaTitle>
+      <DataPanel>
+        <DataArea>
+          <DataItemLabel>Query</DataItemLabel>
+          <DataItemValue>{queryString}</DataItemValue>
+        </DataArea>
+      </DataPanel>
+      <DataAreaTitle>Result</DataAreaTitle>
       <DataPanel>
         <DataAreaTitle>
           This search has found <b>{total}</b> variant(s).{" "}
