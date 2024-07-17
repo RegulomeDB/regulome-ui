@@ -30,10 +30,10 @@ export default function Query() {
   const [ancestry, setAncestry] = useState("");
   const [r2, setR2] = useState("0.8");
   const [textInput, setTextInput] = useState("");
-  const [includeVariantsInLD, setIncludeVariantsInLD] = useState(false);
+  const [includeVariantsInLD, setIncludeVariantsInLD] = useState(true);
   const [modifyMaf, setModifyMaf] = useState(false);
   const [source, setSource] = useState("bravo_af");
-  const [ldFieldsHidden, setLdFieldsHidden] = useState(true);
+  const [ldFieldsHidden, setLdFieldsHidden] = useState(false);
   const [isGrch38, setIsGrch38] = useState(true);
 
   // Handles the submit event on variants form submit.
@@ -88,7 +88,7 @@ export default function Query() {
         <form onSubmit={handleMultipleSubmit}>
           <div className="flex items-center mb-6">
             <div className="w-1/3">
-              <DataItemLabel>Region</DataItemLabel>
+              <DataItemLabel>Input Variants</DataItemLabel>
             </div>
             <div className="w-2/3">
               <textarea
@@ -107,7 +107,7 @@ export default function Query() {
           <div className="flex items-center mb-6">
             <div className="w-1/3">
               <DataItemLabel htmlFor="include">
-                Include variants in LD
+                Include Variants in LD
               </DataItemLabel>
             </div>
             <div className="w-2/3">
@@ -139,7 +139,7 @@ export default function Query() {
                 value={ancestry}
                 onChange={(e) => setAncestry(e.target.value)}
               >
-                <option value="">Select one...</option>
+                <option value="">ALL</option>
 
                 <option value="EAS">EAS</option>
                 <option value="EUR">EUR</option>
