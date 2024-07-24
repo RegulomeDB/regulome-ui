@@ -167,7 +167,9 @@ export default function VariantSummary({
                 {data.variants[0].rsids.length > 0 && (
                   <>
                     <DataItemLabel>rsID</DataItemLabel>
-                    <DataItemValue>{data.variants[0].rsids}</DataItemValue>
+                    <DataItemValue>
+                      {data.variants[0].rsids.join(", ")}
+                    </DataItemValue>
                   </>
                 )}
                 {data.variants[0].gencode_category && (
