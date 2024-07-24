@@ -29,11 +29,9 @@ const MAF_SOURCE = "bravo_af";
 
 export default function Query() {
   const [isOpen, setIsOpen] = useState(false);
-  const [ancestry, setAncestry] = useState("");
+  const [ancestry, setAncestry] = useState("AFR");
   const [r2, setR2] = useState("0.8");
   const [textInput, setTextInput] = useState("");
-  const [includeVariantsInLD, setIncludeVariantsInLD] = useState(true);
-  const [ldFieldsHidden, setLdFieldsHidden] = useState(false);
   const [isGrch38, setIsGrch38] = useState(true);
 
   // Handles the submit event on variants form submit.
@@ -57,12 +55,10 @@ export default function Query() {
           source: MAF_SOURCE,
           maf: MAF_VALUE,
         };
-        if (includeVariantsInLD) {
-          query.r2 = r2;
-          query.ld = true;
-          if (ancestry) {
-            query.ancestry = ancestry;
-          }
+        query.r2 = r2;
+        query.ld = true;
+        if (ancestry) {
+          query.ancestry = ancestry;
         }
         Router.push({
           pathname: "/summary",
@@ -104,31 +100,8 @@ export default function Query() {
               ></textarea>
             </div>
           </div>
-          <div className="flex items-center mb-6">
-            <div className="w-1/3">
-              <DataItemLabel htmlFor="include">
-                Include Variants in LD
-              </DataItemLabel>
-            </div>
-            <div className="w-2/3">
-              <input
-                className="mr-1"
-                name="include"
-                type="checkbox"
-                checked={includeVariantsInLD}
-                onChange={(e) => {
-                  setIncludeVariantsInLD(e.target.checked);
-                  setLdFieldsHidden(!e.target.checked);
-                }}
-              />
-            </div>
-          </div>
 
-          <div
-            className={`flex items-center mb-6 ${
-              ldFieldsHidden ? "hidden" : ""
-            }`}
-          >
+          <div className="flex items-center mb-6">
             <div className="w-1/3">
               <DataItemLabel htmlFor="ancestry">LD Ancestry</DataItemLabel>
             </div>
@@ -139,12 +112,11 @@ export default function Query() {
                 value={ancestry}
                 onChange={(e) => setAncestry(e.target.value)}
               >
-                <option value="">ALL</option>
-
+                <option value="AFR">AFR</option>
                 <option value="EAS">EAS</option>
                 <option value="EUR">EUR</option>
-                <option value="AFR">AFR</option>
                 <option value="SAS">SAS</option>
+                <option value="">ALL</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-800">
                 <svg
@@ -158,11 +130,7 @@ export default function Query() {
             </div>
           </div>
 
-          <div
-            className={`flex items-center mb-6 ${
-              ldFieldsHidden ? "hidden" : ""
-            }`}
-          >
+          <div className="flex items-center mb-6">
             <div className="w-1/3">
               <DataItemLabel htmlFor="r2">
                 R<sup>2</sup>{" "}

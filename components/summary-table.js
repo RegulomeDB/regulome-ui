@@ -15,7 +15,7 @@ const initialSort = {
 const summaryColumnsGRCh38 = [
   {
     id: "chrom_location",
-    title: "Chromosome location",
+    title: "Chromosome location + LD",
     display: ({ source, meta }) => {
       const url = source.spdi
         ? `/search?regions=${source.spdi}&genome=${source.assembly}${meta.ldQuery}`

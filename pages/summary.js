@@ -17,11 +17,16 @@ import { API_URL_GDS } from "../lib/constants";
 import errorObjectToProps from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
 import { getQueryStringFromServerQuery } from "../lib/query-utils";
+import { getMafNote } from "../lib/variant_data";
 
-export default function Summary({ data, queryString, ldQuery }) {
+export default function Summary({ data, query, queryString, ldQuery }) {
   const total = data.total || 0;
   const variants = [];
   const assembly = data.assembly;
+  const mafNote =
+    assembly === "GRCh38" && data.region_queries?.length > 0
+      ? getMafNote(data.region_queries, query.source, query.maf)
+      : "";
   if (total >= 1) {
     for (let i = 0; i < data.variants.length; i++) {
       const variant = {};
@@ -53,17 +58,9 @@ export default function Summary({ data, queryString, ldQuery }) {
       <Navigation />
       <Breadcrumbs />
       <PagePreamble />
-      <DataAreaTitle>Query</DataAreaTitle>
-      <DataPanel>
-        <DataArea>
-          <DataItemLabel>Query</DataItemLabel>
-          <DataItemValue>{queryString}</DataItemValue>
-        </DataArea>
-      </DataPanel>
-      <DataAreaTitle>Result</DataAreaTitle>
       <DataPanel>
         <DataAreaTitle>
-          This search has found <b>{total}</b> variant(s).{" "}
+          This search has found <b>{total}</b> variant(s).{mafNote}
           {total > variants.length ? (
             <span>
               {" "}
@@ -87,6 +84,14 @@ export default function Summary({ data, queryString, ldQuery }) {
                 Download TSV
               </ButtonLink>
             </div>
+            {assembly === "GRCh38" && (
+              <DataArea>
+                <DataItemLabel>Ancestry</DataItemLabel>
+                <DataItemValue>
+                  {query.ancestry ? query.ancestry : "ALL"}
+                </DataItemValue>
+              </DataArea>
+            )}
             <SummaryTable
               data={variants}
               assembly={assembly}
@@ -104,6 +109,7 @@ export default function Summary({ data, queryString, ldQuery }) {
 
 Summary.propTypes = {
   data: PropTypes.object.isRequired,
+  query: PropTypes.object.isRequired,
   queryString: PropTypes.string.isRequired,
   ldQuery: PropTypes.string.isRequired,
 };
@@ -139,6 +145,7 @@ export async function getServerSideProps({ query }) {
         data,
         breadcrumbs,
         pageContext: { title: "Summary" },
+        query,
         queryString,
         ldQuery,
       },

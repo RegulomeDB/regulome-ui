@@ -24,6 +24,7 @@ import { Card } from "./card";
 import Motifs from "./motifs-view";
 import ChromatinBarChart from "./chromatin-bar-chart";
 import Sparkline from "./sparkline";
+import { getSortedFreqKeys } from "../lib/variant_data";
 
 // To dynamically load those components on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
@@ -91,7 +92,11 @@ export default function VariantSummary({
     );
     setOrganFilters(filters);
   }
-
+  const freqKeys = data.variants[0].freq
+    ? Object.keys(data.variants[0].freq)
+    : [];
+  // freqKeys is an array contains possible keys like bravo_af and gnomad_af_total, etc. Sort the keys to make sure bravo_af is always the first one and gnomad_af_total is always the second one.
+  const sortedFreqKeys = getSortedFreqKeys(freqKeys);
   return (
     <>
       <DataAreaTitle>Scores</DataAreaTitle>
@@ -186,13 +191,11 @@ export default function VariantSummary({
                       <DataItemLabel>Frequency</DataItemLabel>
                       <DataItemValue>
                         <div>
-                          {Object.keys(data.variants[0].freq)
-                            .slice(0, 3)
-                            .map((key) => (
-                              <div
-                                key={key}
-                              >{`${key} (${data.variants[0].freq[key]})`}</div>
-                            ))}
+                          {sortedFreqKeys.slice(0, 3).map((key) => (
+                            <div
+                              key={key}
+                            >{`${key} (${data.variants[0].freq[key]})`}</div>
+                          ))}
                         </div>
                         {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT &&
                         showMoreFreqs ? (
