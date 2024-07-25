@@ -7,12 +7,11 @@ describe("query tests", () => {
     cy.contains("Submit").click();
     cy.url().should(
       "include",
-      "/search?regions=NC_000009.12%3A4575119%3AG%3AA&genome=GRCh38"
+      "/search?regions=NC_000009.12:4575119:G:A&genome=GRCh38&source=bravo_af&maf=0.01&r2=0.8&ld=true"
     );
   });
   it("it should navigate to summary page for multiple variants", () => {
     cy.visit("/");
-    cy.contains("Multiple variants").click();
     cy.contains("coordinates ranges").click();
     cy.contains("Submit").click();
     cy.url().should(

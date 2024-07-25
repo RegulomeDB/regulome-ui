@@ -202,6 +202,14 @@ export async function getServerSideProps({ query }) {
   const request = new FetchRequest();
   const data = await request.getObject(`/search?${queryString}`);
   if (FetchRequest.isResponseSuccess(data)) {
+    if (data["@type"][0] === "summary") {
+      return {
+        redirect: {
+          destination: `/summary?${queryString}`,
+          permanent: true,
+        },
+      };
+    }
     let motifDocList = [];
     let variantLD = [];
     let nearbyData = {};
@@ -240,10 +248,9 @@ export async function getServerSideProps({ query }) {
         variantLD,
         breadcrumbs,
         pageContext: {
-          title:
-            data.query_coordinates.length < 1
-              ? "Search"
-              : `${data.query_coordinates[0]} (${data.regulome_score.probability})`,
+          title: data.variants[0].spdi
+            ? `${data.variants[0].spdi} (${data.regulome_score.probability})`
+            : `${data.query_coordinates[0]} (${data.regulome_score.probability})`,
         },
         queryString,
       },

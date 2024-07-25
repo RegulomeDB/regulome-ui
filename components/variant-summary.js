@@ -24,6 +24,7 @@ import { Card } from "./card";
 import Motifs from "./motifs-view";
 import ChromatinBarChart from "./chromatin-bar-chart";
 import Sparkline from "./sparkline";
+import { getSortedFreqKeys } from "../lib/variant_data";
 
 // To dynamically load those components on the client side,
 // use the ssr option to disable server-rendering since AccessibilityChart relies on browser APIs like window.
@@ -91,88 +92,136 @@ export default function VariantSummary({
     );
     setOrganFilters(filters);
   }
-
+  const freqKeys = data.variants[0].freq
+    ? Object.keys(data.variants[0].freq)
+    : [];
+  // freqKeys is an array contains possible keys like bravo_af and gnomad_af_total, etc. Sort the keys to make sure bravo_af is always the first one and gnomad_af_total is always the second one.
+  const sortedFreqKeys = getSortedFreqKeys(freqKeys);
   return (
     <>
       <DataAreaTitle>Scores</DataAreaTitle>
       {data.assembly === "GRCh38" ? (
-        <div className="grid grid-cols-1 lg:space-x-4 lg:grid-cols-3">
-          <DataPanel className="grid place-items-center">
-            <div className="relative w-64">
-              <div>
-                <BodyMapThumbnailAndModal
-                  data={data["@graph"]}
-                  assembly={data.assembly}
-                  organFilters={organFilters}
-                  handleClickOrgan={handleClickOrgan}
-                  getOrganFacetsForTissue={getOrganFacetsForTissueScore}
-                  normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-                  colorBy={"Colored by tissue specific score"}
-                  width={"w-10/12"}
-                />
-                {organFilters.length > 0 && (
-                  <Selections
-                    filters={organFilters}
-                    clearFilterFunc={handleClickOrgan}
+        <>
+          <div className="grid grid-cols-1 lg:space-x-4 lg:grid-cols-3">
+            <DataPanel className="grid place-items-center">
+              <div className="relative w-64">
+                <div>
+                  <BodyMapThumbnailAndModal
+                    data={data["@graph"]}
+                    assembly={data.assembly}
+                    organFilters={organFilters}
+                    handleClickOrgan={handleClickOrgan}
+                    getOrganFacetsForTissue={getOrganFacetsForTissueScore}
+                    normalizedTissueSpecificScore={
+                      normalizedTissueSpecificScore
+                    }
+                    colorBy={"Colored by tissue specific score"}
+                    width={"w-10/12"}
                   />
+                  {organFilters.length > 0 && (
+                    <Selections
+                      filters={organFilters}
+                      clearFilterFunc={handleClickOrgan}
+                    />
+                  )}
+                </div>
+                <div className="absolute top-12 right-6 h-48">
+                  <TissueScoreBar
+                    normalizedTissueSpecificScore={
+                      normalizedTissueSpecificScore
+                    }
+                  />
+                </div>
+              </div>
+            </DataPanel>
+            <DataPanel className="col-span-2">
+              <DataArea>
+                <DataItemLabel>Searched Coordinates</DataItemLabel>
+                <DataItemValue>{data.query_coordinates[0]}</DataItemValue>
+                <DataItemLabel>Genome Assembly</DataItemLabel>
+                <DataItemValue>{data.assembly}</DataItemValue>
+                <DataItemLabel>Global Rank</DataItemLabel>
+                <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
+                <DataItemLabel>Global Score</DataItemLabel>
+                <DataItemValue>{data.regulome_score.probability}</DataItemValue>
+                <DataItemLabel>Tissue Specific Scores</DataItemLabel>
+                <div className="w-11/12">
+                  <Sparkline
+                    scores={data.regulome_score.tissue_specific_scores}
+                    maxBarThickness={8}
+                    thumbnail
+                  />
+                </div>
+                {data.variants[0].spdi && (
+                  <>
+                    <DataItemLabel>SPDI</DataItemLabel>
+                    <DataItemValue>{data.variants[0].spdi}</DataItemValue>
+                    <DataItemLabel>HGVS</DataItemLabel>
+                    <DataItemValue>{data.variants[0].hgvs}</DataItemValue>
+                    <DataItemLabel>Ref</DataItemLabel>
+                    <DataItemValue>{data.variants[0].ref}</DataItemValue>
+                    <DataItemLabel>Alt</DataItemLabel>
+                    <DataItemValue>{data.variants[0].alt}</DataItemValue>
+                  </>
                 )}
-              </div>
-              <div className="absolute top-12 right-6 h-48">
-                <TissueScoreBar
-                  normalizedTissueSpecificScore={normalizedTissueSpecificScore}
-                />
-              </div>
-            </div>
-          </DataPanel>
-          <DataPanel className="col-span-2">
+                {data.variants[0].rsids.length > 0 && (
+                  <>
+                    <DataItemLabel>rsID</DataItemLabel>
+                    <DataItemValue>
+                      {data.variants[0].rsids.join(", ")}
+                    </DataItemValue>
+                  </>
+                )}
+                {data.variants[0].gencode_category && (
+                  <>
+                    <DataItemLabel>GENCODE Category</DataItemLabel>
+                    <DataItemValue>
+                      {data.variants[0].gencode_category}
+                    </DataItemValue>
+                  </>
+                )}
+              </DataArea>
+            </DataPanel>
+          </div>
+          <DataAreaTitle>Variant Frequencies</DataAreaTitle>
+          <DataPanel>
             <DataArea>
-              <DataItemLabel>Searched Coordinates</DataItemLabel>
-              <DataItemValue>{data.query_coordinates[0]}</DataItemValue>
-              <DataItemLabel>Genome Assembly</DataItemLabel>
-              <DataItemValue>{data.assembly}</DataItemValue>
-              <DataItemLabel>Global Rank</DataItemLabel>
-              <DataItemValue>{data.regulome_score.ranking}</DataItemValue>
-              <DataItemLabel>Global Score</DataItemLabel>
-              <DataItemValue>{data.regulome_score.probability}</DataItemValue>
-              <DataItemLabel>Tissue Specific Scores</DataItemLabel>
-              <div className="w-11/12">
-                <Sparkline
-                  scores={data.regulome_score.tissue_specific_scores}
-                  maxBarThickness={8}
-                  thumbnail
-                />
-              </div>
-
-              {Object.keys(hitSnps).length > 0 && (
+              {data.variants[0].freq && (
                 <>
                   {Object.keys(hitSnps).map((rsid) => (
                     <React.Fragment key={rsid}>
-                      <DataItemLabel>{rsid}</DataItemLabel>
+                      <DataItemLabel>Frequency</DataItemLabel>
                       <DataItemValue>
                         <div>
-                          {hitSnps[rsid].slice(0, 3).map((populationInfo) => (
+                          {sortedFreqKeys.slice(0, 3).map((key) => (
                             <div
-                              key={populationInfo.population}
-                            >{`${populationInfo.info} (${populationInfo.population})`}</div>
+                              key={key}
+                            >{`${key} (${data.variants[0].freq[key]})`}</div>
                           ))}
                         </div>
-                        {hitSnps[rsid].length > 3 && showMoreFreqs ? (
+                        {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT &&
+                        showMoreFreqs ? (
                           <div>
-                            {hitSnps[rsid]
-                              .slice(3, hitSnps[rsid].length)
-                              .map((populationInfo) => (
+                            {Object.keys(data.variants[0].freq)
+                              .slice(
+                                DEFAULT_DISPLAY_COUNT,
+                                Object.keys(data.variants[0].freq).length
+                              )
+                              .map((key) => (
                                 <div
-                                  key={populationInfo.population}
-                                >{`${populationInfo.info} (${populationInfo.population})`}</div>
+                                  key={key}
+                                >{`${key} (${data.variants[0].freq[key]})`}</div>
                               ))}
                           </div>
                         ) : null}
-                        {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT ? (
+                        {Object.keys(data.variants[0].freq).length >
+                        DEFAULT_DISPLAY_COUNT ? (
                           <Button
                             type="secondary"
                             onClick={() => setShowMoreFreqs(!showMoreFreqs)}
                           >
-                            {hitSnps[rsid].length - 3}{" "}
+                            {Object.keys(data.variants[0].freq).length -
+                              DEFAULT_DISPLAY_COUNT}{" "}
                             {showMoreFreqs ? "fewer" : "more"}
                           </Button>
                         ) : null}
@@ -183,7 +232,7 @@ export default function VariantSummary({
               )}
             </DataArea>
           </DataPanel>
-        </div>
+        </>
       ) : (
         <DataPanel>
           <DataArea>
