@@ -40,7 +40,8 @@ const NearbyDiagram = dynamic(() => import("./nearby-diagram"), {
 });
 
 // Default number of populations to display for allele frequencies.
-const DEFAULT_DISPLAY_COUNT = 3;
+const DEFAULT_DISPLAY_COUNT_HG19 = 3;
+const DEFAULT_DISPLAY_COUNT_GRCH38 = 2;
 
 function Selections({ filters, clearFilterFunc }) {
   return (
@@ -183,7 +184,7 @@ export default function VariantSummary({
               </DataArea>
             </DataPanel>
           </div>
-          <DataAreaTitle>Variant Frequencies</DataAreaTitle>
+          <DataAreaTitle>Variant Allele Frequencies</DataAreaTitle>
           <DataPanel>
             <DataArea>
               {data.variants[0].freq && (
@@ -193,19 +194,21 @@ export default function VariantSummary({
                       <DataItemLabel>Frequency</DataItemLabel>
                       <DataItemValue>
                         <div>
-                          {sortedFreqKeys.slice(0, 3).map((key) => (
-                            <div
-                              key={key}
-                            >{`${key} (${data.variants[0].freq[key]})`}</div>
-                          ))}
+                          {sortedFreqKeys
+                            .slice(0, DEFAULT_DISPLAY_COUNT_GRCH38)
+                            .map((key) => (
+                              <div
+                                key={key}
+                              >{`${key} (${data.variants[0].freq[key]})`}</div>
+                            ))}
                         </div>
-                        {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT &&
+                        {sortedFreqKeys.length > DEFAULT_DISPLAY_COUNT_GRCH38 &&
                         showMoreFreqs ? (
                           <div>
-                            {Object.keys(data.variants[0].freq)
+                            {sortedFreqKeys
                               .slice(
-                                DEFAULT_DISPLAY_COUNT,
-                                Object.keys(data.variants[0].freq).length
+                                DEFAULT_DISPLAY_COUNT_GRCH38,
+                                sortedFreqKeys.length
                               )
                               .map((key) => (
                                 <div
@@ -215,13 +218,13 @@ export default function VariantSummary({
                           </div>
                         ) : null}
                         {Object.keys(data.variants[0].freq).length >
-                        DEFAULT_DISPLAY_COUNT ? (
+                        DEFAULT_DISPLAY_COUNT_GRCH38 ? (
                           <Button
                             type="secondary"
                             onClick={() => setShowMoreFreqs(!showMoreFreqs)}
                           >
                             {Object.keys(data.variants[0].freq).length -
-                              DEFAULT_DISPLAY_COUNT}{" "}
+                              DEFAULT_DISPLAY_COUNT_GRCH38}{" "}
                             {showMoreFreqs ? "fewer" : "more"}
                           </Button>
                         ) : null}
@@ -252,16 +255,22 @@ export default function VariantSummary({
                     <DataItemLabel>{rsid}</DataItemLabel>
                     <DataItemValue>
                       <div>
-                        {hitSnps[rsid].slice(0, 3).map((populationInfo) => (
-                          <div
-                            key={populationInfo.population}
-                          >{`${populationInfo.info} (${populationInfo.population})`}</div>
-                        ))}
+                        {hitSnps[rsid]
+                          .slice(0, DEFAULT_DISPLAY_COUNT_HG19)
+                          .map((populationInfo) => (
+                            <div
+                              key={populationInfo.population}
+                            >{`${populationInfo.info} (${populationInfo.population})`}</div>
+                          ))}
                       </div>
-                      {hitSnps[rsid].length > 3 && showMoreFreqs ? (
+                      {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT_HG19 &&
+                      showMoreFreqs ? (
                         <div>
                           {hitSnps[rsid]
-                            .slice(3, hitSnps[rsid].length)
+                            .slice(
+                              DEFAULT_DISPLAY_COUNT_HG19,
+                              hitSnps[rsid].length
+                            )
                             .map((populationInfo) => (
                               <div
                                 key={populationInfo.population}
@@ -269,12 +278,12 @@ export default function VariantSummary({
                             ))}
                         </div>
                       ) : null}
-                      {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT ? (
+                      {hitSnps[rsid].length > DEFAULT_DISPLAY_COUNT_HG19 ? (
                         <Button
                           type="secondary"
                           onClick={() => setShowMoreFreqs(!showMoreFreqs)}
                         >
-                          {hitSnps[rsid].length - 3}{" "}
+                          {hitSnps[rsid].length - DEFAULT_DISPLAY_COUNT_HG19}{" "}
                           {showMoreFreqs ? "fewer" : "more"}
                         </Button>
                       ) : null}
