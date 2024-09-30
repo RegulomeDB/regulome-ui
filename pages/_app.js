@@ -29,7 +29,10 @@ function Site({ Component, pageProps }) {
       }
     }
     function end(url) {
-      if (url.startsWith("/summary") || url.startsWith("/search")) {
+      if (
+        typeof url === "string" &&
+        (url.startsWith("/summary") || url.startsWith("/search"))
+      ) {
         setIsLoading(false);
       }
     }

@@ -214,23 +214,28 @@ export async function getServerSideProps({ query }) {
     let variantLD = [];
     let nearbyData = {};
     if (data.query_coordinates.length === 1) {
-      motifDocList = await fetchMotifDoc(request, data["@graph"]);
-      nearbyData = await fetchNearby(
-        request,
-        data.query_coordinates[0],
-        data.assembly
-      );
-      if (query.ld) {
-        const response = await fetchVariantLD(
+      try {
+        motifDocList = await fetchMotifDoc(request, data["@graph"]);
+        nearbyData = await fetchNearby(
           request,
           data.query_coordinates[0],
-          data.assembly,
-          query.r2,
-          query.ancestry
+          data.assembly
         );
-        if (Array.isArray(response)) {
-          variantLD = response;
+        if (query.ld) {
+          const response = await fetchVariantLD(
+            request,
+            data.query_coordinates[0],
+            data.assembly,
+            query.r2,
+            query.ancestry
+          );
+          if (Array.isArray(response)) {
+            variantLD = response;
+          }
         }
+      } catch (error) {
+        console.log(error);
+        return errorObjectToProps(error);
       }
     }
 
