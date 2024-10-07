@@ -38,7 +38,7 @@ const summaryColumnsGRCh38 = [
   {
     id: "rsids",
     title: "dbSNP IDs",
-    display: ({ source }) => `${source.rsids.join(", ")}`,
+    display: ({ source }) => `${source.rsids ? source.rsids.join(", ") : ""}`,
   },
   {
     id: "spdi",
@@ -116,7 +116,7 @@ const summaryColumnsHg19 = [
   {
     id: "rsids",
     title: "dbSNP IDs",
-    display: ({ source }) => `${source.rsids.join(", ")}`,
+    display: ({ source }) => `${source.rsids ? source.rsids.join(", ") : ""}`,
   },
   {
     id: "rank",
