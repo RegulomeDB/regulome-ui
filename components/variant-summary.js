@@ -165,7 +165,7 @@ export default function VariantSummary({
                     <DataItemValue>{data.variants[0].alt}</DataItemValue>
                   </>
                 )}
-                {data.variants[0].rsids.length > 0 && (
+                {data.variants[0].rsids?.length > 0 && (
                   <>
                     <DataItemLabel>rsID</DataItemLabel>
                     <DataItemValue>

@@ -319,6 +319,40 @@ export default function NearbyDiagram({
   const viewBoxHeight =
     motifPositionY + motifsList.length * geneUnitHeight + blankHeight * 2;
 
+  function getGeneScaleLabel(
+    index,
+    tickWidth,
+    scaleForGene,
+    geneScaleStartTick
+  ) {
+    const num = Math.floor(
+      (index * tickWidth) / scaleForGene + geneScaleStartTick
+    );
+    return num >= 0 ? num : "";
+  }
+
+  function getVariantScaleLabel(
+    index,
+    tickWidth,
+    scaleForVariantInLd,
+    offsetForVariantInLd
+  ) {
+    const num = Math.floor(
+      (index * tickWidth) / scaleForVariantInLd + offsetForVariantInLd
+    );
+    return num >= 0 ? num : "";
+  }
+
+  function getSequenceScaleLabel(
+    index,
+    tickWidth,
+    baseWidth,
+    offsetXForVariant
+  ) {
+    const num = Math.floor((index * tickWidth) / baseWidth + offsetXForVariant);
+    return num >= 0 ? num : "";
+  }
+
   return (
     <>
       <DataAreaTitle>Variant Nearby</DataAreaTitle>
@@ -382,8 +416,11 @@ export default function NearbyDiagram({
                       y={scaleForGenePositionY - tickHeight - 5}
                       textAnchor="middle"
                     >
-                      {Math.floor(
-                        (index * tickWidth) / scaleForGene + geneScaleStartTick
+                      {getGeneScaleLabel(
+                        index,
+                        tickWidth,
+                        scaleForGene,
+                        geneScaleStartTick
                       )}
                     </text>
                   </g>
@@ -521,9 +558,11 @@ export default function NearbyDiagram({
                               y={scaleForVariantsInLdPositionY - tickHeight - 5}
                               textAnchor="middle"
                             >
-                              {Math.floor(
-                                (index * tickWidth) / scaleForVariantInLd +
-                                  offsetForVariantInLd
+                              {getVariantScaleLabel(
+                                index,
+                                tickWidth,
+                                scaleForVariantInLd,
+                                offsetForVariantInLd
                               )}
                             </text>
                           </g>
@@ -617,8 +656,11 @@ export default function NearbyDiagram({
                       y={scaleForSequencePositionY - tickHeight - 5}
                       textAnchor="middle"
                     >
-                      {Math.floor(
-                        (index * tickWidth) / baseWidth + offsetXForVariant
+                      {getSequenceScaleLabel(
+                        index,
+                        tickWidth,
+                        baseWidth,
+                        offsetXForVariant
                       )}
                     </text>
                   </g>

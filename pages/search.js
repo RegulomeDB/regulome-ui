@@ -255,7 +255,9 @@ export async function getServerSideProps({ query }) {
         pageContext: {
           title: data.variants[0].spdi
             ? `${data.variants[0].spdi} (${data.regulome_score.probability})`
-            : `${data.query_coordinates[0]} (${data.regulome_score.probability})`,
+            : `${data.query_coordinates[0]} ${
+                data.regulome_score ? data.regulome_score.probability : ""
+              }`,
         },
         queryString,
       },
