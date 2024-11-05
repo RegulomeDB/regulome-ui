@@ -93,11 +93,15 @@ export default function VariantSummary({
     );
     setOrganFilters(filters);
   }
+  // get the list of frequency keys if the key has a non-null value
   const freqKeys = data.variants[0].freq
-    ? Object.keys(data.variants[0].freq)
+    ? Object.keys(data.variants[0].freq).filter(
+        (key) => data.variants[0].freq[key] !== null
+      )
     : [];
   // freqKeys is an array contains possible keys like bravo_af and gnomad_af_total, etc. Sort the keys to make sure bravo_af is always the first one and gnomad_af_total is always the second one.
   const sortedFreqKeys = getSortedFreqKeys(freqKeys);
+
   return (
     <>
       <DataAreaTitle>Scores</DataAreaTitle>
@@ -184,11 +188,11 @@ export default function VariantSummary({
               </DataArea>
             </DataPanel>
           </div>
-          <DataAreaTitle>Variant Allele Frequencies</DataAreaTitle>
-          <DataPanel>
-            <DataArea>
-              {data.variants[0].freq && (
-                <>
+          {sortedFreqKeys.length > 0 && (
+            <>
+              <DataAreaTitle>Variant Allele Frequencies</DataAreaTitle>
+              <DataPanel>
+                <DataArea>
                   {Object.keys(hitSnps).map((rsid) => (
                     <React.Fragment key={rsid}>
                       <DataItemLabel>Frequency</DataItemLabel>
@@ -217,13 +221,13 @@ export default function VariantSummary({
                               ))}
                           </div>
                         ) : null}
-                        {Object.keys(data.variants[0].freq).length >
+                        {sortedFreqKeys.length >
                         DEFAULT_DISPLAY_COUNT_GRCH38 ? (
                           <Button
                             type="secondary"
                             onClick={() => setShowMoreFreqs(!showMoreFreqs)}
                           >
-                            {Object.keys(data.variants[0].freq).length -
+                            {sortedFreqKeys.length -
                               DEFAULT_DISPLAY_COUNT_GRCH38}{" "}
                             {showMoreFreqs ? "fewer" : "more"}
                           </Button>
@@ -231,10 +235,10 @@ export default function VariantSummary({
                       </DataItemValue>
                     </React.Fragment>
                   ))}
-                </>
-              )}
-            </DataArea>
-          </DataPanel>
+                </DataArea>
+              </DataPanel>
+            </>
+          )}
         </>
       ) : (
         <DataPanel>
