@@ -391,7 +391,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                                 'ProjectName': {
                                     'Ref': 'TestDemoDeploymentPipelineCodePipelineUpdatePipelineSelfMutation212B9375'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"605d0c1620dff32c92d57c00cd8f6dad9bd16abe72817311ea354b050934a0f3\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"23ee736d5fd16edcc3a8afe9c61f8f29bb3681e2b263890124a5fc1a30965867\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -684,7 +684,7 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                                 'ProjectName': {
                                     'Ref': 'DevDeploymentPipelineCodePipelineUpdatePipelineSelfMutation49276B8C'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"605d0c1620dff32c92d57c00cd8f6dad9bd16abe72817311ea354b050934a0f3\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"23ee736d5fd16edcc3a8afe9c61f8f29bb3681e2b263890124a5fc1a30965867\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -977,7 +977,7 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                 'ProjectName': {
                                     'Ref': 'TestProductionDeploymentPipelineCodePipelineUpdatePipelineSelfMutation7B8F4173'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"605d0c1620dff32c92d57c00cd8f6dad9bd16abe72817311ea354b050934a0f3\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"23ee736d5fd16edcc3a8afe9c61f8f29bb3681e2b263890124a5fc1a30965867\"}]"
                             },
                             'InputArtifacts': [
                                 {
