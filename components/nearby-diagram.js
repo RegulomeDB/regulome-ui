@@ -82,30 +82,18 @@ const colorGenes = {
 // ENH - enhancer same as dELS
 // PRO - promoter same as PLS
 const colorCCREs = {
-  PLS: "#FF0000",
-  PRO: "#FF0000",
-  pELS: "#FFA700",
-  dELS: "#FFCD00",
-  ENH: "#FFCD00",
-  "CA-H3K4me3": "#FFAAAA",
-  "CA-CTCF": "#00B0F0",
-  CA: "#06DA93",
-  "CA-TF": "#BE28E5",
-  TF: "#D876EC",
-  "Low DNase": "#E1E1E1",
-  Unclassified: "#8C8C8C",
+  "PLS: Promoter-like signal": "#FF0000",
+  "pELS: proximal Enhancer-like signal": "#FFA700",
+  "dELS: distal Enhancer-like signal": "#FFCD00",
+  "CA-H3K4me3: chromatin accessible + H3K4me3 high signal": "#FFAAAA",
+  "CA-CTCF: chromatin accessible + CTCF binding": "#00B0F0",
+  "CA: chromatin accessible": "#06DA93",
+  "CA-TF: chromatin accessible + TF binding": "#BE28E5",
+  "TF: TF binding": "#D876EC",
 };
 
-const regRegionSourceOrder = [
-  "ENCODE_SCREEN (ccREs)",
-  "ENCODE_EpiRaction",
-  "ENCODE-E2G",
-  "ENCODE_MPRA",
-  "FUNCODE",
-  "AFGR",
-  "PMID:34038741",
-  "PMID:34017130",
-];
+// right now we only show genomic elements from ENCODE_SCREEN (ccREs)
+const regRegionSourceOrder = ["ENCODE_SCREEN (ccREs)"];
 
 const tickWidth = 200;
 const tickHeight = 10;
@@ -130,14 +118,14 @@ const variatInLdHeight = 40;
 /**
  * In this nearby drawing, we show groups of data from top to bottom:
  * The nearest genes with their gene names as labels
- * The regulatory regions separated into trackes by sources, labeled by the source
+ * The genomic elements separated into trackes by sources, labeled by the source
  * The variants in LD
  * The sequence near the coordinateds
  * The SNP got hit and the SNPs nearby labeled by rsid
  * The motifs labeled by the targets
  * This svg use three different scales to draw all the elements.
  * From the smallest to the biggest scale,
- * Genes, and regulatory regions use the same smallest scale.
+ * Genes, and genomic elements use the same smallest scale.
  * Variants in LD use a new scale if the scale for gene is not a good fit
  * Sequence, variants and motifs use the same largest scale.
  */
@@ -153,9 +141,7 @@ export default function NearbyDiagram({
       index
   );
   const genes = nearbyData.genes;
-  const regulatoryRegions = nearbyData.regulatoryRegions.filter(
-    (region) => region.source === "ENCODE_SCREEN (ccREs)"
-  );
+  const regulatoryRegions = nearbyData.regulatoryRegions;
   const targetCoordinatesStart = +data.query_coordinates[0]
     .split(":")[1]
     .split("-")[0];
@@ -476,7 +462,7 @@ export default function NearbyDiagram({
                         (regRegionPositiontrackHeight + labelHeight)
                     }
                   >
-                    regulatory region source: {source}
+                    genomic element source: {source}
                   </text>
                 );
               })}
@@ -498,9 +484,9 @@ export default function NearbyDiagram({
                           width={(region.end - region.start) * scaleForGene}
                           height={geneRectHeight}
                           fill={
-                            region.biochemical_activity
-                              ? colorCCREs[region.biochemical_activity]
-                              : colorCCREs.CA
+                            region.source_annotation
+                              ? colorCCREs[region.source_annotation]
+                              : colorCCREs["CA: chromatin accessible"]
                           }
                           opacity="0.8"
                         />
@@ -805,7 +791,7 @@ export function NearybyLegend() {
               ))}
             </div>
             <div>
-              <strong>Regulatory regions</strong>
+              <strong>Genomic elements</strong>
               {Object.keys(colorCCREs).map((ccre) => (
                 <div className="flex space-x-1" key={ccre}>
                   <div
