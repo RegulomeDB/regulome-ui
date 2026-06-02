@@ -52,7 +52,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
-            'backend_url': 'https://gds-for-regulome-demo.demo.regulomedb.org',
+            'backend_url': 'https://regulome-es-2-2-rc.demo.regulomedb.org',
             'tags': [
                 ('time-to-live-hours', '72'),
                 ('turn-off-on-friday-night', 'yes'),
