@@ -126,7 +126,7 @@ class BasicSelfUpdatingPipeline(Construct):
             ],
             docker_enabled_for_synth=True,
             code_pipeline=self.underlying_pipeline,
-            cli_version=self.props.common.aws_cdk_version,
+            cli_version=self.props.config.common.aws_cdk_version,
         )
 
     def _get_underlying_pipeline(self) -> Pipeline:
