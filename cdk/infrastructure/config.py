@@ -90,7 +90,7 @@ class Common:
     organization_name: str = 'regulomedb'
     project_name: str = 'regulome-ui'
     default_region: str = 'us-west-2'
-    aws_cdk_version: str = '2.88.0'
+    aws_cdk_version: str = '2.1031.2'
 
 
 @dataclass
