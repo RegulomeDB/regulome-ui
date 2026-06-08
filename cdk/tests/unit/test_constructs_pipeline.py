@@ -158,7 +158,7 @@ def test_constructs_pipeline_initialize_basic_self_updating_pipeline_construct(s
                         'Value': 'some-branch'
                     }
                 ],
-                'Image': 'aws/codebuild/standard:6.0',
+                'Image': 'aws/codebuild/standard:7.0',
                 'ImagePullCredentialsType': 'CODEBUILD',
                 'PrivilegedMode': True,
                 'Type': 'LINUX_CONTAINER'
@@ -354,7 +354,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                                 'ProjectName': {
                                     'Ref': 'TestDemoDeploymentPipelineBuildSynthStepCdkBuildProject6B563FFC'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"09e3872abd4833eb32a6b4b2e1958cbb36dab7e6022067b918f95ad58940f3a3\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"663d3af2f62a493998c7e6c0334d84a6bd01853e7bbba5373362d5dd5455c029\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -391,7 +391,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                                 'ProjectName': {
                                     'Ref': 'TestDemoDeploymentPipelineCodePipelineUpdatePipelineSelfMutation212B9375'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"23ee736d5fd16edcc3a8afe9c61f8f29bb3681e2b263890124a5fc1a30965867\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"56f4ab1238fb5a2100c95e66a072579f4118ed7c5154d9e1c3d1acc7b78e8dcb\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -429,7 +429,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                                     'Name': 'SynthStep_Output'
                                 }
                             ],
-                            'Name': 'DockerAsset1',
+                            'Name': 'Frontend_Fargate_TaskDef_nginxfe_AssetImage',
                             'RoleArn': {
                                     'Fn::GetAtt': [
                                         'TestDemoDeploymentPipelineCodePipelineCodeBuildActionRoleD3A8E8C4',
@@ -455,7 +455,7 @@ def test_constructs_pipeline_initialize_demo_deployment_pipeline_construct(mocke
                                     'Name': 'SynthStep_Output'
                                 }
                             ],
-                            'Name': 'DockerAsset2',
+                            'Name': 'Frontend_Fargate_TaskDef_ApplicationContainer_AssetImage',
                             'RoleArn': {
                                     'Fn::GetAtt': [
                                         'TestDemoDeploymentPipelineCodePipelineCodeBuildActionRoleD3A8E8C4',
@@ -647,7 +647,7 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                                 'ProjectName': {
                                     'Ref': 'DevDeploymentPipelineBuildSynthStepCdkBuildProject2CD3821E'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"09e3872abd4833eb32a6b4b2e1958cbb36dab7e6022067b918f95ad58940f3a3\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"663d3af2f62a493998c7e6c0334d84a6bd01853e7bbba5373362d5dd5455c029\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -684,7 +684,7 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                                 'ProjectName': {
                                     'Ref': 'DevDeploymentPipelineCodePipelineUpdatePipelineSelfMutation49276B8C'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"23ee736d5fd16edcc3a8afe9c61f8f29bb3681e2b263890124a5fc1a30965867\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"56f4ab1238fb5a2100c95e66a072579f4118ed7c5154d9e1c3d1acc7b78e8dcb\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -722,7 +722,7 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                                     'Name': 'SynthStep_Output'
                                 }
                             ],
-                            'Name': 'DockerAsset1',
+                            'Name': 'Frontend_Fargate_TaskDef_nginxfe_AssetImage',
                             'RoleArn': {
                                     'Fn::GetAtt': [
                                         'DevDeploymentPipelineCodePipelineCodeBuildActionRole393D1655',
@@ -748,7 +748,7 @@ def test_constructs_pipeline_initialize_dev_deployment_pipeline_construct(mocker
                                     'Name': 'SynthStep_Output'
                                 }
                             ],
-                            'Name': 'DockerAsset2',
+                            'Name': 'Frontend_Fargate_TaskDef_ApplicationContainer_AssetImage',
                             'RoleArn': {
                                     'Fn::GetAtt': [
                                         'DevDeploymentPipelineCodePipelineCodeBuildActionRole393D1655',
@@ -940,7 +940,7 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                 'ProjectName': {
                                     'Ref': 'TestProductionDeploymentPipelineBuildSynthStepCdkBuildProjectF1FF1A53'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"f041a4096b5b2d4fbf65a1d7311618f03ff3d0f62f88fb9ea73440b7493eeb84\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"6f0b2962bf308cc00b3858b13595b2b277034bd4ffefa3d44d6475a0f247376f\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -977,7 +977,7 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                 'ProjectName': {
                                     'Ref': 'TestProductionDeploymentPipelineCodePipelineUpdatePipelineSelfMutation7B8F4173'
                                 },
-                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"23ee736d5fd16edcc3a8afe9c61f8f29bb3681e2b263890124a5fc1a30965867\"}]"
+                                'EnvironmentVariables': "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"56f4ab1238fb5a2100c95e66a072579f4118ed7c5154d9e1c3d1acc7b78e8dcb\"}]"
                             },
                             'InputArtifacts': [
                                 {
@@ -1015,7 +1015,7 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                     'Name': 'SynthStep_Output'
                                 }
                             ],
-                            'Name': 'DockerAsset1',
+                            'Name': 'Frontend_Fargate_TaskDef_nginxfe_AssetImage',
                             'RoleArn': {
                                     'Fn::GetAtt': [
                                         'TestProductionDeploymentPipelineCodePipelineCodeBuildActionRole650FEAB8',
@@ -1041,7 +1041,7 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                     'Name': 'SynthStep_Output'
                                 }
                             ],
-                            'Name': 'DockerAsset2',
+                            'Name': 'Frontend_Fargate_TaskDef_ApplicationContainer_AssetImage',
                             'RoleArn': {
                                     'Fn::GetAtt': [
                                         'TestProductionDeploymentPipelineCodePipelineCodeBuildActionRole650FEAB8',

@@ -1,5 +1,5 @@
 ## Infrastructure
-Install Node.js 18 using `nvm` (Node Version Manager):
+Install Node.js 24 using `nvm` (Node Version Manager):
 
 ```
 # Install nvm.
@@ -9,17 +9,17 @@ $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bas
 Then in new terminal:
 
 ```
-# Install and use node 18.
-$ nvm install 18
-$ nvm use 18
+# Install and use node 24.
+$ nvm install 24
+$ nvm use 24
 # Check version.
 $ node --version
 ```
 
-Install CDK toolkit (requires Node.js 16.x):
+Install CDK toolkit (requires Node.js >20):
 
 ```
-$ npm install -g aws-cdk@2.88.0
+$ npm install -g aws-cdk@2.1031.2
 ```
 
 Create virtual Python 3.11 environment and install requirements:
