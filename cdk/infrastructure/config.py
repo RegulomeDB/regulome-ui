@@ -76,7 +76,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
-            'backend_url': 'https://regulome-es-2-2-rc.demo.regulomedb.org',
+            'backend_url': 'https://api.regulomedbtemp.org',
             'use_subdomain': False,
             'tags': [
             ],
