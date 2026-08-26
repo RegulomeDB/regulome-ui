@@ -851,9 +851,9 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
     from infrastructure.config import Config
     from infrastructure.constructs.pipeline import ProductionDeploymentPipeline
     from infrastructure.constructs.pipeline import ProductionDeploymentPipelineProps
-    from infrastructure.constructs.existing import regulome_dev
+    from infrastructure.constructs.existing import regulome_prod
     stack = Stack(
-        env=regulome_dev.US_WEST_2
+        env=regulome_prod.US_EAST_2
     )
     existing_resources = mocker.Mock()
     existing_resources.code_star_connection.arn = 'some-arn'
@@ -1073,7 +1073,7 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                                 {
                                                     'Ref': 'AWS::Partition'
                                                 },
-                                            ':iam::281708499374:role/cdk-hnb659fds-cfn-exec-role-281708499374-us-west-2'
+                                            ':iam::178707647236:role/cdk-hnb659fds-cfn-exec-role-178707647236-us-east-2'
                                         ]
                                     ]
                                 },
@@ -1096,7 +1096,7 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                             {
                                                 'Ref': 'AWS::Partition'
                                             },
-                                            ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                            ':iam::178707647236:role/cdk-hnb659fds-deploy-role-178707647236-us-east-2'
                                         ]
                                     ]
                             },
@@ -1123,7 +1123,7 @@ def test_constructs_pipeline_initialize_production_deployment_pipeline_construct
                                             {
                                                 'Ref': 'AWS::Partition'
                                             },
-                                            ':iam::281708499374:role/cdk-hnb659fds-deploy-role-281708499374-us-west-2'
+                                            ':iam::178707647236:role/cdk-hnb659fds-deploy-role-178707647236-us-east-2'
                                         ]
                                     ]
                             },

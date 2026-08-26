@@ -39,7 +39,7 @@ config: Dict[str, Any] = {
         'production': {
             'pipeline': 'ProductionDeploymentPipelineStack',
             'existing_resources_class': regulome_prod.Resources,
-            'account_and_region': regulome_prod.US_WEST_2,
+            'account_and_region': regulome_prod.US_EAST_2,
             'notifications_enabled': False,
             'tags': [
             ],
@@ -91,7 +91,7 @@ config: Dict[str, Any] = {
 class Common:
     organization_name: str = 'regulomedb'
     project_name: str = 'regulome-ui'
-    default_region: str = 'us-west-2'
+    default_region: str = 'us-east-2'
     aws_cdk_version: str = '2.88.0'
 
 
