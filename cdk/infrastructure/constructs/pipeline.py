@@ -261,7 +261,11 @@ class ProductionDeploymentPipeline(BasicSelfUpdatingPipeline):
         )
         self._define_production_config()
         self._add_production_deploy_stage()
-        self._add_slack_notifications()
+        # self._add_slack_notifications()
+        # Keep the notification implementation available, but do not use it
+        # for production when no Slack/Amazon Q configuration is available.
+        if self.props.config.notifications_enabled:
+            self._add_slack_notifications()
 
     def _define_production_config(self) -> None:
         self.production_config = build_config_from_name(

@@ -31,6 +31,7 @@ def test_config_config_dataclass():
     assert config.frontend == {}
     assert config.backend_url == 'https://test.backend.org'
     assert config.tags == [('test', 'tag')]
+    assert config.notifications_enabled is True
 
 
 def test_config_pipeline_config_dataclass():
@@ -57,6 +58,24 @@ def test_config_pipeline_config_dataclass():
         ('abc', '123'),
         ('xyz', '321'),
     ]
+    assert config.notifications_enabled is True
+
+
+def test_production_notifications_are_disabled():
+    from infrastructure.config import build_config_from_name
+    from infrastructure.config import build_pipeline_config_from_name
+
+    environment_config = build_config_from_name(
+        'production',
+        branch='main',
+    )
+    pipeline_config = build_pipeline_config_from_name(
+        'production',
+        branch='main',
+    )
+
+    assert environment_config.notifications_enabled is False
+    assert pipeline_config.notifications_enabled is False
 
 
 def test_config_build_config_from_name():

@@ -40,6 +40,7 @@ config: Dict[str, Any] = {
             'pipeline': 'ProductionDeploymentPipelineStack',
             'existing_resources_class': regulome_prod.Resources,
             'account_and_region': regulome_prod.US_WEST_2,
+            'notifications_enabled': False,
             'tags': [
             ],
         },
@@ -78,6 +79,7 @@ config: Dict[str, Any] = {
             },
             'backend_url': 'https://api.regulomedbtemp.org',
             'use_subdomain': False,
+            'notifications_enabled': False,
             'tags': [
             ],
         },
@@ -100,6 +102,7 @@ class Config:
     backend_url: str
     frontend: Dict[str, Any]
     tags: List[Tuple[str, str]]
+    notifications_enabled: bool = True
     url_prefix: Optional[str] = None
     use_subdomain: bool = True
     common: Common = field(
@@ -115,6 +118,7 @@ class PipelineConfig:
     existing_resources_class: ExistingResourcesClass
     account_and_region: Environment
     tags: List[Tuple[str, str]]
+    notifications_enabled: bool = True
     common: Common = field(
         default_factory=Common
     )
