@@ -203,7 +203,7 @@ export function Logo() {
  * @param {*} version the version to display
  * @returns regulome icon with version tag
  */
-export default function RegulomeVersionTag({ version = "2.2" }) {
+export default function RegulomeVersionTag({ version = "3.0 Beta" }) {
   return (
     <div className="flex justify-center mb-10">
       <Link href="/">
