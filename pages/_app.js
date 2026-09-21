@@ -88,7 +88,7 @@ function Site({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"
-          content="Portal for the Impact of Genomic Variation on Function consortium"
+          content="RegulomeDB is a database that provides functional context to variants or regions of interest and serves as a tool to prioritize functionally important single nucleotide variants (SNVs) located within the non-coding regions of the human genome."
         />
         <meta name="theme-color" content={BRAND_COLOR} />
       </Head>

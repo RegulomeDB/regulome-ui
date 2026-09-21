@@ -39,7 +39,8 @@ config: Dict[str, Any] = {
         'production': {
             'pipeline': 'ProductionDeploymentPipelineStack',
             'existing_resources_class': regulome_prod.Resources,
-            'account_and_region': regulome_prod.US_WEST_2,
+            'account_and_region': regulome_prod.US_EAST_2,
+            'notifications_enabled': False,
             'tags': [
             ],
         },
@@ -76,8 +77,9 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
-            'backend_url': 'https://regulome-es-2-2-rc.demo.regulomedb.org',
+            'backend_url': 'https://api.regulomedbtemp.org',
             'use_subdomain': False,
+            'notifications_enabled': False,
             'tags': [
             ],
         },
@@ -89,8 +91,8 @@ config: Dict[str, Any] = {
 class Common:
     organization_name: str = 'regulomedb'
     project_name: str = 'regulome-ui'
-    default_region: str = 'us-west-2'
-    aws_cdk_version: str = '2.88.0'
+    default_region: str = 'us-east-2'
+    aws_cdk_version: str = '2.1142.0'
 
 
 @dataclass
@@ -100,6 +102,7 @@ class Config:
     backend_url: str
     frontend: Dict[str, Any]
     tags: List[Tuple[str, str]]
+    notifications_enabled: bool = True
     url_prefix: Optional[str] = None
     use_subdomain: bool = True
     common: Common = field(
@@ -115,6 +118,7 @@ class PipelineConfig:
     existing_resources_class: ExistingResourcesClass
     account_and_region: Environment
     tags: List[Tuple[str, str]]
+    notifications_enabled: bool = True
     common: Common = field(
         default_factory=Common
     )

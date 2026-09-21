@@ -29,6 +29,6 @@ class ProductionDeployStage(Stage):
             'FrontendStack',
             config=config,
             existing_resources_class=regulome_prod.Resources,
-            env=regulome_prod.US_WEST_2,
+            env=regulome_prod.US_EAST_2,
         )
         add_tags_to_stack(self.frontend_stack, config)
