@@ -76,11 +76,7 @@ class Frontend(Construct):
         self._add_tags_to_fargate_service()
         self._enable_exec_command()
         self._configure_task_scaling()
-        # self._add_alarms()
-        # Notifications are optional so production can deploy without the
-        # resources imported by regulome_prod/notification.py.
-        if self.props.config.notifications_enabled:
-            self._add_alarms()
+        self._add_alarms()
 
     def _define_docker_assets(self) -> None:
         self.application_image = ContainerImage.from_asset(
