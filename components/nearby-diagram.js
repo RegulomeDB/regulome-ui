@@ -93,7 +93,7 @@ const colorCCREs = {
 };
 
 // right now we only show genomic elements from ENCODE_SCREEN (ccREs)
-const regRegionSourceOrder = ["ENCODE_SCREEN (ccREs)"];
+const regRegionSourceOrder = ["ENCODE"];
 
 const tickWidth = 200;
 const tickHeight = 10;

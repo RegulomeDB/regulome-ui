@@ -52,7 +52,7 @@ config: Dict[str, Any] = {
                 'desired_count': 1,
                 'max_capacity': 4,
             },
-            'backend_url': 'https://gds-for-regulome-demo.demo.regulomedb.org',
+            'backend_url': 'https://dev-d1c8912-demo-otto.demo.regulomedb.org',
             'tags': [
                 ('time-to-live-hours', '72'),
                 ('turn-off-on-friday-night', 'yes'),
@@ -90,7 +90,7 @@ class Common:
     organization_name: str = 'regulomedb'
     project_name: str = 'regulome-ui'
     default_region: str = 'us-west-2'
-    aws_cdk_version: str = '2.88.0'
+    aws_cdk_version: str = '2.1031.2'
 
 
 @dataclass
